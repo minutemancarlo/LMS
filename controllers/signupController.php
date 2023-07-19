@@ -9,7 +9,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $email = $postData['Email'];
     $phone = $postData['Phone'];
-
+    $postData['Password'] = password_hash($postData['Password'], PASSWORD_DEFAULT);
+    
     // Check if the email or phone number is already registered
     $existingEmail = $db->select('member', 'Email', "Email = '$email'");
     $existingPhone = $db->select('member', 'Phone', "Phone = '$phone'");

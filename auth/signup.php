@@ -58,6 +58,13 @@ if($session->isSessionVariableSet("isLoggedin")){
                             </div>
                         </div>
                         <div class="mb-3 text-start">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" name="Address" id="Address" placeholder="Enter Address" required>
+                            <div class="invalid-feedback">
+                              Please provide a your Address.
+                            </div>
+                        </div>
+                        <div class="mb-3 text-start">
                             <label for="name" class="form-label">Phone Number</label>
                             <sub class="text-muted"> e.g. 09123456789 </sub>
                             <input type="tel" class="form-control" name="Phone" id="Phone" placeholder="Enter Phone Number" pattern="[0-9]{11}" required>
@@ -81,9 +88,9 @@ if($session->isSessionVariableSet("isLoggedin")){
 
                         <div class="mb-3 text-start">
                             <div class="form-check">
-                              <input class="form-check-input" name="confirm" type="checkbox" value="" id="check1">
+                              <input class="form-check-input"  type="checkbox" value="" id="check1">
                               <label class="form-check-label" for="check1">
-                                I agree to the <a href="#" tabindex="-1">terms and policy</a>.
+                                I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal" tabindex="-1">terms and conditions</a>.
                               </label>
                             </div>
                         </div>
@@ -94,6 +101,59 @@ if($session->isSessionVariableSet("isLoggedin")){
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          Welcome to our Library Management System! Before you proceed to use our services, we kindly request you to read and understand the following terms and conditions. By accessing or using our system, you agree to comply with these terms and conditions.
+</br>
+</br><strong>1. Privacy and Data Collection:</strong>
+</br>1.1. To access our Library Management System, users will be required to provide certain personal information, including but not limited to name, email, phone number, and address.
+</br>1.2. We will collect and process this information in accordance with our Privacy Policy, which can be found on our website. Your data will be handled securely and only used for the purpose of managing library-related activities.
+</br>1.3. We will not sell, trade, or share your personal information with any third parties, except as required by law or with your explicit consent.
+</br>
+</br><strong>2. Account Responsibility:</strong>
+</br>2.1. Users are responsible for maintaining the confidentiality of their account information, including login credentials (username and password).
+</br>2.2. You agree to notify us immediately of any unauthorized use of your account or any other security breach.
+</br>
+</br><strong>3. Use of Library Materials:</strong>
+</br>3.1. The Library Management System provides access to a variety of materials, including books, e-books, audio, and video content, subject to availability.
+</br>3.3. Any misuse, unauthorized distribution, or copyright infringement may result in the termination of library privileges and potential legal consequences.
+
+</br><strong>4. Conduct:</strong>
+</br>4.1. Users are expected to maintain respectful and appropriate behavior while using the Library Management System.
+</br>4.2. Any form of harassment, offensive content, or disruptive actions will not be tolerated and may lead to suspension or termination of library privileges.
+</br>
+</br><strong>5. System Availability:</strong>
+</br>5.1. We will make reasonable efforts to ensure the continuous and uninterrupted availability of our Library Management System. However, we cannot guarantee that the system will be free from interruptions or technical issues.
+</br>5.2. We reserve the right to temporarily suspend access to the system for maintenance, upgrades, or other necessary reasons.
+</br>
+</br><strong>6. Modifications to the Terms and Conditions:</strong>
+</br>6.1. We may update or modify these terms and conditions from time to time. Users will be notified of any significant changes, and continued use of the Library Management System constitutes acceptance of the revised terms.
+</br>
+</br><strong>7. Termination of Services:</strong>
+</br>7.1. We reserve the right to terminate or suspend access to the Library Management System at any time and for any reason without prior notice.
+</br>7.2. Upon termination, users will lose access to all library-related services and materials.
+</br>
+</br><strong>8. Governing Law:</strong>
+</br>8.1. These terms and conditions shall be governed by and construed in accordance with the laws of [your jurisdiction], without regard to its conflicts of law principles.
+</br>
+By using our Library Management System, you acknowledge that you have read, understood, and agreed to abide by these terms and conditions. If you do not agree to these terms, please refrain from using our services. If you have any questions or concerns, feel free to contact our customer support. Happy reading!
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
     <?php echo $scripts; ?>
     <script type="text/javascript">
     $(document).ready(function() {
@@ -131,6 +191,17 @@ if($session->isSessionVariableSet("isLoggedin")){
             $('#ConfirmPassword').removeClass('is-invalid');
             $('.confirm-password-error').hide();
         }
+
+        //Check for the terms and condition if checked.
+
+        if(!$('#check1').prop("checked")){
+          Toast.fire({
+          icon: 'error',
+          title: "Please read and check terms and conditions."
+        });
+          return false;
+        }
+
 
         var successCallback = function(response) {
           console.log(response);
