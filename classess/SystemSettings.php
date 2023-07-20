@@ -27,6 +27,7 @@ class SystemSettings {
         <link href="../assets/vendor/flagiconcss/css/flag-icon.min.css" rel="stylesheet">
         <link href="../assets/vendor/airdatepicker/css/datepicker.min.css" rel="stylesheet">
         <link href="../assets/vendor/mdtimepicker/mdtimepicker.min.css" rel="stylesheet">
+        <link href="../assets/vendor/datatables/datatables.min.css" rel="stylesheet">
         <link href="../assets/vendor/sweetalert2/sweetalert2.min.css" rel="stylesheet">
         ';
         $this->scripts = '
@@ -38,6 +39,7 @@ class SystemSettings {
         <script src="../assets/vendor/airdatepicker/js/datepicker.min.js"></script>
         <script src="../assets/vendor/airdatepicker/js/i18n/datepicker.en.js"></script>
         <script src="../assets/vendor/mdtimepicker/mdtimepicker.min.js"></script>
+        <script src="../assets/vendor/datatables/datatables.min.js"></script>
         <script src="../assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
         ';
         $this->sweetAlert = "
@@ -147,6 +149,7 @@ class SystemSettings {
     }
 
     private function getLogFilePath() {
+        $this->setDefaultTimezone();
         // Get the current year, month, and date
         $currentYear = date('Y');
         $currentMonth = date('F');

@@ -11,7 +11,7 @@ class RoleHandler {
             // Admin menu tags
             return '
             <li>
-              <a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a>
+              <a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a>
             </li>
             <li>
               <a href="dashboard.html"><i class="fas fa-user-friends"></i> Members</a>
