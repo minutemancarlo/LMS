@@ -205,7 +205,6 @@ By using our Library Management System, you acknowledge that you have read, unde
 
         var successCallback = function(response) {
           console.log(response);
-          loadingAlert.close();
             var data = JSON.parse(JSON.stringify(response));
           if (data.success) {
             Toast.fire({
@@ -224,7 +223,7 @@ By using our Library Management System, you acknowledge that you have read, unde
         };
 
         var errorCallback = function(xhr, status, error) {
-          loadingAlert.close();
+          
           var errorMessage = xhr.responseText;
           console.log('AJAX request error:', errorMessage);
           Toast.fire({

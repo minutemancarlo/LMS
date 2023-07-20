@@ -16,7 +16,7 @@ class SystemSettings {
     private function loadSettings() {
         $this->timezone = 'America/New_York';
         $this->websiteTitle = 'LMS';
-        $this->baseURL="http://localhost:8080/lms/";
+        $this->baseURL="http://192.168.100.13:8080/lms/";
         $this->styles = '
         <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link href="../assets/vendor/sweetalert2/sweetalert2.min.css" rel="stylesheet">
@@ -43,9 +43,10 @@ class SystemSettings {
       function loadContent(url, data, successCallback, errorCallback) {
           // Show loading SweetAlert2
         let loadingAlert = Swal.fire({
-        title: 'Loading...',
         allowOutsideClick: false,
-        onBeforeOpen: () => {
+         showConfirmButton: false,
+         text: 'Loading. Please wait...', 
+        didOpen: () => {
             Swal.showLoading();
         }
       });
