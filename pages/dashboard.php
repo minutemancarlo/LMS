@@ -267,6 +267,7 @@ $cards = $roleHandler->getCards($roleValue);
         </div>
     </div>
     <?php echo $scripts; ?>
+    <script src="../assets/js/dashboard-charts.js"></script>
     <script src="../assets/js/script.js"></script>
 </body>
 

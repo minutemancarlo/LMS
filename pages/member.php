@@ -26,9 +26,13 @@ $cards = $roleHandler->getCards($roleValue);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Logs | <?php echo $websiteTitle; ?></title>
+    <title>Members | <?php echo $websiteTitle; ?></title>
     <?php echo $styles; ?>
     <link href="../assets/css/master.css" rel="stylesheet">
+    <style media="screen">
+    th { font-size: .8em; }
+    td { font-size: .8em; }
+    </style>
 </head>
 
 <body>
@@ -39,23 +43,17 @@ $cards = $roleHandler->getCards($roleValue);
             <div class="content">
                 <div class="container-fluid">
                     <div class="page-title">
-                        <h3>System Logs</h3>
-                        <div class="col-md-12 col-lg-12">
+                      <h3>Member Management</h3>
                            <div class="card">
-                             <div class="card-header">
-                               <div class="col-md-4 mb-3">
-                                 <div class="input-group mb-3">
-                                   <span class="input-group-text" id="basic-addon1"><i class="fas fa-filter"></i></span>
-                                     <input type="text" class="datepicker-here form-control" name="filterdate" id="filterdate" data-language="en" placeholder="Select Date" aria-label="Filter" aria-describedby="basic-addon1">
-                                     <button class="btn btn-primary" type="button" name="filterBtn" id="button-addon1">Go!</button>
-                                 </div>
+                             <div class="card-body ">
+                               <div class="table-responsive">
+                                 <table width="100%" class="table table-hover" id="memberTable">
+                                 </table>
                                </div>
-                             </div>
-                             <div class="card-body">
-                               <textarea class="form-control" name="logsContent" id="logsContent" rows="8" cols="80" readonly></textarea>
+
                              </div>
                           </div>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -71,7 +69,7 @@ $cards = $roleHandler->getCards($roleValue);
         event.preventDefault();
 
             var successCallback = function(response) {
-              // console.log(response);
+              console.log(response);
                 var data = JSON.parse(JSON.stringify(response));
               if (data.success) {
                 Toast.fire({
@@ -102,6 +100,60 @@ $cards = $roleHandler->getCards($roleValue);
             };
             loadContent('../controllers/logsController.php', data, successCallback, errorCallback);
         });
+
+        var table=$('#memberTable').DataTable({
+        processing: true,
+        ajax: {
+          url: "../controllers/memberController.php",
+          type: "POST",
+          data: { action: 'select'},
+          dataType: 'json',
+          dataSrc: '',
+          cache: false
+        },
+        columns: [
+          { title: 'MemberID', data: "MemberID", visible: false },
+          { title: 'Name', data: "Name", visible: true,
+          render: function(data, type, row) {
+            if (type === 'display' || type === 'filter') {
+              return data.toLowerCase().replace(/(^|\s)\S/g, function(t) {
+                return t.toUpperCase();
+              });
+            }
+            return data;
+          }
+         },
+          { title: 'Email', data: "Email", visible: true },
+          { title: 'Phone', data: "Phone", visible: true },
+          {
+            title: 'Status',
+            data: "is_verified",
+            className: "text-center",
+            visible: true,
+            render: function(data, type, row) {
+        var svgFile = data == 1 ? "../assets/img/check-circle-solid.svg" : "../assets/img/times-circle-solid.svg";
+        var svgElement = '<img src="' + svgFile + '" alt="SVG Icon" width="20" height="20">';
+        return svgElement;
+      }
+
+          },
+          { title: 'Created On', data: "Created_On", visible: true },
+          { title: 'Updated On', data: "Updated_On", visible: true },
+          {
+            title: 'Action',
+            data: null,
+            orderable: false,
+            searchable: false,
+            className: "text-center",
+            render: function (data, type, row) {
+              var buttons = '<button class="btn btn-success btn-action-edit" data-id="' + row.MemberID + '"><i class="fa fa-edit"></i></button> ';
+              buttons += '<button class="btn btn-danger btn-action-delete" data-id="' + row.MemberID + '"><i class="fa fa-trash"></i></button> ';
+              return buttons;
+            }
+          }
+        ],
+        order: [[1, 'desc']]
+      });
     });
     </script>
 </body>

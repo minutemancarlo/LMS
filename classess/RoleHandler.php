@@ -14,7 +14,7 @@ class RoleHandler {
               <a href="dashboard.php"><i class="fas fa-home"></i> Dashboard</a>
             </li>
             <li>
-              <a href="dashboard.html"><i class="fas fa-user-friends"></i> Members</a>
+              <a href="member.php"><i class="fas fa-user-friends"></i> Members</a>
             </li>
             <li>
               <a href="dashboard.html"><i class="fas fa-book"></i> Books</a>
