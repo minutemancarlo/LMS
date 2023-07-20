@@ -11,19 +11,33 @@ class SystemSettings {
 
     public function __construct() {
         $this->loadSettings();
+        $this->logFilePath = $this->getLogFilePath();
     }
 
     private function loadSettings() {
-        $this->timezone = 'America/New_York';
+        $this->timezone = 'Asia/Manila';
         $this->websiteTitle = 'LMS';
         $this->baseURL="http://192.168.100.13:8080/lms/";
         $this->styles = '
         <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../assets/vendor/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+        <link href="../assets/vendor/fontawesome/css/solid.min.css" rel="stylesheet">
+        <link href="../assets/vendor/fontawesome/css/brands.min.css" rel="stylesheet">
+        <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../assets/vendor/flagiconcss/css/flag-icon.min.css" rel="stylesheet">
+        <link href="../assets/vendor/airdatepicker/css/datepicker.min.css" rel="stylesheet">
+        <link href="../assets/vendor/mdtimepicker/mdtimepicker.min.css" rel="stylesheet">
         <link href="../assets/vendor/sweetalert2/sweetalert2.min.css" rel="stylesheet">
         ';
         $this->scripts = '
         <script src="../assets/vendor/jquery/jquery.min.js"></script>
         <script src="../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script src="../assets/vendor/chartsjs/Chart.min.js"></script>
+        <script src="../assets/js/dashboard-charts.js"></script>
+        <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="../assets/vendor/airdatepicker/js/datepicker.min.js"></script>
+        <script src="../assets/vendor/airdatepicker/js/i18n/datepicker.en.js"></script>
+        <script src="../assets/vendor/mdtimepicker/mdtimepicker.min.js"></script>
         <script src="../assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
         ';
         $this->sweetAlert = "
@@ -45,7 +59,7 @@ class SystemSettings {
         let loadingAlert = Swal.fire({
         allowOutsideClick: false,
          showConfirmButton: false,
-         text: 'Loading. Please wait...', 
+         text: 'Loading. Please wait...',
         didOpen: () => {
             Swal.showLoading();
         }
@@ -108,5 +122,45 @@ class SystemSettings {
 
     public function validateForms() {
         return $this->validate;
+    }
+
+    public function setDefaultTimezone() {
+       date_default_timezone_set($this->timezone);
+   }
+
+    public function createLogFile($module, $logMessage) {
+        $this->setDefaultTimezone();
+        // Get the current time in 12-hour format
+        $currentTime = date('h:i A');
+
+        // Format the log entry
+        $logEntry = "$currentTime [$module] - $logMessage" . PHP_EOL;
+
+        // Check if the log folder exists, if not, create it
+        $logFolder = dirname($this->logFilePath);
+        if (!file_exists($logFolder)) {
+            mkdir($logFolder, 0777, true);
+        }
+
+        // Write the log entry to the log file
+        file_put_contents($this->logFilePath, $logEntry, FILE_APPEND);
+    }
+
+    private function getLogFilePath() {
+        // Get the current year, month, and date
+        $currentYear = date('Y');
+        $currentMonth = date('F');
+        $currentDate = date('m-d-Y');
+        // Get the project root folder
+        $rootFolder = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . 'LMS';
+
+        // Create the log folder path based on the current year, month, and date
+        $logFolderPath =   $rootFolder . DIRECTORY_SEPARATOR . "Logs" . DIRECTORY_SEPARATOR . $currentYear . DIRECTORY_SEPARATOR . $currentMonth;
+
+        // Create the log file path based on the log folder path and the current date
+        $logFilePath = $logFolderPath . DIRECTORY_SEPARATOR . $currentDate . '.txt';
+
+        // Return the full log file path
+        return $logFilePath;
     }
 }

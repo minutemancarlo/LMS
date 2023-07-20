@@ -1,6 +1,7 @@
 <?php
 require_once '../classess/DatabaseHandler.php';
-
+require_once '../classess/SystemSettings.php';
+$settings = new SystemSettings();
 // Assuming the form data is submitted via POST method
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Retrieve the email and password from the form data
@@ -27,6 +28,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'success' => true,
                     'message' => 'Login Successful'
                 );
+                $logMessage="User ".$email." login successful.";
+                $settings->createLogFile("LoginController", $logMessage);
             } else {
                 $response = array(
                     'success' => false,

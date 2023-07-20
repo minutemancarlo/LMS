@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Create an array with the POST data
             $data = array(
               'email' => $email,
-              'subject' => "Email Verification ",
+              'subject' => "Email Verification",
               'link' => $baseURL."auth/verify.php?q=".$token,
               'name' => ucwords($name),
               'action' => "register"

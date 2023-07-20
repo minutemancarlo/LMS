@@ -4,14 +4,14 @@ require_once '../classess/SessionHandler.php';
 
 $settings = new SystemSettings();
 $session = new CustomSessionHandler();
-$timezone = $settings->getTimezone();
+$settings->setDefaultTimezone();
 $websiteTitle = $settings->getWebsiteTitle();
 $styles = $settings->getStyles();
 $scripts = $settings->getScripts();
 $sweetAlert = $settings->getSweetAlertInit();
 $ajax = $settings->getAjaxInit();
 $validate = $settings->validateForms();
-date_default_timezone_set($timezone);
+
 
 
 if($session->isSessionVariableSet("isLoggedin")){
@@ -37,10 +37,12 @@ if($session->isSessionVariableSet("isLoggedin")){
             <div class="card">
                 <div class="card-body text-center">
                   <div class="mb-4">
-                      <img class="brand" src="../assets/img/ms-icon-144x144.png" alt="<?php echo $websiteTitle; ?> logo">
-                      <img class="brand" style="height: 144px;" src="../assets/img/poz-logo.png" alt="<?php echo $websiteTitle; ?> logo">
+                      <!-- <img class="brand" src="../assets/img/ms-icon-144x144.png" alt="<?php //echo $websiteTitle; ?> logo">
+                      <img class="brand" style="height: 144px;" src="../assets/img/poz-logo.png" alt="<?php //echo $websiteTitle; ?> logo"> -->
+                      <img class="brand" style="height: 120px; width:400px" src="../assets/img/navbar-icon.png" alt="<?php echo $websiteTitle; ?> logo">
+
                   </div>
-                  <h2>Library Management System</h2>
+                  <!-- <h2>Library Management System</h2> -->
                     <h6 class="mb-4 text-muted">Create new account</h6>
                   <form action="" id="signupForm" method="POST" class="needs-validation" novalidate>
                         <div class="mb-3 text-start">
@@ -223,7 +225,7 @@ By using our Library Management System, you acknowledge that you have read, unde
         };
 
         var errorCallback = function(xhr, status, error) {
-          
+
           var errorMessage = xhr.responseText;
           console.log('AJAX request error:', errorMessage);
           Toast.fire({

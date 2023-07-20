@@ -1,0 +1,7 @@
+10:24 AM [Login] - User cboado@teligent.ph loggedin successfully.
+10:31 AM [DatabaseHandler] - Connection failed: Access denied for user 'root'@'localhost' (using password: YES)
+10:39 AM [EmailApi] - Email Verification  sent to s4dev.main@gmail.com
+10:40 AM [LoginController] - User s4dev.main@gmail.com login successful.
+10:42 AM [LoginController] - User s4dev.main@gmail.com login successful.
+10:45 AM [LoginController] - User s4dev.main@gmail.com login successful.
+06:46 PM [LoginController] - User s4dev.main@gmail.com login successful.

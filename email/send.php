@@ -2,7 +2,8 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 require 'phpmailer/vendor/autoload.php';
-
+require_once '../classess/SystemSettings.php';
+$settings = new SystemSettings();
 
 
 
@@ -66,33 +67,29 @@ $action=$_POST['action'];
     // $mail->addAttachment('../mail/images/phpmailer.png');
 
     if (!$mail->send()) {
-        $response = array(
-            'status' => 'error',
-            'message' => 'Email could not be sent'
-            // 'error' => $mail->ErrorInfo
-        );
+      $logMessage=$subject." could not be sent to ".$email.". Info: ".$mail->ErrorInfo;
+      $settings->createLogFile("EmailApi", $logMessage);
+        // $response = array(
+        //     'status' => 'error',
+        //     'message' => 'Email could not be sent'
+        //     // 'error' => $mail->ErrorInfo
+        // );
     } else {
-
-  $response = array(
-      'status' => 'success',
-      'message' => 'Email sent successfully'
-  );
-
-
-
-
+      $logMessage=$subject." sent to ".$email;
+      $settings->createLogFile("EmailApi", $logMessage);
+  // $response = array(
+  //     'status' => 'success',
+  //     'message' => 'Email sent successfully'
+  // );
     }
 
 
 // Convert the response to JSON
-$jsonResponse = json_encode($response);
+// $jsonResponse = json_encode($response);
 
 // Set the JSON response headers
-header('Content-Type: application/json');
-echo $jsonResponse;
-
-
-
+// header('Content-Type: application/json');
+// echo $jsonResponse;
 
 
 ?>

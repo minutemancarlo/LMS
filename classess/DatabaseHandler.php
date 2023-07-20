@@ -1,13 +1,26 @@
 <?php
+require_once 'SystemSettings.php'; // Include the SystemSettings class
+
 class DatabaseHandler {
     private $connection;
+    private $systemSettings;
 
     public function __construct() {
-        $this->connection = new mysqli("localhost", "root", "","lms");
+        $this->connection = new mysqli("localhost", "root", "", "lms");
 
         if ($this->connection->connect_error) {
+            // Create an instance of SystemSettings
+            $this->systemSettings = new SystemSettings();
+
+            // Log the connection error message using the createLogFile method
+            $module = 'DatabaseHandler';
+            $logMessage = 'Connection failed: ' . $this->connection->connect_error;
+            $this->systemSettings->createLogFile($module, $logMessage);
+
             die("Connection failed: " . $this->connection->connect_error);
         }
+
+        $this->systemSettings = new SystemSettings();
     }
 
     public function insert($table, $data) {
@@ -46,6 +59,11 @@ class DatabaseHandler {
         $result = $this->connection->query($query);
 
         if ($result === false) {
+            // Log the error message using the SystemSettings class
+            $module = 'DatabaseHandler';
+            $logMessage = 'Query execution failed: ' . $this->connection->error;
+            $this->systemSettings->createLogFile($module, $logMessage);
+
             die("Query execution failed: " . $this->connection->error);
         }
 
@@ -56,5 +74,4 @@ class DatabaseHandler {
         $this->connection->close();
     }
 }
-
- ?>
+?>
