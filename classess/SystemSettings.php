@@ -7,6 +7,7 @@ class SystemSettings {
     private $sweetAlert;
     private $ajax;
     private $validate;
+    private $baseURL;
 
     public function __construct() {
         $this->loadSettings();
@@ -15,6 +16,7 @@ class SystemSettings {
     private function loadSettings() {
         $this->timezone = 'America/New_York';
         $this->websiteTitle = 'LMS';
+        $this->baseURL="http://localhost:8080/lms/";
         $this->styles = '
         <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link href="../assets/vendor/sweetalert2/sweetalert2.min.css" rel="stylesheet">
@@ -39,6 +41,15 @@ class SystemSettings {
 
       $this->ajax = "
       function loadContent(url, data, successCallback, errorCallback) {
+          // Show loading SweetAlert2
+        let loadingAlert = Swal.fire({
+        title: 'Loading...',
+        allowOutsideClick: false,
+        onBeforeOpen: () => {
+            Swal.showLoading();
+        }
+      });
+
         $.ajax({
           url: url,
           method: 'POST',
@@ -88,6 +99,10 @@ class SystemSettings {
 
     public function getAjaxInit() {
         return $this->ajax;
+    }
+
+    public function getBaseURL() {
+        return $this->baseURL;
     }
 
     public function validateForms() {

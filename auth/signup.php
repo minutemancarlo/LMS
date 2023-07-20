@@ -96,7 +96,7 @@ if($session->isSessionVariableSet("isLoggedin")){
                         </div>
                         <button type="submit" class="btn btn-primary shadow-2 mb-4">Register</button>
                     </form>
-                    <p class="mb-0 text-muted">Allready have an account? <a href="login.php">Log in</a></p>
+                    <p class="mb-0 text-muted">Already have an account? <a href="login.php">Log in</a></p>
                 </div>
             </div>
         </div>
@@ -205,6 +205,7 @@ By using our Library Management System, you acknowledge that you have read, unde
 
         var successCallback = function(response) {
           console.log(response);
+          loadingAlert.close();
             var data = JSON.parse(JSON.stringify(response));
           if (data.success) {
             Toast.fire({
@@ -223,6 +224,7 @@ By using our Library Management System, you acknowledge that you have read, unde
         };
 
         var errorCallback = function(xhr, status, error) {
+          loadingAlert.close();
           var errorMessage = xhr.responseText;
           console.log('AJAX request error:', errorMessage);
           Toast.fire({

@@ -10,6 +10,7 @@ require 'phpmailer/vendor/autoload.php';
 $email = $_POST['email'];
 $subject = $_POST['subject'];
 $link = $_POST['link'];
+$name= $_POST['name'];
 $password=isset($_POST['password'])?$_POST['password']:'';
 $action=$_POST['action'];
 
@@ -34,9 +35,9 @@ $action=$_POST['action'];
 
 
     //Set who the message is to be sent from
-    $mail->setFrom('noreply@dev.x10.bz', "LMS Pozzurubio");
+    $mail->setFrom('noreply@dev.x10.bz', "LMS Pozorrubio");
     //Set an alternative reply-to address
-    $mail->addReplyTo('noreply@dev.x10.bz', "LMS Pozzurubio");
+    $mail->addReplyTo('noreply@dev.x10.bz', "LMS Pozorrubio");
     //Set who the message is to be sent to
     $mail->addAddress($email);
 
@@ -46,7 +47,7 @@ $action=$_POST['action'];
     ob_start();
     switch ($action) {
       case 'register':
-        include 'register_template.php';
+        include 'verify.php';
         break;
 
       case 'resetpassword':
