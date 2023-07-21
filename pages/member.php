@@ -131,9 +131,8 @@ $cards = $roleHandler->getCards($roleValue);
             className: "text-center",
             visible: true,
             render: function(data, type, row) {
-        var svgFile = data == 1 ? "../assets/img/check-circle-solid.svg" : "../assets/img/times-circle-solid.svg";
-        var svgElement = '<img src="' + svgFile + '" alt="SVG Icon" width="20" height="20">';
-        return svgElement;
+        var stat = data == 1 ? 'Verified' : 'Not Verified';        
+        return stat;
       }
 
           },
