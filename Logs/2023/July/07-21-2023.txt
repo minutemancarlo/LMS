@@ -1,1 +1,5 @@
 12:08 AM [LoginController] - User carloboado18@gmail.com login successful.
+12:14 PM [DatabaseHandler] - Query execution failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JOIN loan ON catalog.BookID = loan.BookID GROUP BY catalog.BookID' at line 1
+12:15 PM [DatabaseHandler] - Query execution failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JOIN loan ON catalog.BookID = loan.BookID GROUP BY catalog.BookID' at line 1
+12:16 PM [DatabaseHandler] - Query execution failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JOIN loan ON catalog.BookID = loan.BookID GROUP BY catalog.BookID' at line 1
+12:22 PM [DatabaseHandler] - Query execution failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JOIN loan ON catalog.BookID = loan.BookID' at line 1

@@ -55,7 +55,7 @@ class DatabaseHandler {
         return $this->executeQuery($query);
     }
 
-    private function executeQuery($query) {
+    public function executeQuery($query) {
         $result = $this->connection->query($query);
 
         if ($result === false) {

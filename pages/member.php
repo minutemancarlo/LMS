@@ -29,10 +29,7 @@ $cards = $roleHandler->getCards($roleValue);
     <title>Members | <?php echo $websiteTitle; ?></title>
     <?php echo $styles; ?>
     <link href="../assets/css/master.css" rel="stylesheet">
-    <style media="screen">
-    th { font-size: .8em; }
-    td { font-size: .8em; }
-    </style>
+    
 </head>
 
 <body>
@@ -42,19 +39,22 @@ $cards = $roleHandler->getCards($roleValue);
           <?php include 'navbar.php'; ?>
             <div class="content">
                 <div class="container-fluid">
-                    <div class="page-title">
-                      <h3>Member Management</h3>
-                           <div class="card">
-                             <div class="card-body ">
-                               <div class="table-responsive">
-                                 <table width="100%" class="table table-hover" id="memberTable">
-                                 </table>
-                               </div>
-
-                             </div>
+                  <div class="container">
+                      <div class="page-title">
+                          <h3>Member Management
+                              <!-- <a href="roles.html" class="btn btn-sm btn-outline-primary float-end"><i class="fas fa-user-shield"></i> Roles</a> -->
+                          </h3>
+                      </div>
+                      <div class="box box-primary">
+                          <div class="box-body">
+                            <div class="table-responsive">
+                              <table width="100%" class="table table-hover" id="memberTable">
+                              </table>
+                            </div>
                           </div>
+                      </div>
+                  </div>
 
-                    </div>
                 </div>
             </div>
         </div>
@@ -131,7 +131,7 @@ $cards = $roleHandler->getCards($roleValue);
             className: "text-center",
             visible: true,
             render: function(data, type, row) {
-        var stat = data == 1 ? 'Verified' : 'Not Verified';        
+        var stat = data == 1 ? 'Verified' : 'Not Verified';
         return stat;
       }
 
