@@ -105,6 +105,14 @@ $cards = $roleHandler->getCards($roleValue);
           <div class="modal-body">
             <!-- Book Form -->
             <form id="bookForm" novalidate method="POST" class="needs-validation">
+              <img src="https://picsum.photos/200/300" id="thumbnailPreview" alt="Thumbnail Preview" class="img-fluid rounded" width="100" height="100">
+              <div class="mb-3">
+                <label for="thumbnail" class="form-label">Thumbnail Image</label>
+                <input type="file" class="form-control" id="thumbnail" name="thumbnail" accept="image/*" required>
+                <div class="invalid-feedback">
+                  Please select a thumbnail image.
+                </div>
+              </div>
               <div class="mb-3">
                 <label for="bookTitle" class="form-label">Book Title</label>
                 <input type="text" class="form-control" id="bookTitle" name="bookTitle" required>
@@ -147,10 +155,7 @@ $cards = $roleHandler->getCards($roleValue);
                   Please add at least 1 genre.
                 </div>
               </div>
-
-
               <div id="tagContainer"></div>
-
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 <button type="submit" class="btn btn-primary">Add</button>
@@ -307,6 +312,7 @@ $cards = $roleHandler->getCards($roleValue);
 
       $('#bookModal').on('hidden.bs.modal', function () {
     $('#bookForm')[0].reset();
+    $('#thumbnailPreview').attr('src', 'https://picsum.photos/200/300');
     $('#bookForm .invalid-feedback .is-invalid').removeClass('is-invalid');
   });
 
@@ -336,6 +342,24 @@ $cards = $roleHandler->getCards($roleValue);
         tagContainer.appendChild(tagElement);
       });
     }
+
+    // Function to display the selected image as a preview
+  function readURL(input) {
+    if (input.files && input.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function(e) {
+        $('#thumbnailPreview').attr('src', e.target.result);
+      }
+
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  // Trigger the readURL function when a thumbnail image is selected
+  $('#thumbnail').change(function() {
+    readURL(this);
+  });
 
 
     </script>
