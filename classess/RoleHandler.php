@@ -7,7 +7,7 @@ class RoleHandler {
 
     public function getMenuTags($roleValue) {
         // Return menu tags based on the role value
-        if ($roleValue === 0) {
+        if ($roleValue === '0') {
             // Admin menu tags
             return '
             <li>
@@ -38,9 +38,9 @@ class RoleHandler {
         }
     }
 
-    public function getCards($roleValue){
+    public function getCards($roleValue,$borrowed,$overdue,$users,$unverified){
       // Return menu tags based on the role value
-      if ($roleValue === 0) {
+      if ($roleValue === '0') {
         return '<div class="row">
             <div class="col-sm-6 col-md-6 col-lg-3 mt-3">
                 <div class="card">
@@ -54,7 +54,7 @@ class RoleHandler {
                             <div class="col-sm-8">
                                 <div class="detail">
                                     <p class="detail-subtitle">Borrowed</p>
-                                    <span class="number">6,267</span>
+                                    <span class="number">'.$borrowed.'</span>
                                 </div>
                             </div>
                         </div>
@@ -79,7 +79,7 @@ class RoleHandler {
                             <div class="col-sm-8">
                                 <div class="detail">
                                     <p class="detail-subtitle">Overdue</p>
-                                    <span class="number">180,900</span>
+                                    <span class="number">'.$overdue.'</span>
                                 </div>
                             </div>
                         </div>
@@ -104,7 +104,7 @@ class RoleHandler {
                             <div class="col-sm-8">
                                 <div class="detail">
                                     <p class="detail-subtitle">Users</p>
-                                    <span class="number">28,210</span>
+                                    <span class="number">'.$users.'</span>
                                 </div>
                             </div>
                         </div>
@@ -129,7 +129,7 @@ class RoleHandler {
                             <div class="col-sm-8">
                                 <div class="detail">
                                     <p class="detail-subtitle">Not Verified</p>
-                                    <span class="number">75</span>
+                                    <span class="number">'.$unverified.'</span>
                                 </div>
                             </div>
                         </div>

@@ -14,7 +14,7 @@ $validate = $settings->validateForms();
 
 
 
-if($session->isSessionVariableSet("isLoggedin")){
+if($session->isSessionVariableSet("Role")){
   header("Location: ../pages/");
 }
 
@@ -94,7 +94,7 @@ if($session->isSessionVariableSet("isLoggedin")){
                     timer: 2000,
                   }).then(() => {
                     // window.location.href = window.origin+'/lms/admin';
-
+                    location.reload();
                   });
                 } else {
                   Toast.fire({

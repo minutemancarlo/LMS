@@ -3,3 +3,30 @@
 12:15 PM [DatabaseHandler] - Query execution failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JOIN loan ON catalog.BookID = loan.BookID GROUP BY catalog.BookID' at line 1
 12:16 PM [DatabaseHandler] - Query execution failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JOIN loan ON catalog.BookID = loan.BookID GROUP BY catalog.BookID' at line 1
 12:22 PM [DatabaseHandler] - Query execution failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'JOIN loan ON catalog.BookID = loan.BookID' at line 1
+08:17 PM [LoginController] - User carloboado18@gmail.com login successful.
+08:19 PM [LoginController] - User carloboado18@gmail.com login successful.
+08:22 PM [LoginController] - User carloboado18@gmail.com login successful.
+08:46 PM [LoginController] - User carloboado18@gmail.com login successful.
+08:47 PM [LoginController] - User carloboado18@gmail.com login successful.
+08:55 PM [LoginController] - User carloboado18@gmail.com login successful.
+09:11 PM [DatabaseHandler] - Query execution failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'where is_returned=0' at line 1
+10:06 PM [LoginController] - User carloboado18@gmail.com login successful.
+10:41 PM [LoginController] - User carloboado18@gmail.com login successful.
+11:10 PM [DatabaseHandler] - Query execution failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Programming'', ''Silvanus P. Thompson'', ''Adarna'', ''1-58204-777-2'', 2, ''pro' at line 1
+11:22 PM [DatabaseHandler] - Query execution failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Programming'', ''Silvanus P. Thompson'', ''Adarna'', ''1-58204-777-2'', 2, '['pr' at line 1
+11:25 PM [DatabaseHandler] - Query execution failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Programming'', ''Silvanus P. Thompson'', ''Adarna'', ''1-58204-777-2'', 2, 'Arra' at line 1
+11:25 PM [DatabaseHandler] - Query execution failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'Programming'', ''Silvanus P. Thompson'', ''Adarna'', ''1-58204-777-2'', 2, Array' at line 1
+11:26 PM [DatabaseHandler] - Query execution failed: INSERT INTO catalog (Title, Author, Publication, ISBN, Quantity, Genre, Thumbnail) VALUES (''Programming'', ''Silvanus P. Thompson'', ''Adarna'', ''1-58204-777-2'', 2, Array, 'http://192.168.100.13:8080/lms/assets/img/thumbnail/64baa3ac051e3_20230721232636_electric-meter.png')
+11:29 PM [DatabaseHandler] - Query execution failed: INSERT INTO catalog (Title, Author, Publication, ISBN, Quantity, Genre, Thumbnail) VALUES
+                 ('Programming', 'Silvanus P. Thompson', 'Adarna', '1-58204-777-2', 2, ["'programming","coding","code","software","computer'"], 'http://192.168.100.13:8080/lms/assets/img/thumbnail/64baa45924f1a_20230721232929_electric-meter.png')
+11:30 PM [DatabaseHandler] - Query execution failed: INSERT INTO catalog (Title, Author, Publication, ISBN, Quantity, Genre, Thumbnail) VALUES
+                 ('Programming', 'Silvanus P. Thompson', 'Adarna', '1-58204-777-2', 2, "'programming, coding, code, software, computer'", 'http://192.168.100.13:8080/lms/assets/img/thumbnail/64baa48d1a5ec_20230721233021_electric-meter.png')
+11:32 PM [DatabaseHandler] - Query execution failed: INSERT INTO catalog (Title, Author, Publication, ISBN, Quantity, Genre, Thumbnail) VALUES
+                 ('Programming', 'Silvanus P. Thompson', 'Adarna', '1-58204-777-2', 2, 'programming, coding, code, software, computer', 'http://192.168.100.13:8080/lms/assets/img/thumbnail/64baa51ce2698_20230721233244_electric-meter.png')
+11:33 PM [DatabaseHandler] - Query execution failed: INSERT INTO catalog (Title, Author, Publication, ISBN, Quantity, Genre, Thumbnail) VALUES
+                 ('Programming', 'Silvanus P. Thompson', 'Adarna', '1-58204-777-2', 2, ["'programming, coding, code, software, computer'"], 'http://192.168.100.13:8080/lms/assets/img/thumbnail/64baa54f36b80_20230721233335_electric-meter.png')
+11:34 PM [DatabaseHandler] - Query execution failed: INSERT INTO catalog (Title, Author, Publication, ISBN, Quantity, Genre, Thumbnail) VALUES
+                 ('Programming', 'Silvanus P. Thompson', 'Adarna', '1-58204-777-2', 2, Array, 'http://192.168.100.13:8080/lms/assets/img/thumbnail/64baa5766d908_20230721233414_electric-meter.png')
+11:34 PM [DatabaseHandler] - Query execution failed: INSERT INTO catalog (Title, Author, Publication, ISBN, Quantity, Genre, Thumbnail) VALUES
+                 ('Programming', 'Silvanus P. Thompson', 'Adarna', '1-58204-777-2', 2, ["'programming","coding","code","software","computer'"], 'http://192.168.100.13:8080/lms/assets/img/thumbnail/64baa58b39153_20230721233435_electric-meter.png')
+11:36 PM [LoginController] - User carloboado18@gmail.com login successful.

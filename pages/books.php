@@ -1,4 +1,6 @@
 <?php
+include 'session.php';
+
 require_once '../classess/DatabaseHandler.php';
 require_once '../classess/SystemSettings.php';
 require_once '../classess/RoleHandler.php';
@@ -14,10 +16,17 @@ $settings->setDefaultTimezone();
 $baseURL = $settings->getBaseURL();
 $validate = $settings->validateForms();
 
-$roleValue = 0; // 0 for Admin, 1 for Standard User
+$roleValue = $session->getSessionVariable("Role");
 $roleName = $roleHandler->getRoleName($roleValue);
 $menuTags = $roleHandler->getMenuTags($roleValue);
-$cards = $roleHandler->getCards($roleValue);
+$result=$db->select('loan','*','is_returned=0');
+$borrowed=$result->num_rows;
+$overdue=0;
+$result=$db->select('member','*','');
+$users=$result->num_rows;
+$result=$db->select('member','*','is_verified=0');
+$unverified=$result->num_rows;
+$cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified);
  ?>
 
 <!doctype html>
@@ -104,8 +113,8 @@ $cards = $roleHandler->getCards($roleValue);
           </div>
           <div class="modal-body">
             <!-- Book Form -->
-            <form id="bookForm" novalidate method="POST" class="needs-validation">
-              <img src="https://picsum.photos/200/300" id="thumbnailPreview" alt="Thumbnail Preview" class="img-fluid rounded" width="100" height="100">
+            <form id="bookForm" novalidate method="POST" class="needs-validation" enctype="multipart/form-data">
+              <img src="https://picsum.photos/200/300" id="thumbnailPreview"  alt="Thumbnail Preview" class="img-fluid rounded" width="100" height="100">
               <div class="mb-3">
                 <label for="thumbnail" class="form-label">Thumbnail Image</label>
                 <input type="file" class="form-control" id="thumbnail" name="thumbnail" accept="image/*" required>
@@ -199,7 +208,7 @@ $cards = $roleHandler->getCards($roleValue);
       columns: [
         { title: 'BookID', data: "BookID", visible: false },
         {
-      title: 'Thumbnail',
+      title: 'Image',
       data: "Thumbnail",
       render: function(data, type, row) {
         if (type === 'display' || type === 'filter') {
@@ -241,8 +250,18 @@ $cards = $roleHandler->getCards($roleValue);
       }
      },
         { title: 'ISBN', data: "ISBN", visible: true },
-        { title: 'Quantity', data: "Quantity", visible: true },
-        { title: 'Remaining', data: "Remaining", visible: true },
+        { title: 'Quantity', data: "Quantity", visible: true,
+        className: 'text-center',
+          render: function (data, type, row) {
+            return '<span class="badge bg-primary">' + data + '</span> ';
+          }
+       },
+        { title: 'Remaining', data: "Remaining", visible: true,
+        className: 'text-center',
+          render: function (data, type, row) {
+            return '<span class="badge bg-primary">' + data + '</span> ';
+          }
+       },
         {
           title: 'Genre',
           data: "Genre",
@@ -275,6 +294,8 @@ $cards = $roleHandler->getCards($roleValue);
 
 
     $('#bookForm').submit(function(event) {
+
+
       event.preventDefault();
 
           var successCallback = function(response) {
@@ -287,7 +308,7 @@ $cards = $roleHandler->getCards($roleValue);
                 timer: 2000,
               }).then(() => {
                 // window.location.href = window.origin+'/lms/admin';
-
+                location.reload();
               });
             } else {
               Toast.fire({
@@ -305,8 +326,26 @@ $cards = $roleHandler->getCards($roleValue);
             title: "Unexpected Error Occured. Please check browser logs for more info."
           });
           };
-           var formData = $(this).serialize();
-          // loadContent('../controllers/loginController.php', formData, successCallback, errorCallback);
+           // var formData = $(this).serialize();
+           // Create a new FormData object
+           var formData = new FormData(this);
+
+
+           // Add the additional post variable and value to the formData object
+            formData.append("action", "insert");
+
+            $.ajax({
+              url: '../controllers/catalogController.php',
+              type: 'POST',
+              data: formData,
+              dataType: 'json',
+              processData: false,
+              contentType: false,
+              success: successCallback,
+              error: errorCallback
+            });
+ // loadContent('../controllers/catalogController.php', formData, successCallback, errorCallback);
+
       });
 
 

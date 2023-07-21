@@ -1,4 +1,6 @@
 <?php
+include 'session.php';
+
 require_once '../classess/DatabaseHandler.php';
 require_once '../classess/SystemSettings.php';
 require_once '../classess/RoleHandler.php';
@@ -13,10 +15,17 @@ $ajax = $settings->getAjaxInit();
 $settings->setDefaultTimezone();
 $baseURL = $settings->getBaseURL();
 
-$roleValue = 0; // 0 for Admin, 1 for Standard User
+$roleValue = $session->getSessionVariable("Role");
 $roleName = $roleHandler->getRoleName($roleValue);
 $menuTags = $roleHandler->getMenuTags($roleValue);
-$cards = $roleHandler->getCards($roleValue);
+$result=$db->select('loan','*','is_returned=0');
+$borrowed=$result->num_rows;
+$overdue=0;
+$result=$db->select('member','*','');
+$users=$result->num_rows;
+$result=$db->select('member','*','is_verified=0');
+$unverified=$result->num_rows;
+$cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified);
  ?>
 
 <!doctype html>
@@ -29,7 +38,7 @@ $cards = $roleHandler->getCards($roleValue);
     <title>Members | <?php echo $websiteTitle; ?></title>
     <?php echo $styles; ?>
     <link href="../assets/css/master.css" rel="stylesheet">
-    
+
 </head>
 
 <body>

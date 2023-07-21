@@ -46,6 +46,15 @@ class DatabaseHandler {
         return $this->executeQuery($query);
     }
 
+    public function escape($value) {
+       if (is_null($value)) {
+           return "NULL";
+       } else {
+           $escapedValue = $this->connection->real_escape_string($value);
+           return "'$escapedValue'";
+       }
+   }
+
     public function select($table, $columns = "*", $where = "") {
         $query = "SELECT $columns FROM $table";
         if ($where !== "") {
