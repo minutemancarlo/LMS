@@ -12,6 +12,7 @@ $sweetAlert = $settings->getSweetAlertInit();
 $ajax = $settings->getAjaxInit();
 $settings->setDefaultTimezone();
 $baseURL = $settings->getBaseURL();
+$validate = $settings->validateForms();
 
 $roleValue = 0; // 0 for Admin, 1 for Standard User
 $roleName = $roleHandler->getRoleName($roleValue);
@@ -29,7 +30,16 @@ $cards = $roleHandler->getCards($roleValue);
     <title>Books | <?php echo $websiteTitle; ?></title>
     <?php echo $styles; ?>
     <link href="../assets/css/master.css" rel="stylesheet">
-    
+    <style>
+      /* Optional CSS for styling tags */
+      .tag {
+        display: inline-block;
+        padding: 5px;
+        margin: 5px;
+        background-color: #f1f1f1;
+        border-radius: 5px;
+      }
+    </style>
 </head>
 
 <body>
@@ -42,7 +52,7 @@ $cards = $roleHandler->getCards($roleValue);
                   <div class="container">
                       <div class="page-title">
                           <h3>Catalog Management
-                              <a href="roles.html" class="btn btn-sm btn-outline-primary float-end"><i class="fas fa-user-shield"></i> Roles</a>
+                              <a href="" data-bs-toggle="modal" data-bs-target="#bookModal" class="btn btn-sm btn-outline-primary float-end"><i class="fas fa-book-medical"></i> Add Book</a>
                           </h3>
                       </div>
                       <div class="box box-primary">
@@ -83,12 +93,93 @@ $cards = $roleHandler->getCards($roleValue);
             </div>
         </div>
     </div>
+
+    <!-- MODALS   -->
+    <div class="modal fade" id="bookModal" tabindex="-1" aria-labelledby="bookModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="bookModalLabel">Add Book</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <!-- Book Form -->
+            <form id="bookForm" novalidate method="POST" class="needs-validation">
+              <div class="mb-3">
+                <label for="bookTitle" class="form-label">Book Title</label>
+                <input type="text" class="form-control" id="bookTitle" name="bookTitle" required>
+                <div class="invalid-feedback">
+                  Please fill out this field.
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="author" class="form-label">Author</label>
+                <input type="text" class="form-control" id="author" name="author" required>
+                <div class="invalid-feedback">
+                  Please fill out this field.
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="publication" class="form-label">Publication</label>
+                <input type="text" class="form-control" id="publication" name="publication" required>
+                <div class="invalid-feedback">
+                  Please fill out this field.
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="isbn" class="form-label">ISBN</label>
+                <input type="text" class="form-control" id="isbn" name="isbn" required>
+                <div class="invalid-feedback">
+                  Please fill out this field.
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="quantity" class="form-label">Quantity</label>
+                <input type="number" class="form-control" id="quantity" name="quantity" required>
+                <div class="invalid-feedback">
+                  Please fill out this field.
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="genre" class="form-label">Genre</label>
+                <textarea class="form-control" id="genre" name="genre" placeholder="Place a comma to separate multiple genre tags" required></textarea>
+                <div class="invalid-feedback">
+                  Please add at least 1 genre.
+                </div>
+              </div>
+
+
+              <div id="tagContainer"></div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Add</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+
+
+
+
+
+    <!-- MODALS -->
+
+
+
     <?php echo $scripts; ?>
     <script src="../assets/js/script.js"></script>
     <script type="text/javascript">
     $(document).ready(function() {
       <?php echo $sweetAlert; ?>
       <?php echo $ajax; ?>
+      <?php echo $validate; ?>
 
       var bookstable=$('#booksTable').DataTable({
       processing: true,
@@ -102,6 +193,18 @@ $cards = $roleHandler->getCards($roleValue);
       },
       columns: [
         { title: 'BookID', data: "BookID", visible: false },
+        {
+      title: 'Thumbnail',
+      data: "Thumbnail",
+      render: function(data, type, row) {
+        if (type === 'display' || type === 'filter') {
+          // Add the default image URL here
+          var defaultImage = 'https://picsum.photos/200/300';
+          return '<img src="' + (data!='' ? data : defaultImage) + '" alt="Thumbnail" width="100" height="100">';
+        }
+        return data;
+      }
+    },
         { title: 'Title', data: "Title", visible: true,
         render: function(data, type, row) {
           if (type === 'display' || type === 'filter') {
@@ -157,14 +260,84 @@ $cards = $roleHandler->getCards($roleValue);
           className: "text-center",
           render: function (data, type, row) {
             var buttons = '<button class="btn btn-success btn-action-edit" data-id="' + row.BookID + '"><i class="fa fa-edit"></i></button> ';
-            buttons += '<button class="btn btn-danger btn-action-delete" data-id="' + row.BookID + '"><i class="fa fa-trash"></i></button> ';
             return buttons;
           }
         }
       ],
       order: [[1, 'desc']]
     });
+
+
+
+    $('#bookForm').submit(function(event) {
+      event.preventDefault();
+
+          var successCallback = function(response) {
+            console.log(response);
+              var data = JSON.parse(JSON.stringify(response));
+            if (data.success) {
+              Toast.fire({
+                icon: 'success',
+                title: data.message,
+                timer: 2000,
+              }).then(() => {
+                // window.location.href = window.origin+'/lms/admin';
+
+              });
+            } else {
+              Toast.fire({
+              icon: 'error',
+              title: data.message
+            });
+            }
+          };
+
+          var errorCallback = function(xhr, status, error) {
+            var errorMessage = xhr.responseText;
+            console.log('AJAX request error:', errorMessage);
+            Toast.fire({
+            icon: 'error',
+            title: "Unexpected Error Occured. Please check browser logs for more info."
+          });
+          };
+           var formData = $(this).serialize();
+          // loadContent('../controllers/loginController.php', formData, successCallback, errorCallback);
+      });
+
+
+      $('#bookModal').on('hidden.bs.modal', function () {
+    $('#bookForm')[0].reset();
+    $('#bookForm .invalid-feedback .is-invalid').removeClass('is-invalid');
+  });
+
+
+
     });
+
+    const tagTextArea = document.getElementById('genre');
+    const tagContainer = document.getElementById('tagContainer');
+
+    tagTextArea.addEventListener('keyup', function(event) {
+      const tags = getTagsFromTextArea(event.target.value);
+      displayTags(tags);
+    });
+
+    function getTagsFromTextArea(text) {
+      const tagsArray = text.split(',').map(tag => tag.trim());
+      return tagsArray.filter(tag => tag !== '');
+    }
+
+    function displayTags(tags) {
+      tagContainer.innerHTML = '';
+      tags.forEach(tag => {
+        const tagElement = document.createElement('span');
+        tagElement.textContent = tag;
+        tagElement.classList.add('tag');
+        tagContainer.appendChild(tagElement);
+      });
+    }
+
+
     </script>
 </body>
 
