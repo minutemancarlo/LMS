@@ -28,8 +28,20 @@ if($session->isSessionVariableSet("Role")){
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Login | <?php echo $websiteTitle; ?></title>
-    <?php echo $styles; ?>
+    <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+        <link href="../assets/vendor/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+        <link href="../assets/vendor/fontawesome/css/solid.min.css" rel="stylesheet">
+        <link href="../assets/vendor/fontawesome/css/brands.min.css" rel="stylesheet">
+        <link href="../assets/vendor/sweetalert2/sweetalert2.min.css" rel="stylesheet">
     <link href="../assets/css/auth.css" rel="stylesheet">
+    <style media="screen">
+      #togglePassword {
+        cursor: pointer;
+      }
+      #eyeIcon {
+        font-size: 1.2rem;
+      }
+    </style>
 </head>
 
 <body>
@@ -38,10 +50,8 @@ if($session->isSessionVariableSet("Role")){
             <div class="card">
                 <div class="card-body text-center">
                     <div class="mb-4">
-                        <!-- <img class="brand" src="../assets/img/ms-icon-144x144.png" alt="<?php //echo $websiteTitle; ?> logo"> -->
-                        <img class="brand" style="height: 120px; width:400px" src="../assets/img/navbar-icon.png" alt="<?php echo $websiteTitle; ?> logo">
+                        <img class="brand" style="height: 50%; width:100%" src="../assets/img/navbar-icon.png" alt="<?php echo $websiteTitle; ?> logo">
                     </div>
-                    <!-- <h2>Municipality of Pozorrubio</h2> -->
                     <h6 class="mb-4 text-muted">Login to your account</h6>
                     <form action="" id="loginForm" method="POST" class="needs-validation" novalidate>
                       <div class="mb-3 text-start">
@@ -53,11 +63,15 @@ if($session->isSessionVariableSet("Role")){
                       </div>
                       <div class="mb-3 text-start">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+                        <div class="input-group mb-3">
+                          <input type="password" class="form-control" name="password" id="password" placeholder="Password" required>
+                            <span class="input-group-text"  id="togglePassword"><i class="fa fa-eye-slash" id="eyeIcon"></i></span>
+                        </div>
                         <div class="invalid-feedback">
                           Please enter your password.
                         </div>
                       </div>
+
                       <div class="mb-3 text-start">
                         <div class="form-check">
                           <input class="form-check-input" name="remember" type="checkbox" value="" id="check1">
@@ -74,7 +88,9 @@ if($session->isSessionVariableSet("Role")){
             </div>
         </div>
     </div>
-    <?php echo $scripts; ?>
+    <script src="../assets/vendor/jquery/jquery.min.js"></script>
+    <script src="../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="../assets/vendor/sweetalert2/sweetalert2.all.min.js"></script>
     <script type="text/javascript">
       $(document).ready(function() {
         <?php echo $sweetAlert; ?>
@@ -115,8 +131,20 @@ if($session->isSessionVariableSet("Role")){
                var formData = $(this).serialize();
               loadContent('../controllers/loginController.php', formData, successCallback, errorCallback);
           });
-      });
 
+          $("#togglePassword").on("click", function() {
+           var passwordInput = $("#password");
+           var eyeIcon = $("#eyeIcon");
+
+           if (passwordInput.attr("type") === "password") {
+               passwordInput.attr("type", "text");
+               eyeIcon.removeClass("fa-eye-slash").addClass("fa-eye");
+           } else {
+               passwordInput.attr("type", "password");
+               eyeIcon.removeClass("fa-eye").addClass("fa-eye-slash");
+           }
+       });
+      });
     </script>
 </body>
 

@@ -39,7 +39,7 @@ if($session->isSessionVariableSet("isLoggedin")){
                   <div class="mb-4">
                       <!-- <img class="brand" src="../assets/img/ms-icon-144x144.png" alt="<?php //echo $websiteTitle; ?> logo">
                       <img class="brand" style="height: 144px;" src="../assets/img/poz-logo.png" alt="<?php //echo $websiteTitle; ?> logo"> -->
-                      <img class="brand" style="height: 120px; width:400px" src="../assets/img/navbar-icon.png" alt="<?php echo $websiteTitle; ?> logo">
+                      <img class="brand" style="height: 50%; width:100%" src="../assets/img/navbar-icon.png" alt="<?php echo $websiteTitle; ?> logo">
 
                   </div>
                   <!-- <h2>Library Management System</h2> -->
