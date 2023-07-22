@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (isset($_FILES["thumbnail"])) {
             $thumbnail = $_FILES["thumbnail"];
             $rootFolder = $_SERVER['DOCUMENT_ROOT'] . '/LMS/';
-            $uploadDir =   $rootFolder."assets/img/thumbnails/";
+            $uploadDir =   $rootFolder."assets/img/thumbnail/";
             $uniqueId = uniqid();
             $fileName = $uniqueId . "_" . date("YmdHis") . "_" . $thumbnail["name"];
             $targetFile = $uploadDir . $fileName;
@@ -79,8 +79,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $publication = $db->escape($publication);
                 $isbn = $db->escape($isbn);
                 $quantity = (int) $quantity;
-                $genre = $db->escape($genre);
-                 $genreArray = $db->escape(json_encode(explode(", ", $genre)));
+                // $genre = $db->escape($genre);
+                $genreArray = $db->escape(json_encode(explode(", ", $genre)));
 
                 $fileName=$baseURL.'assets/img/thumbnail/'.$fileName;
                 // Prepare the SQL query for insertion
