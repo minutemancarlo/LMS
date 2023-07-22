@@ -6,12 +6,16 @@ class DatabaseHandler {
     private $systemSettings;
 
     public function __construct() {
-        $this->connection = new mysqli("localhost", "root", "", "lms");
+        $this->systemSettings = new SystemSettings();
+        $config = $this->systemSettings->getConfig();
+        $dbHost = $config['database']['host'];
+        $dbUser = $config['database']['username'];
+        $dbPass = $config['database']['password'];
+        $dbName = $config['database']['dbname'];
 
-        if ($this->connection->connect_error) {
-            // Create an instance of SystemSettings
-            $this->systemSettings = new SystemSettings();
+        $this->connection = new mysqli($dbHost, $dbUser, $dbPass , $dbName);
 
+        if ($this->connection->connect_error) {          
             // Log the connection error message using the createLogFile method
             $module = 'DatabaseHandler';
             $logMessage = 'Connection failed: ' . $this->connection->connect_error;

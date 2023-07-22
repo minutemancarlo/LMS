@@ -270,7 +270,7 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
           }
        },
         {
-          title: 'Genre',
+          title: 'Tags',
           data: "Genre",
           className: "text-center text-wrap",
           visible: true,

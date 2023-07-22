@@ -8,16 +8,19 @@ class SystemSettings {
     private $ajax;
     private $validate;
     private $baseURL;
+    private $config;
 
     public function __construct() {
+        $this->config = parse_ini_file('../config.ini', true);
         $this->loadSettings();
         $this->logFilePath = $this->getLogFilePath();
     }
 
     private function loadSettings() {
-        $this->timezone = 'Asia/Manila';
-        $this->websiteTitle = 'LMS';
-        $this->baseURL="http://192.168.100.13:8080/lms/";
+        $configs=$this->getConfig();
+        $this->timezone = $configs['website']['timezone'];
+        $this->websiteTitle = $configs['website']['name'];
+        $this->baseURL=$configs['website']['base_url'];
         $this->styles = '
         <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
         <link href="../assets/vendor/fontawesome/css/fontawesome.min.css" rel="stylesheet">
@@ -96,6 +99,10 @@ class SystemSettings {
     public function getTimezone() {
         return $this->timezone;
     }
+
+    public function getConfig() {
+     return $this->config;
+ }
 
     public function getWebsiteTitle() {
         return $this->websiteTitle;
