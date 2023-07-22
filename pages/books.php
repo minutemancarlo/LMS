@@ -218,7 +218,7 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
         if (type === 'display' || type === 'filter') {
           // Add the default image URL here
           var defaultImage = 'https://picsum.photos/200/300';
-          return '<img src="' + (data!='' ? data : defaultImage) + '" alt="Thumbnail" width="100" height="100">';
+          return '<img src="' + (data!='' ? data : defaultImage) + '" class="img-thumbnail" alt="Thumbnail" width="100" height="100">';
         }
         return data;
       }
