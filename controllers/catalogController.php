@@ -53,7 +53,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($action === "insert") {
         // Handle the image upload
-        if (isset($_FILES["thumbnail"])) {
+        if (isset($_FILES["thumbnail"])&&$_FILES["thumbnail"]["size"] > 0) {
+
             $thumbnail = $_FILES["thumbnail"];
             if (strpos($baseURL, "8080") !== false) {
               $rootFolder = $_SERVER['DOCUMENT_ROOT'] . '/LMS/';
@@ -64,63 +65,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $uniqueId = uniqid();
             $fileName = $uniqueId . "_" . date("YmdHis") . "_" . $thumbnail["name"];
             $targetFile = $uploadDir . $fileName;
-
+            $fileName= isset($_FILES["thumbnail"])?'thumbnail/'.$fileName:'book.png';
+            $fileName=$baseURL.'assets/img/'.$fileName;
+            $_POST['thumbnail']=$fileName;
             if (move_uploaded_file($thumbnail["tmp_name"], $targetFile)) {
-
-
-
-              if (isset($_POST["bookTitle"]) && isset($_POST["author"]) && isset($_POST["publication"]) && isset($_POST["isbn"]) && isset($_POST["quantity"]) && isset($_POST["genre"])) {
-                $bookTitle = $_POST["bookTitle"];
-                $author = $_POST["author"];
-                $publication = $_POST["publication"];
-                $isbn = $_POST["isbn"];
-                $quantity = $_POST["quantity"];
-                $genre = $_POST["genre"];
-
-                // Escape the input values to prevent SQL injection
-                $bookTitle = $db->escape($bookTitle);
-                $author = $db->escape($author);
-                $publication = $db->escape($publication);
-                $isbn = $db->escape($isbn);
-                $quantity = (int) $quantity;
-                // $genre = $db->escape($genre);
-                $genreArray = $db->escape(json_encode(explode(", ", $genre)));
-
-                $fileName=$baseURL.'assets/img/thumbnail/'.$fileName;
-                // Prepare the SQL query for insertion
-                $query = "INSERT INTO catalog (Title, Author, Publication, ISBN, Quantity, Genre, Thumbnail) VALUES
-                 ($bookTitle, $author, $publication, $isbn, $quantity, $genreArray, '$fileName')";
-
-                // Execute the insertion query
-                $insertResult = $db->executeQuery($query);
-
-                // Check if the insertion was successful
-                if ($insertResult) {
-                  // Return success response
-                  $response = array(
-                    "success" => true,
-                    "message" => "Book added successfully.",
-                  );
-                  echo json_encode($response);
-                  exit;
-                } else {
-                  // Return error response
-                  $response = array(
-                    "success" => false,
-                    "message" => "Failed to insert book into the database.",
-                  );
-                  echo json_encode($response);
-                  exit;
-                }
-              } else {
-                // Required fields not found in the request
-                $response = array(
-                  "success" => false,
-                  "message" => "Required fields not found in the request.",
-                );
-                echo json_encode($response);
-                exit;
-              }
 
             } else {
                 // Image upload failed
@@ -131,15 +79,84 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 echo json_encode($response);
                 exit;
             }
-        } else {
-            // No image uploaded
-            $response = array(
+        }
+
+
+
+          $bookID=$_POST['bookID'];
+          if (isset($_POST["bookTitle"]) && isset($_POST["author"]) && isset($_POST["publication"]) && isset($_POST["isbn"]) && isset($_POST["quantity"]) && isset($_POST["genre"])) {
+            $bookTitle = $_POST["bookTitle"];
+            $author = $_POST["author"];
+            $publication = $_POST["publication"];
+            $isbn = $_POST["isbn"];
+            $quantity = $_POST["quantity"];
+            $genre = $_POST["genre"];
+
+            // Escape the input values to prevent SQL injection
+            $bookTitle = $db->escape($bookTitle);
+            $author = $db->escape($author);
+            $publication = $db->escape($publication);
+            $isbn = $db->escape($isbn);
+            $quantity = (int) $quantity;
+            $genreArray = $db->escape(json_encode(explode(", ", $genre)));
+
+
+            if ($bookID=='0') {
+
+              $query = "INSERT INTO catalog (Title, Author, Publication, ISBN, Quantity, Genre, Thumbnail) VALUES
+               ($bookTitle, $author, $publication, $isbn, $quantity, $genreArray, '$fileName')";
+
+               $insertResult = $db->executeQuery($query);
+
+               $response = array(
+                 "success" => true,
+                 "message" => "Book added successfully.",
+               );
+            }else{
+              unset($_POST['bookID']);
+              unset($_POST['action']);
+              $_POST['Title']=$_POST['bookTitle'];
+              unset($_POST['bookTitle']);
+              $genreValue = $_POST['genre'];
+              $genreArray = explode(',', $genreValue);
+              $genreJson = json_encode($genreArray);
+              $_POST['genre']=$genreJson;
+               $insertResult = $db->update('catalog',$_POST,'bookID='.$bookID);
+               $response = array(
+                 "success" => true,
+                 "message" => "Book updated successfully.",
+               );
+            }
+
+
+
+
+            // Check if the insertion was successful
+            if ($insertResult) {
+              echo json_encode($response);
+              exit;
+            } else {
+              // Return error response
+              $response = array(
                 "success" => false,
-                "message" => "Image not found in the request.",
+                "message" => "Failed to insert book into the database.",
+              );
+              echo json_encode($response);
+              exit;
+            }
+          } else {
+            // Required fields not found in the request
+            $response = array(
+              "success" => false,
+              "message" => "Required fields not found in the request.",
             );
             echo json_encode($response);
             exit;
-        }
+          }
+
+
+
+
     }
 } else {
     // Invalid request method
@@ -151,5 +168,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     echo json_encode($response);
     exit;
 }
+
+
+
+
 
 ?>

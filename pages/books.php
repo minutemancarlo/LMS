@@ -65,7 +65,7 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
                   <div class="container">
                       <div class="page-title">
                           <h3>Catalog Management
-                              <a href="" data-bs-toggle="modal" data-bs-target="#bookModal" class="btn btn-sm btn-outline-primary float-end"><i class="fas fa-book-medical"></i> Add Book</a>
+                              <a href="" id="bookModalbtn" data-bs-toggle="modal" data-bs-target="#bookModal" class="btn btn-sm btn-outline-primary float-end"><i class="fas fa-book-medical"></i> Add Book</a>
                           </h3>
                       </div>
                       <div class="box box-primary">
@@ -89,14 +89,14 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
                                     </div>
                                   </div>
                                   <!-- Catalogs Tab Content -->
-                                  <div class="tab-pane fade" id="catalogs" role="tabpanel" aria-labelledby="catalogs-tab">
+                                  <!-- <div class="tab-pane fade" id="catalogs" role="tabpanel" aria-labelledby="catalogs-tab">
                                     <h2>Genre Management</h2>
                                     <div class="table-responsive">
                                       <table width="100%" class="table table-hover" id="genreTable">
 
                                       </table>
                                     </div>
-                                  </div>
+                                  </div> -->
                                 </div>
                           </div>
                       </div>
@@ -112,16 +112,17 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="bookModalLabel">Add Book</h5>
+            <h5 class="modal-title" id="bookModalLabel">Add Book Information</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
             <!-- Book Form -->
             <form id="bookForm" novalidate method="POST" class="needs-validation" enctype="multipart/form-data">
-              <img src="https://picsum.photos/200/300" id="thumbnailPreview"  alt="Thumbnail Preview" class="img-fluid rounded" width="100" height="100">
+              <input type="text" name="bookID" id="bookID" value="0" readonly hidden>
+              <img src="../assets/img/book.png" id="thumbnailPreview"  alt="Thumbnail Preview" class="img-fluid rounded" style="width: 100px; height: 100px;">
               <div class="mb-3">
                 <label for="thumbnail" class="form-label">Thumbnail Image</label>
-                <input type="file" class="form-control" id="thumbnail" name="thumbnail" accept="image/*" required>
+                <input type="file" class="form-control" id="thumbnail" name="thumbnail" accept="image/*">
                 <div class="invalid-feedback">
                   Please select a thumbnail image.
                 </div>
@@ -171,7 +172,7 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
               <div id="tagContainer"></div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Add</button>
+                <button type="submit" id="btnBookSubmit" class="btn btn-primary">Add</button>
               </div>
             </form>
           </div>
@@ -217,8 +218,8 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
       render: function(data, type, row) {
         if (type === 'display' || type === 'filter') {
           // Add the default image URL here
-          var defaultImage = 'https://picsum.photos/200/300';
-          return '<img src="' + (data!='' ? data : defaultImage) + '" class="img-thumbnail" alt="Thumbnail" width="100" height="100">';
+          var defaultImage = '../assets/img/book.png';
+          return '<img src="' + (data!='' ? data : defaultImage) + '" class="img-thumbnail" alt="Thumbnail" style="width: 100px;height:100px">';
         }
         return data;
       }
@@ -352,20 +353,37 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
 
 
       $('#bookModal').on('hidden.bs.modal', function () {
-    $('#bookForm')[0].reset();
-    $('#thumbnailPreview').attr('src', 'https://picsum.photos/200/300');
-    $('#bookForm .invalid-feedback .is-invalid').removeClass('is-invalid');
-  });
+        $('#bookForm')[0].reset();
+        $('#thumbnailPreview').attr('src', '../assets/img/book.png');
+        $('#bookForm .invalid-feedback .is-invalid').removeClass('is-invalid');
+      });
 
+      $(document).on('click', '#bookModalbtn', function () {
+        $('#btnBookSubmit').html("Add");
+        $('#bookModalLabel').html('Add Book Information');
+        $('#tagContainer').html('');
+        $('#thumbnail').val('');
+      });
 
-  $(document).on('click', '.btn-action-edit', function () {
-      // Get the row data using DataTables API
-      var table = $('#booksTable').DataTable();
-      var rowData = table.row($(this).closest('tr')).data();
-
-      // Log the row data to the console
-      console.log(rowData);
-    });
+      $(document).on('click', '.btn-action-edit', function () {
+        // Get the row data using DataTables API
+        var table = $('#booksTable').DataTable();
+        var rowData = table.row($(this).closest('tr')).data();
+        $('#bookForm')[0].reset();
+        $('#btnBookSubmit').html("Update");
+        $('#bookModalLabel').html('Update Book Information');
+        $('#thumbnailPreview').attr('src', rowData.Thumbnail);
+        $('#bookID').val(rowData.BookID);
+        $('#bookTitle').val(rowData.Title);
+        $('#author').val(rowData.Author);
+        $('#publication').val(rowData.Publication);
+        $('#isbn').val(rowData.ISBN);
+        $('#quantity').val(rowData.Quantity);
+        $('#genre').val(JSON.parse(rowData.Genre));
+        displayTags(JSON.parse(rowData.Genre));
+        $('#bookModal').modal('show');
+        // console.log(rowData);
+      });
 
 
     });
