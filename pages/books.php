@@ -1,5 +1,9 @@
 <?php
-include 'session.php';
+require_once '../classess/SessionHandler.php';
+$session = new CustomSessionHandler();
+if(!$session->isSessionVariableSet("Role")){
+  header("Location: ../");
+}
 
 require_once '../classess/DatabaseHandler.php';
 require_once '../classess/SystemSettings.php';
@@ -294,8 +298,6 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
 
 
     $('#bookForm').submit(function(event) {
-
-
       event.preventDefault();
 
           var successCallback = function(response) {
@@ -355,6 +357,15 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
     $('#bookForm .invalid-feedback .is-invalid').removeClass('is-invalid');
   });
 
+
+  $(document).on('click', '.btn-action-edit', function () {
+      // Get the row data using DataTables API
+      var table = $('#booksTable').DataTable();
+      var rowData = table.row($(this).closest('tr')).data();
+
+      // Log the row data to the console
+      console.log(rowData);
+    });
 
 
     });

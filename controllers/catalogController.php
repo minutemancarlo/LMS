@@ -55,7 +55,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         // Handle the image upload
         if (isset($_FILES["thumbnail"])) {
             $thumbnail = $_FILES["thumbnail"];
-            $rootFolder = $_SERVER['DOCUMENT_ROOT'] . '/LMS/';
+            if (strpos($baseURL, "8080") !== false) {
+              $rootFolder = $_SERVER['DOCUMENT_ROOT'] . '/LMS/';
+            } else {
+              $rootFolder = $_SERVER['DOCUMENT_ROOT'] . '/';
+            }
             $uploadDir =   $rootFolder."assets/img/thumbnail/";
             $uniqueId = uniqid();
             $fileName = $uniqueId . "_" . date("YmdHis") . "_" . $thumbnail["name"];

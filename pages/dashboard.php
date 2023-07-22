@@ -1,5 +1,10 @@
 <?php
-include_once 'session.php';
+require_once '../classess/SessionHandler.php';
+$session = new CustomSessionHandler();
+if(!$session->isSessionVariableSet("Role")){
+  header("Location: ../");
+}
+
 require_once '../classess/DatabaseHandler.php';
 require_once '../classess/SystemSettings.php';
 require_once '../classess/RoleHandler.php';

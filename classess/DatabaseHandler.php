@@ -70,7 +70,7 @@ class DatabaseHandler {
         if ($result === false) {
             // Log the error message using the SystemSettings class
             $module = 'DatabaseHandler';
-            $logMessage = 'Query execution failed: ' . $this->connection->error;
+            $logMessage = 'Query execution failed: ' . $query;
             $this->systemSettings->createLogFile($module, $logMessage);
 
             die("Query execution failed: " . $this->connection->error);

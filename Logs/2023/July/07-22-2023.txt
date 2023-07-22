@@ -1,0 +1,8 @@
+12:16 AM [LoginController] - User carloboado18@gmail.com login successful.
+12:22 AM [DatabaseHandler] - Query execution failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '[\"\computer,code,digital\\"], 'http://192.168.100.13:8080/lms/assets/img/thumbn' at line 2
+12:23 AM [DatabaseHandler] - Query execution failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '[\"\computer,code,digital\\"], 'http://192.168.100.13:8080/lms/assets/img/thumbn' at line 2
+12:23 AM [DatabaseHandler] - Query execution failed: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '[\"\computer,code,digital\\"], 'http://192.168.100.13:8080/lms/assets/img/thumbn' at line 2
+12:23 AM [DatabaseHandler] - Query execution failed: Invalid JSON text: "Invalid value." at position 1 in value for column 'catalog.Genre'.
+12:24 AM [DatabaseHandler] - Query execution failed: INSERT INTO catalog (Title, Author, Publication, ISBN, Quantity, Genre, Thumbnail) VALUES
+                 ('asdfsdf', 'sdfsdf', 'sdfsd', 'sdfsdf', 1, '[\\\"\\computer,code,digital\\\\\"]', 'http://192.168.100.13:8080/lms/assets/img/thumbnail/64bab12337086_20230722002403_desktop-1920x1080.jpg')
+12:55 AM [LoginController] - User carloboado18@gmail.com login successful.
