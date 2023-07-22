@@ -1,1 +1,8 @@
-composer install --no-progress
+{
+  "scripts": {
+    "post-install-cmd": [
+      "echo 'Running post-installation commands...'",
+      "composer install --no-progress"
+    ]
+  }
+}
