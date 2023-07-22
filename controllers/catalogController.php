@@ -49,6 +49,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
     }
 
+    if (isset($_POST['action']) && $_POST['action'] === 'delete') {
+        if (isset($_POST['bookID'])) {
+            $bookID = $_POST['bookID'];
+            $result = $db->delete('catalog', "BookID = $bookID");
+            if ($result) {
+                $response = array('success' => true, 'message' => 'Book deleted successfully.');
+            } else {
+                $response = array('success' => false, 'message' => 'Error deleting book.');
+            }
+            
+            echo json_encode($response);
+            exit;
+        } else {
+            $response = array('success' => false, 'message' => 'BookID is missing.');
+            echo json_encode($response);
+            exit;
+        }
+    }
+
 
 
     if ($action === "insert") {

@@ -172,6 +172,7 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
               <div id="tagContainer"></div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" id="btnDelete" class="btn btn-danger">Delete</button>
                 <button type="submit" id="btnBookSubmit" class="btn btn-primary">Add</button>
               </div>
             </form>
@@ -199,7 +200,8 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
       <?php echo $sweetAlert; ?>
       <?php echo $ajax; ?>
       <?php echo $validate; ?>
-
+      var remaining=0;
+      var quantity=0;
       var bookstable=$('#booksTable').DataTable({
       processing: true,
       ajax: {
@@ -336,7 +338,6 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
 
            // Add the additional post variable and value to the formData object
             formData.append("action", "insert");
-
             $.ajax({
               url: '../controllers/catalogController.php',
               type: 'POST',
@@ -347,8 +348,7 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
               success: successCallback,
               error: errorCallback
             });
- // loadContent('../controllers/catalogController.php', formData, successCallback, errorCallback);
-
+            // loadContent('../controllers/catalogController.php', formData, successCallback, errorCallback);
       });
 
 
@@ -363,6 +363,75 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
         $('#bookModalLabel').html('Add Book Information');
         $('#tagContainer').html('');
         $('#thumbnail').val('');
+        $('#btnDelete').prop('hidden',true);
+      });
+
+
+      $(document).on('click', '#btnDelete', function () {
+        var bookID=$('#bookID').val();
+        if (remaining==quantity) {
+          Swal.fire({
+            title: 'Are you sure?',
+            text: 'You are about to delete this book!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!',
+          }).then((result) => {
+            if (result.isConfirmed) {
+
+              var successCallback = function(response) {
+                console.log(response);
+                  var data = JSON.parse(JSON.stringify(response));
+                if (data.success) {
+                  Toast.fire({
+                    icon: 'success',
+                    title: data.message,
+                    timer: 2000,
+                  }).then(() => {
+                    location.reload();
+                  });
+                } else {
+                  Toast.fire({
+                  icon: 'error',
+                  title: data.message
+                });
+                }
+              };
+
+              var errorCallback = function(xhr, status, error) {
+                var errorMessage = xhr.responseText;
+                console.log('AJAX request error:', errorMessage);
+                Toast.fire({
+                icon: 'error',
+                title: "Unexpected Error Occured. Please check browser logs for more info."
+              });
+              };
+              var formData = new FormData();
+              formData.append("action", "delete");
+              formData.append("bookID", bookID);
+              $.ajax({
+                url: '../controllers/catalogController.php',
+                type: 'POST',
+                data: formData,
+                dataType: 'json',
+                processData: false, // Important: Prevent jQuery from processing the data
+                contentType: false, // Important: Prevent jQuery from setting content type
+                success: successCallback,
+                error: errorCallback
+              });
+            }
+          });
+        }else{
+          setTimeout(function () {
+          Swal.fire({
+            title: 'Warning!',
+            text: 'Some of this book is not yet returned.',
+            icon: 'warning',
+          });
+        }, 1000);
+        }
       });
 
       $(document).on('click', '.btn-action-edit', function () {
@@ -381,6 +450,9 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
         $('#quantity').val(rowData.Quantity);
         $('#genre').val(JSON.parse(rowData.Genre));
         displayTags(JSON.parse(rowData.Genre));
+        remaining=rowData.Remaining;
+        quantity=rowData.Quantity;
+        $('#btnDelete').prop('hidden',false);
         $('#bookModal').modal('show');
         // console.log(rowData);
       });
