@@ -110,7 +110,7 @@ if($session->isSessionVariableSet("Role")){
           event.preventDefault();
 
               var successCallback = function(response) {
-                console.log(response);
+                
                   var data = JSON.parse(JSON.stringify(response));
                 if (data.success) {
                   Toast.fire({
