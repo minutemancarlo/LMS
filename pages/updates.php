@@ -85,10 +85,12 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
                               // Display the commit information.
                               foreach ($commits as $commit) {
                                   $commitSha = $commit['sha'];
-                                  $commitTitle = $commit['commit']['message'];
+                                  $commitMessage = $commit['commit']['message'];
                                   $commitAuthor = $commit['commit']['author']['name'];
                                   $commitDate = $commit['commit']['author']['date'];
-                                  $commitDescription = $commit['commit']['message'];
+                                  $commitTitle = strtok($commitMessage, "\n");
+                                 $commitDescription = trim(substr($commitMessage, strlen($commitTitle)));
+                                 $commitDescription = !empty($commitDescription)?$commitDescription: "<i>(No description)</i>";
                                   $commitDate = new DateTime($commitDate);
 
 
