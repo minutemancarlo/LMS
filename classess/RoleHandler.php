@@ -20,7 +20,7 @@ class RoleHandler {
               <a href="books.php"><i class="fas fa-book"></i> Catalogs</a>
             </li>
             <li>
-              <a href="dashboard.html"><i class="fas fa-book-reader"></i> Circulations</a>
+              <a href="circulations.php"><i class="fas fa-book-reader"></i> Circulations</a>
             </li>
             <li>
               <a href="dashboard.html"><i class="fas fa-credit-card"></i> Fines</a>

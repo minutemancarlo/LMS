@@ -134,10 +134,10 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
     </div>
     <?php echo $scripts; ?>
     <script src="../assets/js/script.js"></script>
-    <style media="screen">
+    <script>
     <?php echo $sweetAlert; ?>
     <?php echo $ajax; ?>
-    </style>
+    </script>
 </body>
 
 </html>

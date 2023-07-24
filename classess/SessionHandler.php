@@ -34,6 +34,7 @@ class CustomSessionHandler {
         if (isset($_SESSION['LAST_ACTIVITY']) && time() - $_SESSION['LAST_ACTIVITY'] > $this->sessionTimeout) {
             // Session has expired, destroy it
             session_destroy();
+            header("Location: ../");
         }
 
         // Update last activity time
