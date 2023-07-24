@@ -55,6 +55,8 @@ if (isset($_POST['email'])) {
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
 
         // Execute cURL request and get the response
         $response = curl_exec($ch);
@@ -63,20 +65,24 @@ if (isset($_POST['email'])) {
         if (curl_errno($ch)) {
           $error = curl_error($ch);
           // Handle the error as needed
-        } else {
-          // Process the response
-          // $responseData = json_decode($response, true);
-          // Access the response data using $responseData array
-        }
+                  $response = [
+            'success' => false,
+            'message' => $error
+        ];
 
-        // Close cURL session
-        curl_close($ch);
-        $response = [
+        echo json_encode($response);
+        } else {
+             $response = [
             'success' => true,
             'message' => 'Success! Please check your email.'
         ];
 
         echo json_encode($response);
+        }
+
+        // Close cURL session
+        curl_close($ch);
+
     } else {
 
         $response = array(
