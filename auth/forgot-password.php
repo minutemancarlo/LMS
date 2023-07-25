@@ -65,8 +65,8 @@ $validate = $settings->validateForms();
             title: data.message,
             timer: 2000,
           }).then(() => {
-            // window.location.href = window.origin+'/lms/admin';
-            location.reload();
+             window.location.href = window.origin;
+
           });
         } else {
           Toast.fire({
