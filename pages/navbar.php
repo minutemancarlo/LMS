@@ -17,8 +17,6 @@
                             <li><a href="" class="dropdown-item"><i class="fas fa-database"></i> Back ups</a></li>
                             <div class="dropdown-divider"></div>
                             <li><a href="updates.php" class="dropdown-item"><i class="fas fa-cloud-download-alt"></i> Updates</a></li>
-                            <div class="dropdown-divider"></div>
-                            <li><a href="" class="dropdown-item"><i class="fas fa-user-shield"></i> Roles</a></li>
                         </ul>
                     </div>
                 </div>
