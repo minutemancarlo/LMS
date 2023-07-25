@@ -18,7 +18,7 @@ $sweetAlert = $settings->getSweetAlertInit();
 $ajax = $settings->getAjaxInit();
 $settings->setDefaultTimezone();
 $baseURL = $settings->getBaseURL();
-
+$session->checkSessionExpiration();
 $roleValue = $session->getSessionVariable("Role");
 $roleName = $roleHandler->getRoleName($roleValue);
 $menuTags = $roleHandler->getMenuTags($roleValue);
@@ -44,6 +44,68 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
                 <div class="container-fluid">
                     <div class="page-title">
                         <h3>Circulations Management</h3>
+                        <div class="row">
+                          <div class="col-md-3">
+                            <div class="box box-primary">
+                              <div class="box-body">
+                                <sub>Legend:
+                                <span class="badge bg-success">Returned</span>
+                                <span class="badge bg-primary">Borrowed</span>
+                                <span class="badge bg-danger">Overdue</span>
+                              </sub>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-md-9">
+                            <div class="box box-primary">
+                              <div class="box-body">
+                                <sub>
+                                  <form class="" action="index.html" method="post">
+                                    <div class="row">
+
+
+                                      <div class="col">
+                                        <strong>
+                                          Status
+                                        </strong>
+                                        <select class="form-control" name="">
+                                          <option value="" selected>All</option>
+                                          <option value="">Borrowed</option>
+                                          <option value="">Overdue</option>
+                                          <option value="">Returned</option>
+                                        </select>
+                                      </div>
+                                      <div class="col">
+                                        <strong>
+                                          Borrowed Date
+                                        </strong>
+                                        <input type="text" class="datepicker-here form-control" data-range="true" data-multiple-dates-separator="-" data-language="en">
+                                      </div>
+                                      <div class="col">
+                                        <strong>
+                                          Return Date
+                                        </strong>
+                                        <input type="text" class="datepicker-here form-control" data-range="true" data-multiple-dates-separator="-" data-language="en">
+                                      </div>
+                                      <div class="col">
+                                        <strong>
+                                          Date Returned
+                                        </strong>
+                                        <input type="text" class="datepicker-here form-control" data-range="true" data-multiple-dates-separator="-" data-language="en">
+                                      </div>
+                                      <div class="col">
+                                        <button type="button" class="btn btn-primary" name="button">Search</button>
+                                      </div>
+                                    </div>
+
+                                  </form>
+
+                                </sub>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
                     </div>
                     <div class="box box-primary">
                         <div class="box-body">
@@ -57,6 +119,32 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
             </div>
         </div>
     </div>
+
+    <!-- MODALS -->
+    <div class="modal fade" id="viewLoan" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+           <div class="modal-dialog">
+               <div class="modal-content">
+                   <!-- Modal Header -->
+                   <div class="modal-header">
+                       <h5 class="modal-title" id="exampleModalLabel">Loan ID: <strong id="loanID"></strong> </h5>
+                       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                   </div>
+                   <!-- Modal Body -->
+                   <div class="modal-body">
+                       <!-- Add your content here -->
+                       <p>This is a blank modal. Add your content here.</p>
+                   </div>
+                   <!-- Modal Footer -->
+                   <div class="modal-footer">
+                       <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                       <button type="button" class="btn btn-primary">Save changes</button>
+                   </div>
+               </div>
+           </div>
+       </div>
+
+
+    <!-- MODALS -->
     <?php echo $scripts; ?>
     <script src="../assets/js/script.js"></script>
     <script media="screen">
@@ -64,6 +152,44 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
 
     <?php echo $sweetAlert; ?>
     <?php echo $ajax; ?>
+
+    // Continuously send AJAX request every 10 seconds
+      var timer = setInterval(function() {
+          $.ajax({
+              url: '../controllers/sessionController.php',
+              type: 'GET',
+              dataType: 'json',
+              success: function(response) {
+                  console.log(response);
+                  var data = JSON.parse(JSON.stringify(response));
+                  if (data.success) {
+                      // Show the session expired prompt using SweetAlert2
+                      clearInterval(timer);
+                      Swal.fire({
+                          title: 'Session Expired!',
+                          text: data.message,
+                          icon: 'warning',
+                          showCancelButton: false,
+                          confirmButtonText: 'Confirm'
+                      }).then((result) => {
+                          if (result.isConfirmed) {
+                              // Reload the page
+                              location.reload();
+                          }
+                      });
+                  }
+              }
+          });
+      }, 10000); // 10 seconds interval
+
+      $(document).on('click', '.btn-action-view', function() {
+         $('#viewLoan').modal('show');
+         var id = $(this).data('id');
+         $('#loanID').html(id);
+       });
+
+
+    // datatable initialization
     var table=$('#circulationsTable').DataTable({
     processing: true,
     ajax: {
@@ -108,7 +234,7 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
         searchable: false,
         className: "text-center",
         render: function (data, type, row) {
-          var buttons = '<button class="btn btn-secondary btn-action-edit" tooltip="view details" data-id="' + row.LoanID + '"><i class="fa fa-eye"></i></button> ';
+          var buttons = '<button class="btn btn-secondary btn-action-view" tooltip="view details" data-id="' + row.LoanID + '"><i class="fa fa-eye"></i></button> ';
           return buttons;
         }
       }

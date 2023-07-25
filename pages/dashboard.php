@@ -18,7 +18,7 @@ $sweetAlert = $settings->getSweetAlertInit();
 $ajax = $settings->getAjaxInit();
 $settings->setDefaultTimezone();
 $baseURL = $settings->getBaseURL();
-
+$session->checkSessionExpiration();
 $roleValue = $session->getSessionVariable("Role");
 $roleName = $roleHandler->getRoleName($roleValue);
 $menuTags = $roleHandler->getMenuTags($roleValue);
@@ -292,6 +292,39 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
     <?php echo $scripts; ?>
     <script src="../assets/js/dashboard-charts.js"></script>
     <script src="../assets/js/script.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+
+    // Continuously send AJAX request every 10 seconds
+      var timer = setInterval(function() {
+          $.ajax({
+              url: '../controllers/sessionController.php',
+              type: 'GET',
+              dataType: 'json',
+              success: function(response) {
+                  console.log(response);
+                  var data = JSON.parse(JSON.stringify(response));
+                  if (data.success) {
+                      // Show the session expired prompt using SweetAlert2
+                      clearInterval(timer);
+                      Swal.fire({
+                          title: 'Session Expired!',
+                          text: data.message,
+                          icon: 'warning',
+                          showCancelButton: false,
+                          confirmButtonText: 'Confirm'
+                      }).then((result) => {
+                          if (result.isConfirmed) {
+                              // Reload the page
+                              location.reload();
+                          }
+                      });
+                  }
+              }
+          });
+      }, 10000); // 10 seconds interval
+    });
+    </script>
 </body>
 
 </html>

@@ -1,13 +1,13 @@
 <?php
 class CustomSessionHandler {
-    private $sessionTimeout = 600; // Timeout in seconds - 10 minutes
+    private $sessionTimeout = 60; // Timeout in seconds - 10 minutes
 
     public function __construct() {
         // Start the session
         session_start();
 
-        // Check session expiration
-        $this->checkSessionExpiration();
+
+
     }
 
     public function setSessionVariable($key, $value) {
@@ -30,7 +30,7 @@ class CustomSessionHandler {
        return isset($_SESSION[$key]);
    }
 
-    private function checkSessionExpiration() {
+    public function checkSessionExpiration() {
         if (isset($_SESSION['LAST_ACTIVITY']) && time() - $_SESSION['LAST_ACTIVITY'] > $this->sessionTimeout) {
             // Session has expired, destroy it
             session_destroy();
@@ -40,6 +40,14 @@ class CustomSessionHandler {
         // Update last activity time
         $_SESSION['LAST_ACTIVITY'] = time();
 
+    }
+
+    public function checkSessionExpirationAsync() {
+        if (isset($_SESSION['LAST_ACTIVITY']) && time() - $_SESSION['LAST_ACTIVITY'] > $this->sessionTimeout) {
+          return true;
+        }else{
+          return false;
+        }
     }
 }
  ?>

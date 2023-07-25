@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             // Fetch data based on the item value (in this case, 'books')
             if ($item === 'books') {
                 // Perform the select query to retrieve book data
-                $query = "SELECT catalog.*, (catalog.Quantity - COALESCE((SELECT COUNT(*) FROM loan WHERE loan.BookID = catalog.BookID), 0)) as Remaining FROM catalog";
+                $query = "SELECT catalog.*, (catalog.Quantity - COALESCE((SELECT COUNT(*) FROM loaninfo WHERE loaninfo.BookID = catalog.BookID), 0)) as Remaining FROM catalog";
 
                 $result = $db->executeQuery($query);
 
@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             } else {
                 $response = array('success' => false, 'message' => 'Error deleting book.');
             }
-            
+
             echo json_encode($response);
             exit;
         } else {
