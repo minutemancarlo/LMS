@@ -40,10 +40,7 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Settings | <?php echo $websiteTitle; ?></title>
-    <link href="../assets/vendor/fontawesome/css/fontawesome.min.css" rel="stylesheet">
-    <link href="../assets/vendor/fontawesome/css/solid.min.css" rel="stylesheet">
-    <link href="../assets/vendor/fontawesome/css/brands.min.css" rel="stylesheet">
-    <link href="../assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+      <?php echo $styles; ?>
     <link href="../assets/css/master.css" rel="stylesheet">
 </head>
 
@@ -331,9 +328,41 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
             </div>
         </div>
     </div>
-    <script src="../assets/vendor/jquery/jquery.min.js"></script>
-    <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <?php echo $scripts; ?>
     <script src="../assets/js/script.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+
+    // Continuously send AJAX request every 10 seconds
+      var timer = setInterval(function() {
+          $.ajax({
+              url: '../controllers/sessionController.php',
+              type: 'GET',
+              dataType: 'json',
+              success: function(response) {
+                  console.log(response);
+                  var data = JSON.parse(JSON.stringify(response));
+                  if (data.success) {
+                      // Show the session expired prompt using SweetAlert2
+                      clearInterval(timer);
+                      Swal.fire({
+                          title: 'Session Expired!',
+                          text: data.message,
+                          icon: 'warning',
+                          showCancelButton: false,
+                          confirmButtonText: 'Confirm'
+                      }).then((result) => {
+                          if (result.isConfirmed) {
+                              // Reload the page
+                              location.reload();
+                          }
+                      });
+                  }
+              }
+          });
+      }, 10000); // 10 seconds interval
+    });
+    </script>
 </body>
 
 </html>
