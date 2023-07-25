@@ -1,6 +1,6 @@
 <?php
 class CustomSessionHandler {
-    private $sessionTimeout = 60; // Timeout in seconds - 10 minutes
+    private $sessionTimeout = 600; // Timeout in seconds - 10 minutes
 
     public function __construct() {
         // Start the session
