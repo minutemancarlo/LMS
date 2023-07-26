@@ -51,6 +51,7 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Books | <?php echo $websiteTitle; ?></title>
     <?php echo $styles; ?>
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css"> -->
     <link href="../assets/css/master.css" rel="stylesheet">
     <style>
       /* Optional CSS for styling tags */
@@ -203,6 +204,11 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
 
 
     <?php echo $scripts; ?>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+      <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/vfs_fonts.js"></script>
     <script src="../assets/js/script.js"></script>
     <script type="text/javascript">
     $(document).ready(function() {
@@ -216,6 +222,8 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
                 url: '../controllers/sessionController.php',
                 type: 'GET',
                 dataType: 'json',
+                dom: 'Bfrtip',
+                buttons: ['pdf'],
                 success: function(response) {
                     console.log(response);
                     var data = JSON.parse(JSON.stringify(response));
@@ -251,6 +259,39 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
         dataSrc: '',
         cache: false
       },
+      dom: 'Bfrtip',
+      buttons: [
+              {
+                  extend: 'excel',
+                  text: '<i class="fas fa-file-excel"></i> Export to Excel',
+                  className: 'btn btn-primary',
+                  filename: 'Cataloglist_' + new Date().toISOString().slice(0, 19).replace(/-/g, "_").replace(/:/g, "_"), // Set the filename with the current datetime
+                  exportOptions: {
+                      columns: [0,2,3,4,5,6,7], // Hide the 2nd column when exporting to Excel
+                  },
+              },
+              {
+                  extend: 'pdf',
+                  text: '<i class="fas fa-file-pdf"></i> Export to PDF',
+                  className: 'btn btn-danger',
+                  filename: 'Cataloglist_' + new Date().toISOString().slice(0, 19).replace(/-/g, "_").replace(/:/g, "_"), // Set the filename with the current datetime
+                  exportOptions: {
+                      columns: [0,2,3,4,5,6,7], // Hide the 2nd column when exporting to PDF
+                  },
+                  customize: function(doc) {
+                      // Set landscape mode for the PDF
+                      doc.content[1].layout = 'landscape';
+
+                      // Add a custom title in the header
+                      doc.content.unshift({
+                          text: 'Catalog List as of ' + new Date().toLocaleDateString(),
+                          fontSize: 18,
+                          margin: [0, 0, 0, 10],
+                          alignment: 'center'
+                      });
+                  }
+              },
+          ],
       columns: [
         { title: 'BookID', data: "BookID", visible: false },
         {
