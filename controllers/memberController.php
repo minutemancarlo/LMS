@@ -2,6 +2,7 @@
 // Include the necessary files and initialize the database connection
 require_once '../classess/DatabaseHandler.php';
 require_once '../classess/SystemSettings.php';
+require_once '../classess/SessionHandler.php';
 $settings=new SystemSettings();
 $db = new DatabaseHandler();
 
@@ -39,7 +40,13 @@ if (isset($_POST['action'])) {
             $memberAddress = $_POST["memberAddress"];
             $role = $_POST["memberRole"];
 
-            // Validate and sanitize the data if needed
+            $session=new CustomSessionHandler();
+
+            if ($memberID==$session->getSessionVariable('Id')) {
+              $response = array("success" => false, "message" => "You cannot modify role on your own account.");
+              echo json_encode($response);
+              exit();
+            }
 
             // Create a new instance of the DatabaseHandler class
             $db = new DatabaseHandler();
