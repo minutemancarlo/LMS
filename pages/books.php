@@ -266,7 +266,7 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
       <?php
       if ($roleValue=='0') {
         echo <<<HTML
-{
+        
     dom: 'Bfrtip',
     buttons: [
         {
@@ -300,84 +300,84 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
             }
         },
     ],
-}
 HTML;
       }
 
        ?>
-
-
-
       columns: [
         { title: 'BookID', data: "BookID", visible: false },
         {
-      title: 'Image',
-      data: "Thumbnail",
-      render: function(data, type, row) {
-        if (type === 'display' || type === 'filter') {
+          title: 'Image',
+          data: "Thumbnail",
+          render: function(data, type, row) {
+            if (type === 'display' || type === 'filter') {
           // Add the default image URL here
-          var defaultImage = '../assets/img/book.png';
-          return '<img src="' + (data!='' ? data : defaultImage) + '" class="img-thumbnail" alt="Thumbnail" style="width: 100px;height:100px">';
-        }
-        return data;
-      }
-    },
-        { title: 'Title', data: "Title", visible: true,
-        render: function(data, type, row) {
-          if (type === 'display' || type === 'filter') {
-            return data.toLowerCase().replace(/(^|\s)\S/g, function(t) {
-              return t.toUpperCase();
-            });
+            var defaultImage = '../assets/img/book.png';
+            return '<img src="' + (data!='' ? data : defaultImage) + '" class="img-thumbnail" alt="Thumbnail" style="width: 100px;height:100px">';
           }
           return data;
         }
+      },
+        {
+          title: 'Title', data: "Title", visible: true,
+          render: function(data, type, row) {
+            if (type === 'display' || type === 'filter') {
+              return data.toLowerCase().replace(/(^|\s)\S/g, function(t) {
+              return t.toUpperCase();
+              });
+            }
+          return data;
+          }
        },
-       { title: 'Author', data: "Author", visible: true,
-       render: function(data, type, row) {
+       {
+         title: 'Author', data: "Author", visible: true,
+         render: function(data, type, row) {
          if (type === 'display' || type === 'filter') {
-           return data.toLowerCase().replace(/(^|\s)\S/g, function(t) {
-             return t.toUpperCase();
+            return data.toLowerCase().replace(/(^|\s)\S/g, function(t) {
+            return t.toUpperCase();
            });
          }
          return data;
-       }
-      },
+        }
+        },
       { title: 'Publication', data: "Publication", visible: true,
-      render: function(data, type, row) {
-        if (type === 'display' || type === 'filter') {
-          return data.toLowerCase().replace(/(^|\s)\S/g, function(t) {
+        render: function(data, type, row) {
+          if (type === 'display' || type === 'filter') {
+            return data.toLowerCase().replace(/(^|\s)\S/g, function(t) {
             return t.toUpperCase();
           });
-        }
+          }
         return data;
-      }
+        }
      },
         { title: 'ISBN', data: "ISBN", visible: true },
-        { title: 'Quantity', data: "Quantity", visible: true,
-        className: 'text-center',
+        {
+          title: 'Quantity', data: "Quantity", visible: true,
+          className: 'text-center',
           render: function (data, type, row) {
             return '<span class="badge bg-primary">' + data + '</span> ';
           }
-       },
-        { title: 'Remaining', data: "Remaining", visible: true,
-        className: 'text-center',
+        },
+        {
+          title: 'Remaining', data: "Remaining", visible: true,
+          className: 'text-center',
           render: function (data, type, row) {
             return '<span class="badge bg-primary">' + data + '</span> ';
           }
-       },
+        },
         {
           title: 'Tags',
           data: "Genre",
           className: "text-center text-wrap",
           visible: true,
           render: function (data, type, row) {
-      var genres = JSON.parse(data);
-      var badges = '';
-      for (var i = 0; i < genres.length; i++) {
-        badges += '<span class="badge bg-secondary">' + genres[i] + '</span> ';
-      }
-      return badges;
-    }
+            var genres = JSON.parse(data);
+            var badges = '';
+            for (var i = 0; i < genres.length; i++) {
+              badges += '<span class="badge bg-secondary">' + genres[i] + '</span> ';
+            }
+            return badges;
+          }
         }
         <?php
         if($roleValue=='0'){
