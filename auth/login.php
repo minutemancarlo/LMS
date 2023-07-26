@@ -15,7 +15,10 @@ $validate = $settings->validateForms();
 
 
 if($session->isSessionVariableSet("Role")){
-  header("Location: ../pages/");
+  if ($session->getSessionVariable('Role')=='0') {
+    header("Location: ../pages/");
+  }
+  header("Location: ../pages/books.php");
 }
 
 ?>

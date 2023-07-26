@@ -34,7 +34,22 @@ class RoleHandler {
             ';
         } else {
             // Standard User menu tags
-            return '<a href="#">Dashboard</a> | <a href="#">Profile</a> | <a href="#">Settings</a>';
+            return '
+            <li>
+            <a href="books.php"><i class="fas fa-book"></i> Catalogs</a>
+            </li>
+            <li>
+              <a href="#"><i class="fas fa-undo"></i> Returns</a>
+            </li>
+            <li>
+              <a href=""><i class="fas fa-hourglass"></i> History</a>
+            </li>
+            <li>
+              <a href=""><i class="fas fa-credit-card"></i> Payments</a>
+            </li>
+            <li>
+              <a href="#"><i class="fas fa-book-medical"></i> Cart</a>
+            </li>';
         }
     }
 

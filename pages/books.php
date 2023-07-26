@@ -18,8 +18,8 @@ $sweetAlert = $settings->getSweetAlertInit();
 $ajax = $settings->getAjaxInit();
 $settings->setDefaultTimezone();
 $baseURL = $settings->getBaseURL();
-$validate = $settings->validateForms();
 $session->checkSessionExpiration();
+$validate = $settings->validateForms();
 $roleValue = $session->getSessionVariable("Role");
 $roleName = $roleHandler->getRoleName($roleValue);
 $menuTags = $roleHandler->getMenuTags($roleValue);
@@ -31,6 +31,7 @@ $users=$result->num_rows;
 $result=$db->select('member','*','is_verified=0');
 $unverified=$result->num_rows;
 $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified);
+
  ?>
 
 <!doctype html>
@@ -75,7 +76,10 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
                   <div class="container">
                       <div class="page-title">
                           <h3>Catalog Management
-                              <a href="" id="bookModalbtn" data-bs-toggle="modal" data-bs-target="#bookModal" class="btn btn-sm btn-outline-primary float-end"><i class="fas fa-book-medical"></i> Add Book</a>
+                            <?php if($roleValue=='0'){
+                              echo '<a href="" id="bookModalbtn" data-bs-toggle="modal" data-bs-target="#bookModal" class="btn btn-sm btn-outline-primary float-end"><i class="fas fa-book-medical"></i> Add Book</a>';
+                            } ?>
+
                           </h3>
                       </div>
                       <div class="box box-primary">
@@ -259,39 +263,51 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
         dataSrc: '',
         cache: false
       },
-      dom: 'Bfrtip',
-      buttons: [
-              {
-                  extend: 'excel',
-                  text: '<i class="fas fa-file-excel"></i> Export to Excel',
-                  className: 'btn btn-primary',
-                  filename: 'Cataloglist_' + new Date().toISOString().slice(0, 19).replace(/-/g, "_").replace(/:/g, "_"), // Set the filename with the current datetime
-                  exportOptions: {
-                      columns: [0,2,3,4,5,6,7], // Hide the 2nd column when exporting to Excel
-                  },
-              },
-              {
-                  extend: 'pdf',
-                  text: '<i class="fas fa-file-pdf"></i> Export to PDF',
-                  className: 'btn btn-danger',
-                  filename: 'Cataloglist_' + new Date().toISOString().slice(0, 19).replace(/-/g, "_").replace(/:/g, "_"), // Set the filename with the current datetime
-                  exportOptions: {
-                      columns: [0,2,3,4,5,6,7], // Hide the 2nd column when exporting to PDF
-                  },
-                  customize: function(doc) {
-                      // Set landscape mode for the PDF
-                      doc.content[1].layout = 'landscape';
+      <?php
+      if ($roleValue=='0') {
+        echo <<<HTML
+{
+    dom: 'Bfrtip',
+    buttons: [
+        {
+            extend: 'excel',
+            text: '<i class="fas fa-file-excel"></i> Export to Excel',
+            className: 'btn btn-primary',
+            filename: 'Cataloglist_' + new Date().toISOString().slice(0, 19).replace(/-/g, "_").replace(/:/g, "_"), // Set the filename with the current datetime
+            exportOptions: {
+                columns: [0, 2, 3, 4, 5, 6, 7], // Hide the 2nd column when exporting to Excel
+            },
+        },
+        {
+            extend: 'pdf',
+            text: '<i class="fas fa-file-pdf"></i> Export to PDF',
+            className: 'btn btn-danger',
+            filename: 'Cataloglist_' + new Date().toISOString().slice(0, 19).replace(/-/g, "_").replace(/:/g, "_"), // Set the filename with the current datetime
+            exportOptions: {
+                columns: [0, 2, 3, 4, 5, 6, 7], // Hide the 2nd column when exporting to PDF
+            },
+            customize: function(doc) {
+                // Set landscape mode for the PDF
+                doc.content[1].layout = 'landscape';
 
-                      // Add a custom title in the header
-                      doc.content.unshift({
-                          text: 'Catalog List as of ' + new Date().toLocaleDateString(),
-                          fontSize: 18,
-                          margin: [0, 0, 0, 10],
-                          alignment: 'center'
-                      });
-                  }
-              },
-          ],
+                // Add a custom title in the header
+                doc.content.unshift({
+                    text: 'Catalog List as of ' + new Date().toLocaleDateString(),
+                    fontSize: 18,
+                    margin: [0, 0, 0, 10],
+                    alignment: 'center'
+                });
+            }
+        },
+    ],
+}
+HTML;
+      }
+
+       ?>
+
+
+
       columns: [
         { title: 'BookID', data: "BookID", visible: false },
         {
@@ -362,18 +378,24 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
       }
       return badges;
     }
-        },
-        {
-          title: 'Action',
-          data: null,
-          orderable: false,
-          searchable: false,
-          className: "text-center",
-          render: function (data, type, row) {
-            var buttons = '<button class="btn btn-success btn-action-edit" data-id="' + row.BookID + '"><i class="fa fa-edit"></i></button> ';
-            return buttons;
-          }
         }
+        <?php
+        if($roleValue=='0'){
+
+echo ',{
+    title: \'Action\',
+    data: null,
+    orderable: false,
+    searchable: false,
+    className: "text-center",
+    render: function (data, type, row) {
+        var buttons = \'<button class="btn btn-success btn-action-edit" data-id="\' + row.BookID + \'"><i class="fa fa-edit"></i></button> \';
+        return buttons;
+    }
+}';
+
+        }
+         ?>
       ],
       order: [[1, 'desc']]
     });
