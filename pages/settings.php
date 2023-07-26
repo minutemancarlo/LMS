@@ -31,6 +31,12 @@ $result=$db->select('member','*','is_verified=0');
 $unverified=$result->num_rows;
 $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified);
 
+$config = parse_ini_file('../config.ini', true);
+$websiteTitle=$config['website']['name'];
+$email_host = $config['email']['host'];
+$email_port = $config['email']['port'];
+$email_username = $config['email']['username'];
+$email_password = $config['email']['password'];
  ?>
 <!doctype html>
 <html lang="en">
@@ -70,19 +76,10 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
                             <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade active show" id="general" role="tabpanel" aria-labelledby="general-tab">
                                     <div class="col-md-6">
-                                        <p class="text-muted">General settings such as, site title, site description, address and so on.</p>
+                                        <p class="text-muted">General settings such as, site title, and so on.</p>
                                         <div class="mb-3">
                                             <label for="site-title" class="form-label">Site Title</label>
-                                            <input type="text" name="site_title" class="form-control">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="site-description" class="form-label">Site Description</label>
-                                            <textarea class="form-control" name="site_description"></textarea>
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Site Logo</label>
-                                              <input class="form-control" name="site_logo" type="file" id="formFile1">
-                                            <small class="text-muted">The image must have a maximum size of 1MB</small>
+                                            <input type="text" name="site_title" class="form-control" value="<?php echo $websiteTitle; ?>">
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Favicon</label>
@@ -112,11 +109,11 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
                                         </div> -->
                                         <div class="mb-3">
                                             <label for="" class="form-label">SMTP Host</label>
-                                            <input type="text" name="" class="form-control">
+                                            <input type="text" name="" class="form-control" value="<?php echo $email_host; ?>">
                                         </div>
                                         <div class="mb-3">
                                             <label for="" class="form-label">SMTP Username</label>
-                                            <input type="text" name="" class="form-control">
+                                            <input type="text" name="" class="form-control" value="<?php echo $email_username; ?>">
                                         </div>
                                         <!-- <div class="mb-3">
                                             <label for="" class="form-label">SMTP Security</label>
@@ -129,11 +126,11 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
                                         </div> -->
                                         <div class="mb-3">
                                             <label for="" class="form-label">SMTP Port</label>
-                                            <input type="text" name="" class="form-control">
+                                            <input type="text" name="" class="form-control" value="<?php echo $email_port; ?>">
                                         </div>
                                         <div class="mb-3">
                                             <label for="" class="form-label">SMTP Password</label>
-                                            <input type="password" name="" class="form-control">
+                                            <input type="password" name="" class="form-control" value="<?php echo $email_password; ?>">
                                         </div>
                                         <div class="mb-3 text-end">
                                             <button class="btn btn-primary" type="button"><i class="fas fa-paper-plane"></i> Test</button>
