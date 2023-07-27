@@ -1,4 +1,5 @@
 <?php
+
 class RoleHandler {
     public function getRoleName($roleValue) {
         // Return role name based on the role value
@@ -48,7 +49,10 @@ class RoleHandler {
               <a href=""><i class="fas fa-credit-card"></i> Payments</a>
             </li>
             <li>
-              <a href="#"><i class="fas fa-book-medical"></i> Cart</a>
+            <a href="checkout.php">
+<i class="fas fa-shopping-cart"></i> Cart
+<span class="badge bg-primary " id="cardCount" style="font-size: 10px;">0</span>
+</a>
             </li>';
         }
     }

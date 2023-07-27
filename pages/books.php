@@ -88,9 +88,7 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
                                   <li class="nav-item" role="presentation">
                                     <a class="nav-link active" id="books-tab" data-bs-toggle="tab" href="#books" role="tab" aria-controls="books" aria-selected="true">Books</a>
                                   </li>
-                                  <li class="nav-item" role="presentation">
-                                    <a class="nav-link" id="catalogs-tab" data-bs-toggle="tab" href="#catalogs" role="tab" aria-controls="catalogs" aria-selected="false">Genre</a>
-                                  </li>
+
                                 </ul>
                                 <div class="tab-content" id="myTabContent">
                                   <!-- Books Tab Content -->
@@ -219,7 +217,7 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
       <?php echo $sweetAlert; ?>
       <?php echo $ajax; ?>
       <?php echo $validate; ?>
-
+      var count=0;
       // Continuously send AJAX request every 10 seconds
         var timer = setInterval(function() {
             $.ajax({
@@ -266,7 +264,7 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
       <?php
       if ($roleValue=='0') {
         echo <<<HTML
-        
+
     dom: 'Bfrtip',
     buttons: [
         {
@@ -351,13 +349,20 @@ HTML;
         }
      },
         { title: 'ISBN', data: "ISBN", visible: true },
-        {
-          title: 'Quantity', data: "Quantity", visible: true,
-          className: 'text-center',
-          render: function (data, type, row) {
-            return '<span class="badge bg-primary">' + data + '</span> ';
-          }
-        },
+        <?php
+          if ($roleValue=='0') {
+            echo '{
+    title: \'Quantity\',
+    data: "Quantity",
+    visible: true,
+    className: \'text-center\',
+    render: function (data, type, row) {
+        return \'<span class="badge bg-primary">\' + data + \'</span> \';
+    }
+},';
+}
+         ?>
+
         {
           title: 'Remaining', data: "Remaining", visible: true,
           className: 'text-center',
@@ -378,26 +383,68 @@ HTML;
             }
             return badges;
           }
-        }
-        <?php
-        if($roleValue=='0'){
+        },{
+            title: 'Action',
+            data: null,
+            orderable: false,
+            searchable: false,
+            className: "text-center",
+            render: function (data, type, row) {
+              <?php
+              if($roleValue=='0'){
 
-echo ',{
-    title: \'Action\',
-    data: null,
-    orderable: false,
-    searchable: false,
-    className: "text-center",
-    render: function (data, type, row) {
-        var buttons = \'<button class="btn btn-success btn-action-edit" data-id="\' + row.BookID + \'"><i class="fa fa-edit"></i></button> \';
-        return buttons;
-    }
-}';
+                echo 'var buttons = \'<button class="btn btn-success btn-action-edit" data-id="\' + row.BookID + \'"><i class="fa fa-edit"></i></button> \';';
 
+              }else{
+                echo 'var buttons = \'<button class="btn btn-success btn-action-add" data-id="\' + row.BookID + \'"><i class="fa fa-cart-plus"></i></button> \';';
+              }
+               ?>
+
+                return buttons;
+            }
         }
-         ?>
+
       ],
-      order: [[1, 'desc']]
+      order: [[1, 'desc']],
+      initComplete: function () {
+        var successCallback = function(response) {
+          console.log(response);
+            var data = JSON.parse(JSON.stringify(response));
+            // Get all bookIDs from the response JSON
+        var bookIDs = data.bookIDs;
+
+        // Loop through each row in the DataTable
+        bookstable.rows().every(function () {
+          var data = this.data();
+          var rowBookID = data.BookID;
+
+          // Check if the row's BookID is in the bookIDs array
+          if (bookIDs.includes(rowBookID)) {
+            count++;
+            // Change the classname of the button to btn-danger
+            this.nodes().to$().find('.btn-action-add').removeClass('btn-success').addClass('btn-danger');
+
+            // Change the icon to fa-cart-down
+            this.nodes().to$().find('.btn-action-add i').removeClass('fa-cart-plus').addClass('fa-cart-arrow-down');
+          }
+        });
+        $('#cardCount').html(count);
+
+        };
+
+        var formData = new FormData();
+        formData.append("action", "checkCart");
+        $.ajax({
+          url: '../controllers/catalogController.php',
+          type: 'POST',
+          data: formData,
+          dataType: 'json',
+          processData: false, // Important: Prevent jQuery from processing the data
+          contentType: false, // Important: Prevent jQuery from setting content type
+          success: successCallback
+        });
+
+    }
     });
 
 
@@ -433,12 +480,7 @@ echo ',{
             title: "Unexpected Error Occured. Please check browser logs for more info."
           });
           };
-           // var formData = $(this).serialize();
-           // Create a new FormData object
            var formData = new FormData(this);
-
-
-           // Add the additional post variable and value to the formData object
             formData.append("action", "insert");
             $.ajax({
               url: '../controllers/catalogController.php',
@@ -466,6 +508,71 @@ echo ',{
         $('#tagContainer').html('');
         $('#thumbnail').val('');
         $('#btnDelete').prop('hidden',true);
+      });
+
+      $(document).on('click', '.btn-action-add', function () {
+        var button = $(this);
+
+          var table = $('#booksTable').DataTable();
+          var rowData = table.row($(this).closest('tr')).data();
+          var successCallback = function(response) {
+            console.log(response);
+              var data = JSON.parse(JSON.stringify(response));
+              if (data.success) {
+      Toast.fire({
+        icon: 'success',
+        title: data.message
+      });
+        // Check if the message contains the word "Removed"
+        if (data.message.includes("removed")) {
+          count--; // Decrement count if "Removed" is in the message
+
+        } else {
+          count++; // Increment count otherwise
+
+        }
+
+        $('#cardCount').html(count); // Update the count in the HTML element
+
+        // Toggle button classes and icons
+        if (button.hasClass('btn-success')) {
+          button.removeClass('btn-success').addClass('btn-danger');
+          button.find('i').removeClass('fa-cart-plus').addClass('fa-cart-arrow-down');
+        } else {
+          button.removeClass('btn-danger').addClass('btn-success');
+          button.find('i').removeClass('fa-cart-arrow-down').addClass('fa-cart-plus');
+        }
+
+    } else {
+              Toast.fire({
+              icon: 'error',
+              title: data.message
+            });
+            }
+          };
+
+          var errorCallback = function(xhr, status, error) {
+            var errorMessage = xhr.responseText;
+            console.log('AJAX request error:', errorMessage);
+            Toast.fire({
+            icon: 'error',
+            title: "Unexpected Error Occured. Please check browser logs for more info."
+          });
+          };
+          var formData = new FormData();
+          formData.append("action", "addCart");
+          formData.append("bookID", rowData.BookID);
+          $.ajax({
+            url: '../controllers/catalogController.php',
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            processData: false, // Important: Prevent jQuery from processing the data
+            contentType: false, // Important: Prevent jQuery from setting content type
+            success: successCallback,
+            error: errorCallback
+          });
+
       });
 
 

@@ -45,10 +45,11 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
                     <div class="page-title">
                         <h3>Circulations Management</h3>
                         <div class="row">
-                          <div class="col-md-3">
+                          <div class="col-md-4">
                             <div class="box box-primary">
                               <div class="box-body">
                                 <sub>Legend:
+                                  <span class="badge bg-warning" style="color: black;">Pending</span>
                                 <span class="badge bg-success">Returned</span>
                                 <span class="badge bg-primary">Borrowed</span>
                                 <span class="badge bg-danger">Overdue</span>
@@ -56,7 +57,7 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
                               </div>
                             </div>
                           </div>
-                          <div class="col-md-9">
+                          <div class="col-md-8">
                             <div class="box box-primary">
                               <div class="box-body">
                                 <sub>
@@ -71,6 +72,7 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
                                         <select class="form-control" name="">
                                           <option value="" selected>All</option>
                                           <option value="">Borrowed</option>
+                                          <option value="">Pending</option>
                                           <option value="">Overdue</option>
                                           <option value="">Returned</option>
                                         </select>

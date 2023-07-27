@@ -2,11 +2,21 @@
 // Include the necessary files and initialize the database connection
 require_once '../classess/DatabaseHandler.php';
 require_once '../classess/SystemSettings.php';
+require_once '../classess/SessionHandler.php';
 $settings = new SystemSettings();
 $baseURL=$settings->getBaseURL();
 $db = new DatabaseHandler();
+$session=new CustomSessionHandler();
+$memberID=$session->getSessionVariable('Id');
 
+function getBookIDsFromCart() {
 
+        $result = $db->select("cart", "bookID", "memberID=$memberID");
+        $bookIDs = array_column($result->fetch_all(MYSQLI_ASSOC), 'bookID');
+
+        return $bookIDs;
+
+}
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $action = isset($_POST["action"]) ? $_POST["action"] : "";
@@ -67,8 +77,70 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             exit;
         }
     }
+    if (isset($_POST['action']) && $_POST['action'] === 'checkCart') {
+      $result = $db->select("cart", "bookID", "memberID=$memberID");
+      $bookIDs = array_column($result->fetch_all(MYSQLI_ASSOC), 'bookID');
 
 
+        echo json_encode(['bookIDs' => $bookIDs]);
+        exit;
+    }
+    if (isset($_POST['action'])&& $_POST['action'] === 'addCart') {
+
+      if (isset($_POST['action']) && $_POST['action'] === 'addCart') {
+
+      $bookID = $_POST['bookID'];
+
+      $db = new DatabaseHandler();
+      try {
+
+
+          $result = $db->select("cart", "bookID", "memberID = $memberID AND bookID = $bookID");
+          $bookExists = $result->num_rows > 0;
+
+          if ($bookExists) {
+              // Book exists in cart, delete it
+              
+              $db->delete("cart", "memberID=$memberID and bookID=$bookID");
+
+              $response = array(
+                  'success' => true,
+                  'message' => 'Book removed from cart'
+              );
+          } else {
+              // Book does not exist in cart, insert it
+              unset($_POST['action']);
+              $_POST['memberID'] = $memberID;
+
+              $insertResult = $db->insert('cart', $_POST);
+
+              if ($insertResult) {
+                  $response = array(
+                      'success' => true,
+                      'message' => 'Book added to cart'
+                  );
+              } else {
+                  // Failed to insert
+                  $response = array(
+                      'success' => false,
+                      'message' => 'Failed to add book to cart'
+                  );
+              }
+          }
+
+          echo json_encode($response);
+          exit;
+      } catch (Exception $e) {
+          echo json_encode(['error' => 'Failed to process cart data']);
+          exit;
+      }
+  }
+
+    // Return the response as JSON
+    header('Content-Type: application/json');
+    echo json_encode($response);
+    exit();
+}
 
     if ($action === "insert") {
         // Handle the image upload
