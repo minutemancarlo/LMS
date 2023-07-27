@@ -1,14 +1,15 @@
 <?php
 require_once '../classess/DatabaseHandler.php';
-
+require_once '../classess/SessionHandler.php';
 // Initialize the DatabaseHandler
 $db = new DatabaseHandler();
-
+$session=new CustomSessionHandler();
+  $memberID = $session->getSessionVariable('Id');
 // Check if the action is set and equals 'select'
 if (isset($_POST['action']) && $_POST['action'] === 'select') {
 
         // Sanitize the memberID value to prevent SQL injection
-        $memberID = 22;
+
 
         // SQL query to select cart items joined with the catalog table
         $query = "SELECT
@@ -35,7 +36,7 @@ CROSS JOIN
                 $cartItems[] = $row;
             }
 
-          
+
                 // Return the data as JSON
                 echo json_encode($cartItems);
                 exit();
