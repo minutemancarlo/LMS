@@ -98,7 +98,7 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
     $(document).ready(function() {
       <?php echo $sweetAlert; ?>
       <?php echo $ajax; ?>
-
+var count =0;
       // Continuously send AJAX request every 10 seconds
         var timer = setInterval(function() {
             $.ajax({
@@ -131,6 +131,9 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
       var table=$('#checkoutTable').DataTable({
         processing: true,
          dom: 'rtip',
+         language: {
+           emptyTable: "No items in your cart"
+        },
         ajax: {
           url: "../controllers/checkoutController.php",
           type: "POST",
@@ -172,7 +175,7 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
             searchable: false,
             className: "text-center",
             render: function (data, type, row) {
-               var buttons='<a  class="btn btn-danger btn-action-edit" data-id="' + row.bookID + '"><i class="fas fa-trash"></i></a>'
+               var buttons='<a  class="btn btn-danger btn-action-add" data-id="' + row.bookID + '"><i class="fas fa-trash"></i></a>'
               // var buttons = '<button class="btn btn-success btn-action-edit" data-id="' + row.MemberID + '"><i class="fa fa-edit"></i></button> ';
               // buttons += '<button class="btn btn-danger btn-action-delete" data-id="' + row.MemberID + '"><i class="fa fa-trash"></i></button> ';
               return buttons;
@@ -181,13 +184,69 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
         ],
 
         initComplete: function () {
-          var rowCount = table.rows().count();
-    $('#cardCount').html(rowCount);
-    $('#totalBooks').html(rowCount);
-
+          count = table.rows().count();
+          $('#cardCount').html(count);
+          $('#totalBooks').html(count);
       }
 
       });
+
+      $(document).on('click', '.btn-action-add', function () {
+
+          var table = $('#checkoutTable').DataTable();
+          var rowData = table.row($(this).closest('tr')).data();
+          var successCallback = function(response) {
+            console.log(response);
+              var data = JSON.parse(JSON.stringify(response));
+              if (data.success) {
+      Toast.fire({
+        icon: 'success',
+        title: data.message
+      });
+
+      table.ajax.reload();
+      count = table.rows().count()-1;
+      alert(count);
+      $('#cardCount').html(count);
+      $('#totalBooks').html(count);
+
+
+    } else {
+              Toast.fire({
+              icon: 'error',
+              title: data.message
+            });
+            }
+          };
+
+          var errorCallback = function(xhr, status, error) {
+            var errorMessage = xhr.responseText;
+            console.log('AJAX request error:', errorMessage);
+            Toast.fire({
+            icon: 'error',
+            title: "Unexpected Error Occured. Please check browser logs for more info."
+          });
+          };
+          var formData = new FormData();
+          formData.append("action", "addCart");
+          formData.append("bookID", rowData.bookID);
+          $.ajax({
+            url: '../controllers/catalogController.php',
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            processData: false, // Important: Prevent jQuery from processing the data
+            contentType: false, // Important: Prevent jQuery from setting content type
+            success: successCallback,
+            error: errorCallback
+          });
+
+      });
+
+
+
+
+
     });
     </script>
 </body>

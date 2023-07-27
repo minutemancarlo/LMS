@@ -4,7 +4,7 @@ require_once '../classess/SessionHandler.php';
 // Initialize the DatabaseHandler
 $db = new DatabaseHandler();
 $session=new CustomSessionHandler();
-  $memberID = $session->getSessionVariable('Id');
+$memberID = 22;
 // Check if the action is set and equals 'select'
 if (isset($_POST['action']) && $_POST['action'] === 'select') {
 
@@ -35,9 +35,6 @@ CROSS JOIN
             while ($row = $result->fetch_assoc()) {
                 $cartItems[] = $row;
             }
-
-
-                // Return the data as JSON
                 echo json_encode($cartItems);
                 exit();
         } else {
