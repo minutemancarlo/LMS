@@ -4,7 +4,7 @@ require_once '../classess/SessionHandler.php';
 // Initialize the DatabaseHandler
 $db = new DatabaseHandler();
 $session=new CustomSessionHandler();
-$memberID = 22;
+$memberID = $session->getSessionVariable('Id');
 // Check if the action is set and equals 'select'
 if (isset($_POST['action']) && $_POST['action'] === 'select') {
 
@@ -45,13 +45,76 @@ CROSS JOIN
             );
         }
 
-} else {
-    // Invalid action parameter
-    $response = array(
-        'success' => false,
-        'message' => 'Invalid action'
-    );
 }
+
+
+if (isset($_POST['action'])) {
+    $action = $_POST['action'];
+
+    if ($action === 'checkout') {
+        $dateBorrowed = date('Y-m-d');
+        $dueDate = date('Y-m-d', strtotime('+14 days'));
+
+        // Insert into loan table
+        $insertLoanData = array(
+            'memberID' => $memberID,
+            'dateBorrowed' => $dateBorrowed,
+            'dueDate' => $dueDate,
+            'is_returned' => 0,
+            'status' => 0
+        );
+
+        $insertLoanResult = $db->insert('loan', $insertLoanData);
+
+        if ($insertLoanResult) {
+          $loanID = $db->getLastInsertID();
+
+            // Select bookID from cart where memberID = $memberID
+            $cartResult = $db->select('cart', 'bookID', 'memberID=' . $memberID);
+
+            if ($cartResult && $cartResult->num_rows > 0) {
+                   // Insert into loaninfo table
+                   $insertValues = '';
+                   while ($row = $cartResult->fetch_assoc()) {
+                       $bookID = $row['bookID'];
+                       $insertValues .= "($loanID, $bookID),";
+                   }
+
+                   $insertValues = rtrim($insertValues, ',');
+                   $insertQuery = "INSERT INTO loaninfo (loanID, bookID) VALUES $insertValues";
+
+                   $insertResult = $db->executeQuery($insertQuery);
+
+                   if ($insertResult) {
+                     $db->delete('cart','memberID='.$memberID);
+                       $response = array(
+                           'success' => true,
+                           'message' => 'Transaction successfully queued.'
+                       );
+                   } else {
+                       $response = array(
+                           'success' => false,
+                           'message' => 'Failed to insert loan information.'
+                       );
+                   }
+               } else {
+                $response = array(
+                    'success' => false,
+                    'message' => 'No books found in the cart.'
+                );
+            }
+        } else {
+            $response = array(
+                'success' => false,
+                'message' => 'Failed to insert loan data.'
+            );
+        }
+    }
+}
+
+
+
+
 
 // Send the JSON response
 header('Content-Type: application/json');

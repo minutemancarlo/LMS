@@ -80,7 +80,7 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
                                 </div>
                                 <div class="card-body">
                                   <p class="fw-bold">Total Books: <span id="totalBooks">0</span></p>
-                                  <button class="btn btn-primary">Checkout</button>
+                                  <button class="btn btn-primary" id="checkout">Checkout</button>
                                 </div>
                               </div>
                             </div>
@@ -98,7 +98,7 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
     $(document).ready(function() {
       <?php echo $sweetAlert; ?>
       <?php echo $ajax; ?>
-var count =0;
+      var count =0;
       // Continuously send AJAX request every 10 seconds
         var timer = setInterval(function() {
             $.ajax({
@@ -206,7 +206,7 @@ var count =0;
 
       table.ajax.reload();
       count = table.rows().count()-1;
-      alert(count);
+
       $('#cardCount').html(count);
       $('#totalBooks').html(count);
 
@@ -241,6 +241,56 @@ var count =0;
             error: errorCallback
           });
 
+      });
+
+      $('#checkout').click(function() {
+        var table = $('#checkoutTable').DataTable();
+
+        if(table.rows().count()==0){
+          Toast.fire({
+            icon: 'error',
+            title: "Please add books to your cart."
+          });
+          return;
+        }
+        var successCallback = function(response) {
+            var data = JSON.parse(JSON.stringify(response));
+              if (data.success) {
+                Toast.fire({
+                  icon: 'success',
+                  title: data.message,
+                  timer: 2000,
+                }).then(() => {
+                  location.reload();
+                });
+            } else {
+              Toast.fire({
+                icon: 'error',
+                title: data.message
+              });
+            }
+        };
+
+        var errorCallback = function(xhr, status, error) {
+          var errorMessage = xhr.responseText;
+          console.log('AJAX request error:', errorMessage);
+          Toast.fire({
+          icon: 'error',
+          title: "Unexpected Error Occured. Please check browser logs for more info."
+        });
+        };
+        var formData = new FormData();
+        formData.append("action", "checkout");
+        $.ajax({
+          url: '../controllers/checkoutController.php',
+          type: 'POST',
+          data: formData,
+          dataType: 'json',
+          processData: false, // Important: Prevent jQuery from processing the data
+          contentType: false, // Important: Prevent jQuery from setting content type
+          success: successCallback,
+          error: errorCallback
+        });
       });
 
 

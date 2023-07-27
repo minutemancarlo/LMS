@@ -15,7 +15,7 @@ class DatabaseHandler {
 
         $this->connection = new mysqli($dbHost, $dbUser, $dbPass , $dbName);
 
-        if ($this->connection->connect_error) {          
+        if ($this->connection->connect_error) {
             // Log the connection error message using the createLogFile method
             $module = 'DatabaseHandler';
             $logMessage = 'Connection failed: ' . $this->connection->connect_error;
@@ -33,6 +33,10 @@ class DatabaseHandler {
         $query = "INSERT INTO $table ($columns) VALUES ($values)";
 
         return $this->executeQuery($query);
+    }
+
+    public function getLastInsertID() {
+        return $this->connection->insert_id;
     }
 
     public function update($table, $data, $where) {

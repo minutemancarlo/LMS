@@ -43,7 +43,7 @@ class RoleHandler {
               <a href="#"><i class="fas fa-undo"></i> Returns</a>
             </li>
             <li>
-              <a href=""><i class="fas fa-hourglass"></i> History</a>
+              <a href="history.php"><i class="fas fa-hourglass"></i> History</a>
             </li>
             <li>
               <a href=""><i class="fas fa-credit-card"></i> Payments</a>
