@@ -73,7 +73,6 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
       <?php echo $ajax; ?>
       var table=$('#historyTable').DataTable({
         processing: true,
-         dom: 'rtip',
          language: {
            emptyTable: "No transaction history"
         },
@@ -86,55 +85,49 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
           cache: false
         },
         columns: [
-          { title: '#', data: "RowNumber", visible: true },
-          { title: 'bookID', data: "bookID", visible: false },
-          {
-            title: 'Image',
-            data: "Thumbnail",
-            render: function(data, type, row) {
-              if (type === 'display' || type === 'filter') {
-              var defaultImage = '../assets/img/book.png';
-              return '<img src="' + (data!='' ? data : defaultImage) + '" class="img-thumbnail" alt="Thumbnail" style="width: 100px;height:100px">';
-            }
-            return data;
-          }
-        },
-          { title: 'Title', data: "Title", visible: true,
-          render: function(data, type, row) {
-            if (type === 'display' || type === 'filter') {
-              return data.toLowerCase().replace(/(^|\s)\S/g, function(t) {
-                return t.toUpperCase();
-              });
-            }
-            return data;
-          }
-         },
+          { title: '#', data: "rowNumber", visible: true },
+          { title: 'Loan ID', data: "LoanID", visible: true },
+          { title: 'Date Borrowed', data: "DateBorrowed", visible: true },
+          { title: 'Due Date', data: "DueDate", visible: true},
+          { title: 'Date Returned', data: "ReturnDate", visible: true },
+          { title: 'Status', data: "status", visible: true,
+            className: 'text-center',
+            render: function (data, type, row) {
+              var badge;
+              var today = new Date();
 
+              if (data === '0') {
+                badge = '<span class="badge bg-warning" style="color: black;">Pending</span> ';
+              } else if (data === '2') {
+                badge = '<span class="badge bg-success">Returned</span> ';
+              } else {
+
+                if (new Date(data.DueDate) >= today) {
+                  badge = '<span class="badge bg-danger">Overdue</span>';
+                } else {
+                  badge = '<span class="badge bg-primary">Borrowed</span>';
+                }
+              }
+              return badge;
+            }
+
+         },
           {
-            title: 'Remove',
+            title: 'Action',
             data: null,
             orderable: false,
             searchable: false,
             className: "text-center",
             render: function (data, type, row) {
-               var buttons='<a  class="btn btn-danger btn-action-add" data-id="' + row.bookID + '"><i class="fas fa-trash"></i></a>'
+               var buttons='<a  class="btn btn-primary btn-action-add" data-id="' + data.LoanID + '"><i class="fas fa-eye"></i></a>'
               // var buttons = '<button class="btn btn-success btn-action-edit" data-id="' + row.MemberID + '"><i class="fa fa-edit"></i></button> ';
               // buttons += '<button class="btn btn-danger btn-action-delete" data-id="' + row.MemberID + '"><i class="fa fa-trash"></i></button> ';
               return buttons;
             }
           }
-        ],
-
-        initComplete: function () {
-          count = table.rows().count();
-          $('#cardCount').html(count);
-          $('#totalBooks').html(count);
-      }
-
-      });
-
-
+        ]
     });
+  });
 
     </script>
 </body>
