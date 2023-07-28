@@ -392,11 +392,17 @@ HTML;
             render: function (data, type, row) {
               <?php
               if($roleValue=='0'){
-
                 echo 'var buttons = \'<button class="btn btn-success btn-action-edit" data-id="\' + row.BookID + \'"><i class="fa fa-edit"></i></button> \';';
-
               }else{
-                echo 'var buttons = \'<button class="btn btn-success btn-action-add" data-id="\' + row.BookID + \'"><i class="fa fa-cart-plus"></i></button> \';';
+                 echo "var disabled='';
+                       var btn='btn-success';
+                          if(data.Remaining==0){
+                              disabled='disabled';
+                              btn='btn-danger';
+                            }
+                            
+                            ";
+                echo 'var buttons = \'<button class="btn \' + btn + \' \' + disabled + \' btn-action-add" data-id="\' + row.BookID + \'"><i class="fa fa-cart-plus"></i></button> \';';
               }
                ?>
 

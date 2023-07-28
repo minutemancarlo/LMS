@@ -306,8 +306,8 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
       orderable: false,
       searchable: false,
       className: "text-center",
-      render: function (data, type, row) {
-        var buttons = '<button class="btn btn-secondary btn-action-view" tooltip="view details" data-id="' + row.LoanID + '"><i class="fa fa-eye"></i></button> ';
+      render: function (data, type, row) {        
+        var buttons = '<button class="btn btn-primary btn-action-view" tooltip="view details" data-id="' + row.LoanID + '"><i class="fa fa-eye"></i></button> ';
         return buttons;
       }
     }
