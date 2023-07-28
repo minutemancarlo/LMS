@@ -38,4 +38,34 @@ if (isset($_POST['action']) && $_POST['action'] === "select") {
         echo json_encode($response);
     }
 }
+
+
+if (isset($_POST['action']) && $_POST['action'] === "userCart") {
+
+    $query = "Select c.LoanID,a.* from catalog a inner join loaninfo b on a.BookID=b.BookID inner join loan c on b.LoanID=c.LoanID";
+
+    // Execute the query using the DatabaseHandler
+    $result = $db->executeQuery($query);
+
+    // Check if the query execution was successful
+    if ($result) {
+        // Fetch all the rows from the result as an associative array
+        $data = array();
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+
+        // Close the result set
+        $result->close();
+
+        // Return the data as JSON response
+        header('Content-Type: application/json');
+        echo json_encode($data);
+    } else {
+        // Return an error JSON response if the query execution failed
+        $response = array('success' => false, 'message' => 'Error executing query.');
+        header('Content-Type: application/json');
+        echo json_encode($response);
+    }
+}
 ?>

@@ -80,6 +80,10 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
                                 </div>
                                 <div class="card-body">
                                   <p class="fw-bold">Total Books: <span id="totalBooks">0</span></p>
+                                  <p hidden class="fw-bold">Return Date: <input type="text" class="datepicker-here form-control" data-range="true" data-multiple-dates-separator="-" data-language="en" name="DueDate" placeholder="Specify Return Date"></p>
+
+
+                                  <hr>
                                   <button class="btn btn-primary" id="checkout">Checkout</button>
                                 </div>
                               </div>
@@ -127,6 +131,23 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
                 }
             });
         }, 10000); // 10 seconds interval
+
+        $('.datepicker-here').datepicker({
+  range: true,
+  multipleDatesSeparator: '-',
+  language: 'en',
+  onRenderCell: function (date, cellType) {
+    if (cellType === 'day') {
+      var currentDate = new Date();
+      currentDate.setHours(0, 0, 0, 0);
+      if (date.getTime() <= currentDate.getTime()) {
+        return {
+          disabled: true
+        };
+      }
+    }
+  }
+});
 
       var table=$('#checkoutTable').DataTable({
         processing: true,

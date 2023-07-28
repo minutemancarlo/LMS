@@ -102,7 +102,9 @@ class SystemSettings {
 
     public function getConfig() {
      return $this->config;
- }
+   }
+
+   
 
     public function getWebsiteTitle() {
         return $this->websiteTitle;

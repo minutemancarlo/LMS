@@ -7,10 +7,7 @@ $session=new CustomSessionHandler();
 $memberID = $session->getSessionVariable('Id');
 // Check if the action is set and equals 'select'
 if (isset($_POST['action']) && $_POST['action'] === 'select') {
-
         // Sanitize the memberID value to prevent SQL injection
-
-
         // SQL query to select cart items joined with the catalog table
         $query = "SELECT
     (@row_number := @row_number + 1) AS RowNumber,
@@ -56,32 +53,32 @@ if (isset($_POST['action'])) {
         $dueDate = date('Y-m-d', strtotime('+14 days'));
 
         // Insert into loan table
+        $loanID=generateUniqueID();
         $insertLoanData = array(
-            'memberID' => $memberID,
-            'dateBorrowed' => $dateBorrowed,
+            'LoanID'=>(string)$loanID,
+            'MemberID' => $memberID,            
             'dueDate' => $dueDate,
             'is_returned' => 0,
             'status' => 0
         );
-
         $insertLoanResult = $db->insert('loan', $insertLoanData);
 
         if ($insertLoanResult) {
-          $loanID = $db->getLastInsertID();
+
 
             // Select bookID from cart where memberID = $memberID
-            $cartResult = $db->select('cart', 'bookID', 'memberID=' . $memberID);
+            $cartResult = $db->select('cart', 'BookID', 'MemberID=' . $memberID);
 
             if ($cartResult && $cartResult->num_rows > 0) {
                    // Insert into loaninfo table
                    $insertValues = '';
                    while ($row = $cartResult->fetch_assoc()) {
-                       $bookID = $row['bookID'];
-                       $insertValues .= "($loanID, $bookID),";
+                       $bookID = $row['BookID'];
+                       $insertValues .= "('$loanID', $bookID),";
                    }
 
                    $insertValues = rtrim($insertValues, ',');
-                   $insertQuery = "INSERT INTO loaninfo (loanID, bookID) VALUES $insertValues";
+                   $insertQuery = "INSERT INTO loaninfo (LoanID, BookID) VALUES $insertValues";
 
                    $insertResult = $db->executeQuery($insertQuery);
 
@@ -112,7 +109,12 @@ if (isset($_POST['action'])) {
     }
 }
 
+function generateUniqueID() {
+    $prefix = substr(uniqid(), -5); // Get the last 5 characters of the unique ID
+    $randomPart = substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'), 0, 5); // Generate a random 5-character alphanumeric string with uppercase letters and numbers
 
+    return strtoupper($prefix . $randomPart); // Convert the result to uppercase
+}
 
 
 
