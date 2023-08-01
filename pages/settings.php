@@ -42,6 +42,15 @@ $email_password = $config['email']['password'];
 <html lang="en">
 
 <head>
+     <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-K5W94QCNM0"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-K5W94QCNM0');
+</script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -75,6 +84,7 @@ $email_password = $config['email']['password'];
                             </ul>
                             <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade active show" id="general" role="tabpanel" aria-labelledby="general-tab">
+                                  <form>
                                     <div class="col-md-6">
                                         <p class="text-muted">General settings such as, site title, and so on.</p>
                                         <div class="mb-3">
@@ -134,7 +144,8 @@ $email_password = $config['email']['password'];
                                         </div>
                                         <div class="mb-3 text-end">
                                             <button class="btn btn-primary" type="button"><i class="fas fa-paper-plane"></i> Test</button>
-                                            <button class="btn btn-success" type="submit"><i class="fas fa-check"></i> Save</button>
+                                            <button type="submit" class="btn btn-success" type="submit"><i class="fas fa-check"></i> Save</button>
+                                          </form>
                                         </div>
                                     </div>
                                 </div>

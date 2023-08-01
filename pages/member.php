@@ -280,7 +280,7 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
             searchable: false,
             className: "text-center",
             render: function (data, type, row) {
-               var buttons='<a  class="btn btn-outline-info btn-rounded btn-action-edit" data-id="' + row.MemberID + '"><i class="fas fa-pen"></i></a>'
+               var buttons='<a  class="btn btn-success btn-action-edit" data-id="' + row.MemberID + '"><i class="fas fa-pen"></i></a>'
               // var buttons = '<button class="btn btn-success btn-action-edit" data-id="' + row.MemberID + '"><i class="fa fa-edit"></i></button> ';
               // buttons += '<button class="btn btn-danger btn-action-delete" data-id="' + row.MemberID + '"><i class="fa fa-trash"></i></button> ';
               return buttons;
