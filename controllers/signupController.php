@@ -34,8 +34,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     } else {
         // Insert the data into the member table
+        
         $insertResult = $db->insert('member', $postData);
-
+        $lastInsertedId = $db->getLastInsertID();
+        $generatedId = generateIdFromMemberId($lastInsertedId);
+        $data = array(
+            'id' => $generatedId          
+          );
+        $db->update("member",$data,"MemberID=".$lastInsertedId);
         if ($insertResult === true) {
 
 
@@ -95,6 +101,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo json_encode($response);
 
 
+}
+
+function generateIdFromMemberId($memberId) {
+    $currentYear = date('Y');
+    $currentTime = date('is');
+    $paddedMemberId = str_pad($memberId, 4, '0', STR_PAD_LEFT);
+    return $currentYear . $currentTime . $paddedMemberId;
 }
 
 function generateVerificationToken() {

@@ -22,7 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $storedPassword = $row['Password'];
         $role = $row['Role'];
         $name = ucwords($row['Name']);
+        $email = $row['Email'];
+        $phone = $row['Phone'];
         $ID = $row['MemberID'];
+        $profid = $row['id'];
         // Verify the provided password against the stored password using password_verify()
         if (password_verify($password, $storedPassword)) {
             $isVerified = $row['is_verified'];
@@ -37,6 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $session->setSessionVariable("Role",$role);
                 $session->setSessionVariable("Name",$name);
                 $session->setSessionVariable("Id",$ID);
+                $session->setSessionVariable("profId",$profid);
+                $session->setSessionVariable("email",$email);
+                $session->setSessionVariable("phone",$phone);
+
             } else {
                 $response = array(
                     'success' => false,

@@ -22,12 +22,9 @@ class RoleHandler {
             </li>
             <li>
               <a href="circulations.php"><i class="fas fa-book-reader"></i> Circulations</a>
-            </li>
+            </li>           
             <li>
-              <a href="dashboard.html"><i class="fas fa-credit-card"></i> Fines</a>
-            </li>
-            <li>
-              <a href="dashboard.html"><i class="fas fa-mail-bulk"></i> Notifications</a>
+              <a href="notif.php"><i class="fas fa-mail-bulk"></i> Notifications</a>
             </li>
             <li>
               <a href="settings.php"><i class="fas fa-cog"></i> System</a>
