@@ -63,10 +63,7 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
                                 <sub>
                                   <form class="" action="index.html" method="post">
                                     <div class="row">
-
-
                                       <div class="col">
-
                                         <select class="form-control" name="searchStatus">
                                           <option value="" selected>--Status--</option>
                                           <option value="" >All</option>
@@ -138,6 +135,7 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
                    <div class="modal-footer">
                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                        <button type="button" id="release" class="btn btn-primary">Release</button>
+                       <button type="button" id="notify" class="btn btn-warning">Notify</button>
                    </div>
                </div>
            </div>
@@ -246,12 +244,7 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
     ],
   });
 
-  $(document).on('click', '.btn-action-view', function() {
-     $('#viewLoan').modal('show');
-     var id = $(this).data('id');
-     $('#loanID').html(id);
-     cartTable.search(id).draw();
-   });
+
 
   var table=$('#circulationsTable').DataTable({
   processing: true,
@@ -279,22 +272,23 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
     { title: 'Date Borrowed', data: "DateBorrowed", visible: true },
     { title: 'DueDate', data: "DueDate", visible: true },
     { title: 'Return Date', data: "ReturnDate", visible: true },
-    { title: 'Status', data: "is_returned", visible: true,
+    { title: 'Status', data: "status", visible: true,
     className: 'text-center',
     render: function (data, type, row) {
       var badge;
-      var today = new Date();
 
+      var today = new Date();
       if (data === '0') {
         badge = '<span class="badge bg-warning" style="color: black;">Pending</span> ';
       } else if (data === '2') {
         badge = '<span class="badge bg-success">Returned</span> ';
       } else {
 
-        if (new Date(data.DueDate) >= today) {
+        if (new Date(row.DueDate) <= today) {
           badge = '<span class="badge bg-danger">Overdue</span>';
         } else {
           badge = '<span class="badge bg-primary">Borrowed</span>';
+
         }
       }
       return badge;
@@ -306,13 +300,72 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
       orderable: false,
       searchable: false,
       className: "text-center",
-      render: function (data, type, row) {        
+      render: function (data, type, row) {
         var buttons = '<button class="btn btn-primary btn-action-view" tooltip="view details" data-id="' + row.LoanID + '"><i class="fa fa-eye"></i></button> ';
         return buttons;
       }
     }
   ],
   order: [[1, 'desc']]
+});
+
+$(document).on('click', '.btn-action-view', function() {
+   $('#viewLoan').modal('show');
+   var id = $(this).data('id');
+   $('#loanID').html(id);
+   cartTable.search(id).draw();
+
+   var selectedRow = table.row($(this).closest('tr'));
+  var today = new Date();
+   if(selectedRow.data().status==='0'){
+     $('#release').attr('hidden',false);
+     $('#notify').attr('hidden',true);
+   }else if(selectedRow.data().status==='1'){
+     if (new Date(selectedRow.data().DueDate) <= today) {
+       $('#release').attr('hidden',true);
+       $('#notify').attr('hidden',false);
+     } else {
+       $('#release').attr('hidden',true);
+       $('#notify').attr('hidden',true);
+     }
+   }else{
+     $('#release').prop('hidden',true);
+     $('#notify').prop('hidden',true);
+   }
+ });
+
+ $('#release').click(function() {
+   var successCallback = function(response) {
+     console.log(response);
+       var data = JSON.parse(JSON.stringify(response));
+     if (data.success) {
+       Toast.fire({
+         icon: 'success',
+         title: data.message,
+         timer: 2000,
+       }).then(() => {
+         location.reload();
+         // window.location.href = window.origin+'/lms/admin';
+       });
+     } else {
+       Toast.fire({
+       icon: 'error',
+       title: data.message
+     });
+     }
+   };
+
+   var errorCallback = function(xhr, status, error) {
+
+     var errorMessage = xhr.responseText;
+     console.log('AJAX request error:', errorMessage);
+     Toast.fire({
+     icon: 'error',
+     title: "Unexpected Error Occured. Please check browser logs for more info."
+   });
+   };
+    var formData = { action: 'changeStatus', loanID:  $('#loanID').html(), status: 1};
+   loadContent('../controllers/circulationsController.php', formData, successCallback, errorCallback);
 });
 
 

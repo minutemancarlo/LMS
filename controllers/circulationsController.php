@@ -68,4 +68,43 @@ if (isset($_POST['action']) && $_POST['action'] === "userCart") {
         echo json_encode($response);
     }
 }
+
+
+if (isset($_POST['action']) && $_POST['action'] === "changeStatus") {
+
+   $loanID = $_POST['loanID'];
+   $newStatus = $_POST['status'];
+
+   // Get today's date
+    $today = date('Y-m-d');
+
+    // Calculate the due date (3 days from today)
+    $dueDate = date('Y-m-d', strtotime($today . ' +3 days'));
+
+    $updateData = array(
+        'status' => $newStatus,
+        'DateBorrowed' => $today,
+        'DueDate' => $dueDate
+    );
+
+   // Update the loan table using the DatabaseHandler class
+   $updateResult = $db->update('loan', $updateData, "LoanID = '$loanID'");
+
+   if ($updateResult) {
+       $response = array(
+           'success' => true,
+           'message' => 'Loan status updated successfully.'
+       );
+   } else {
+       $response = array(
+           'success' => false,
+           'message' => 'Failed to update loan status.'
+       );
+   }
+   header('Content-Type: application/json');
+   echo json_encode($response);
+
+
+}
+
 ?>

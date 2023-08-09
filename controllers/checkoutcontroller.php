@@ -50,13 +50,13 @@ if (isset($_POST['action'])) {
 
     if ($action === 'checkout') {
         $dateBorrowed = date('Y-m-d');
-        $dueDate = date('Y-m-d', strtotime('+14 days'));
+        $dueDate = date('Y-m-d', strtotime('+3 days'));
 
         // Insert into loan table
         $loanID=generateUniqueID();
         $insertLoanData = array(
             'LoanID'=>(string)$loanID,
-            'MemberID' => $memberID,            
+            'MemberID' => $memberID,
             'dueDate' => $dueDate,
             'is_returned' => 0,
             'status' => 0

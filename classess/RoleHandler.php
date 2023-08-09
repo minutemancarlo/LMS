@@ -27,8 +27,12 @@ class RoleHandler {
               <a href="notif.php"><i class="fas fa-mail-bulk"></i> Notifications</a>
             </li>
             <li>
+            <a href="settings.php"><i class="fas fa-barcode"></i> Scan</a>
+          </li>
+            <li>
               <a href="settings.php"><i class="fas fa-cog"></i> System</a>
             </li>
+           
             ';
         } else {
             // Standard User menu tags

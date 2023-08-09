@@ -16,6 +16,7 @@ $styles = $settings->getStyles();
 $scripts = $settings->getScripts();
 $sweetAlert = $settings->getSweetAlertInit();
 $ajax = $settings->getAjaxInit();
+$validate = $settings->validateForms();
 $settings->setDefaultTimezone();
 $baseURL = $settings->getBaseURL();
 $session->checkSessionExpiration();
@@ -125,40 +126,57 @@ $cards = $roleHandler->getCards($roleValue, $borrowed, $overdue, $users, $unveri
                                         </div>
                                     </div>
                                     <div style="font-size: 16px;" class="col-md-9">
-                                    <div class="box box-success">
-                                        <div class="box-body">
-                                        <form>
-                                            <div class="form-group">
-                                                <label for="profilePicture">Profile Picture:</label>
-                                                <input type="file" class="form-control-file" id="profilePicture" name="profilePicture">
+                                        <div class="box box-success">
+                                            <div class="box-body">
+                                                <form action="" id="signupForm" method="POST" class="needs-validation" novalidate>
+                                                    <div class="mb-3 text-start">
+                                                        <label for="name" class="form-label">Name</label>
+                                                        <input type="text" class="form-control" name="Name" id="Name" placeholder="" required>
+                                                        <div class="invalid-feedback">
+                                                            Please enter your name.
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 text-start">
+                                                        <label for="email" class="form-label">Email address</label>
+                                                        <input type="email" class="form-control" name="Email" id="Email" placeholder="" required>
+                                                        <div class="invalid-feedback">
+                                                            Please provide a valid email address.
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 text-start">
+                                                        <label for="address" class="form-label">Address</label>
+                                                        <input type="text" class="form-control" name="Address" id="Address" placeholder="" required>
+                                                        <div class="invalid-feedback">
+                                                            Please provide a your Address.
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 text-start">
+                                                        <label for="name" class="form-label">Phone Number</label>
+                                                        <sub class="text-muted"> e.g. 09123456789 </sub>
+                                                        <input type="tel" class="form-control" name="Phone" id="Phone" placeholder="" pattern="[0-9]{11}" required>
+                                                        <div class="invalid-feedback">
+                                                            Please enter valid phone number.
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 text-start">
+                                                        <label for="password" class="form-label">Password</label>
+                                                        <input type="password" class="form-control" name="Password" id="Password" pattern=".{8,}" placeholder="">
+                                                        <div class="invalid-feedback password-error">
+                                                            Please enter a password that is at least 8 characters long.
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-3 text-start">
+                                                        <input type="password" class="form-control" id="ConfirmPassword" placeholder="Confirm password">
+                                                        <div class="invalid-feedback confirm-password-error">
+                                                            Please confirm your password.
+                                                        </div>
+                                                    </div>
+
+                                                    <button type="submit" class="btn btn-primary shadow-2 mb-4">Update</button>
+                                                </form>
                                             </div>
-                                            <div class="form-row">
-                                                <div class="form-group col-md-6">
-                                                    <label for="fullName">Full Name:</label>
-                                                    <input type="text" class="form-control" id="fullName" name="fullName" required>
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <label for="phoneNumber">Phone Number:</label>
-                                                    <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" required>
-                                                </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="email">Email:</label>
-                                                <input type="email" class="form-control" id="email" name="email" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="password">Password:</label>
-                                                <input type="password" class="form-control" id="password" name="password" required>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="confirmPassword">Confirm Password:</label>
-                                                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
-                                            </div>
-                                            <button type="submit" class="btn btn-primary">Submit</button>
-                                        </form>
                                         </div>
-                                    </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -166,49 +184,121 @@ $cards = $roleHandler->getCards($roleValue, $borrowed, $overdue, $users, $unveri
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
+
+
     <?php echo $scripts; ?>
     <script src="../assets/js/script.js"></script>
     <script src="https://unpkg.com/bwip-js"></script>
 
     <script>
         $(document).ready(function() {
-            <?php //echo $sweetAlert; 
-            ?>
-            <?php //echo $ajax; 
-            ?>
-            // var count = 0;
-            // // Continuously send AJAX request every 10 seconds
-            // var timer = setInterval(function() {
-            //     $.ajax({
-            //         url: '../controllers/sessionController.php',
-            //         type: 'GET',
-            //         dataType: 'json',
-            //         dom: 'Bfrtip',
-            //         buttons: ['pdf'],
-            //         success: function(response) {
-            //             console.log(response);
-            //             var data = JSON.parse(JSON.stringify(response));
-            //             if (data.success) {
-            //                 // Show the session expired prompt using SweetAlert2
-            //                 clearInterval(timer);
-            //                 Swal.fire({
-            //                     title: 'Session Expired!',
-            //                     text: data.message,
-            //                     icon: 'warning',
-            //                     showCancelButton: false,
-            //                     confirmButtonText: 'Confirm'
-            //                 }).then((result) => {
-            //                     if (result.isConfirmed) {
-            //                         // Reload the page
-            //                         location.reload();
-            //                     }
-            //                 });
-            //             }
-            //         }
-            //     });
-            // }, 10000); // 10 seconds interval
+            <?php echo $sweetAlert; ?>
+            <?php echo $ajax; ?>
+            <?php echo $validate; ?>
+
+            $('#signupForm').on('submit', function() {
+        event.preventDefault();
+        var password = $('#Password').val();
+        var confirmPassword = $('#ConfirmPassword').val();
+
+        // Check if password is at least 8 characters long
+        if (password.length < 8) {
+            $('#Password').addClass('is-invalid');
+            $('.password-error').show();
+            return false; // Prevent form submission
+        } else {
+            $('#Password').removeClass('is-invalid');
+            $('.password-error').hide();
+        }
+
+        // Check if both password and confirm password fields are empty
+        if (password === '' && confirmPassword === '') {
+            $('#ConfirmPassword').addClass('is-invalid');
+            $('.confirm-password-error').show();
+            return false; // Prevent form submission
+        }
+
+        // Check if password and confirm password match
+        if (password !== confirmPassword) {
+            $('#ConfirmPassword').addClass('is-invalid');
+            $('.confirm-password-error').show();
+            return false; // Prevent form submission
+        } else {
+            $('#ConfirmPassword').removeClass('is-invalid');
+            $('.confirm-password-error').hide();
+        }
+
+
+
+
+        var successCallback = function(response) {
+          console.log(response);
+            var data = JSON.parse(JSON.stringify(response));
+          if (data.success) {
+            Toast.fire({
+              icon: 'success',
+              title: data.message,
+              timer: 2000,
+            }).then(() => {
+              // window.location.href = window.origin+'/lms/admin';
+            });
+          } else {
+            Toast.fire({
+            icon: 'error',
+            title: data.message
+          });
+          }
+        };
+
+        var errorCallback = function(xhr, status, error) {
+
+          var errorMessage = xhr.responseText;
+          console.log('AJAX request error:', errorMessage);
+          Toast.fire({
+          icon: 'error',
+          title: "Unexpected Error Occured. Please check browser logs for more info."
+        });
+        };
+         var formData = $(this).serialize();
+        loadContent('../controllers/profileController.php', formData, successCallback, errorCallback);
+
+    });
+
+
+            var count = 0;
+            // Continuously send AJAX request every 10 seconds
+            var timer = setInterval(function() {
+                $.ajax({
+                    url: '../controllers/sessionController.php',
+                    type: 'GET',
+                    dataType: 'json',
+                    dom: 'Bfrtip',
+                    buttons: ['pdf'],
+                    success: function(response) {
+                        console.log(response);
+                        var data = JSON.parse(JSON.stringify(response));
+                        if (data.success) {
+                            // Show the session expired prompt using SweetAlert2
+                            clearInterval(timer);
+                            Swal.fire({
+                                title: 'Session Expired!',
+                                text: data.message,
+                                icon: 'warning',
+                                showCancelButton: false,
+                                confirmButtonText: 'Confirm'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    // Reload the page
+                                    location.reload();
+                                }
+                            });
+                        }
+                    }
+                });
+            }, 10000); // 10 seconds interval
             // Default barcode data
             var defaultBarcodeData = "<?php echo $roleId;  ?>";
 
