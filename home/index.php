@@ -20,8 +20,8 @@ $websiteTitle=$settings->getWebsiteTitle();
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet" />
-        <!-- Bootstrap icons-->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
     </head>
@@ -35,6 +35,8 @@ $websiteTitle=$settings->getWebsiteTitle();
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
                             <li class="nav-item"><a class="nav-link" href="#about">About Us</a></li>
+                            <li class="nav-item"><a class="nav-link" href="../auth/signup.php">Sign Up</a></li>
+                            <li class="nav-item"><a class="nav-link" href="../auth/login.php">Login</a></li>
                         </ul>
                     </div>
                 </div>
@@ -49,10 +51,6 @@ $websiteTitle=$settings->getWebsiteTitle();
                                 <div class="badge bg-gradient-primary-to-secondary text-white mb-4"><div class="text-uppercase">Welcome Guest!</div></div>
                                 <div class="fs-3 fw-light text-muted">Municipality of Pozorrubio</div>
                                 <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">Library Management System</span></h1>
-                                <div class="d-grid gap-3 d-sm-flex justify-content-sm-center justify-content-xxl-start mb-3">
-                                    <a class="btn btn-primary btn-lg px-5 py-3 me-sm-3 fs-6 fw-bolder" href="../auth/signup.php">Sign Up</a>
-                                    <a class="btn btn-outline-dark btn-lg px-5 py-3 fs-6 fw-bolder" href="../auth/login.php">Login</a>
-                                </div>
                             </div>
                         </div>
                         <div class="col-xxl-7">
@@ -179,6 +177,54 @@ $websiteTitle=$settings->getWebsiteTitle();
                                 </div>
                             </div>
                         </div>
+                        <!-- Banner Here -->
+                        <div class="container mt-5">
+                          <div id="myCarousel" class="carousel slide" data-ride="carousel">
+                            <!-- Indicators -->
+                            <ul class="carousel-indicators">
+                              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                              <li data-target="#myCarousel" data-slide-to="1"></li>
+                              <li data-target="#myCarousel" data-slide-to="2"></li>
+                              <li data-target="#myCarousel" data-slide-to="3"></li>
+                              <li data-target="#myCarousel" data-slide-to="4"></li>
+                              <li data-target="#myCarousel" data-slide-to="5"></li>
+                            </ul>
+
+                            <!-- Slides -->
+                            <div class="carousel-inner">
+                              <div class="carousel-item active">
+                                <img src="../assets/img/slide/1.jpeg" class="d-block w-100" alt="Image 1">
+                              </div>
+                              <div class="carousel-item">
+                                <img src="../assets/img/slide/2.jpeg" class="d-block w-100" alt="Image 2">
+                              </div>
+                              <div class="carousel-item">
+                                <img src="../assets/img/slide/3.jpeg" class="d-block w-100" alt="Image 3">
+                              </div>
+                              <div class="carousel-item">
+                                <img src="../assets/img/slide/4.jpeg" class="d-block w-100" alt="Image 4">
+                              </div>
+                              <div class="carousel-item">
+                                <img src="../assets/img/slide/5.jpeg" class="d-block w-100" alt="Image 5">
+                              </div>
+                              <div class="carousel-item">
+                                <img src="../assets/img/slide/6.jpeg" class="d-block w-100" alt="Image 6">
+                              </div>
+                            </div>
+
+                            <!-- Controls -->
+                            <a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
+                              <span class="carousel-control-prev-icon"></span>
+                            </a>
+                            <a class="carousel-control-next" href="#myCarousel" data-slide="next">
+                              <span class="carousel-control-next-icon"></span>
+                            </a>
+                          </div>
+                        </div>
+
+                        <!-- Banner Here -->
+
+
                     </div>
                 </div>
             </header>
@@ -246,6 +292,9 @@ We value your feedback and suggestions. If you have any queries or require assis
         </footer>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
     </body>
