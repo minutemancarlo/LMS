@@ -64,29 +64,34 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
                                   <form class="" action="index.html" method="post">
                                     <div class="row">
                                       <div class="col">
-                                        <select class="form-control" name="searchStatus">
+                                        <select class="form-control" id="searchStatus">
                                           <option value="" selected>--Status--</option>
-                                          <option value="" >All</option>
-                                          <option value="">Borrowed</option>
-                                          <option value="">Pending</option>
-                                          <option value="">Overdue</option>
-                                          <option value="">Returned</option>
+                                          <option value="All" >All</option>
+                                          <option value="Borrowed">Borrowed</option>
+                                          <option value="Pending">Pending</option>
+                                          <option value="Overdue">Overdue</option>
+                                          <option value="Returned">Returned</option>
                                         </select>
                                       </div>
                                       <div class="col">
-                                        <input type="text" class="datepicker-here form-control" data-range="true" data-multiple-dates-separator="-" data-language="en" name="searchBorrowedDate" placeholder="Borrowed Date">
+                                        <input type="text" class="datepicker-here form-control" data-date-format="yyyy-mm-dd" data-range="true" data-multiple-dates-separator="/" data-language="en" id="searchBorrowedDate" placeholder="Borrowed Date">
                                       </div>
                                       <div class="col">
-                                        <input type="text" class="datepicker-here form-control" data-range="true" data-multiple-dates-separator="-" data-language="en" name="searchReturnDate" placeholder="Return Date">
+                                        <input type="text" class="datepicker-here form-control" data-range="true" data-multiple-dates-separator="-" data-language="en" id="searchReturnDate" placeholder="Return Date">
                                       </div>
                                       <div class="col">
-                                        <input type="text" class="datepicker-here form-control" data-range="true" data-multiple-dates-separator="-" data-language="en" name="searchDateReturned" placeholder="Date Returned">
+                                        <input type="text" class="datepicker-here form-control" data-range="true" data-multiple-dates-separator="-" data-language="en" id="searchDateReturned" placeholder="Date Returned">
                                       </div>
                                       <div class="col">
-                                        <input type="text" class="form-control" value="" name="searchID" placeholder="Loan ID">
+                                        <input type="text" class="form-control" value="" id="searchID" placeholder="Loan ID">
                                       </div>
                                       <div class="col">
-                                        <button type="button" class="btn btn-primary" style="width: 100%" name="button"> <i class="fa fa-search"></i> Search</button>
+                                        <button type="button" class="btn btn-primary" id="searchBtn" style="width: 100%" name="button">  Search</button>
+
+                                      </div>
+                                      <div class="col">
+
+                                        <button type="button" class="btn btn-danger" id="clearSearch" style="width: 100%" name="button" onclick="location.reload();"> <i class="fa fa-sync"></i></button>
                                       </div>
                                     </div>
                                   </form>
@@ -354,6 +359,64 @@ HTML;
   ],
   order: [[1, 'desc']]
 });
+
+
+
+$('#searchBtn').click(function() {
+var searchStatus = $('#searchStatus').val();
+table.columns(6).search(searchStatus).draw();
+
+var searchBorrowedDate = $('#searchBorrowedDate').val();
+var searchReturnDate = $('#searchReturnDate').val();
+var searchDateReturned = $('#searchDateReturned').val();
+var searchID = $('#searchID').val();
+
+function getDateRange(dateRange) {
+    if (!dateRange) {
+        return null;
+    }
+    var dates = dateRange.split('/');
+    return {
+        startDate: dates[0].trim(),
+        endDate: dates[1].trim()
+    };
+}
+
+var borrowedDateRange = getDateRange(searchBorrowedDate);
+var returnDateRange = getDateRange(searchReturnDate);
+var dateReturnedRange = getDateRange(searchDateReturned);
+
+$.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+    var borrowedDate = data[3];
+    var returnDate = data[4];
+    var dateReturned = data[5];
+
+    function isDateInRange(date, range) {
+        if (!range || !range.startDate || !range.endDate) {
+            return true;
+        }
+
+        var dateObj = new Date(date);
+        var startDateObj = new Date(range.startDate);
+        var endDateObj = new Date(range.endDate);
+
+        return dateObj >= startDateObj && dateObj <= endDateObj;
+    }
+
+    return (
+        isDateInRange(borrowedDate, borrowedDateRange) ||
+        isDateInRange(returnDate, returnDateRange) ||
+        isDateInRange(dateReturned, dateReturnedRange) ||
+        (searchID === '' || data[0] == searchID)
+    );
+});
+
+table.draw();
+
+$.fn.dataTable.ext.search.pop();
+});
+
+
 
 $(document).on('click', '.btn-action-view', function() {
    $('#viewLoan').modal('show');
