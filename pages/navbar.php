@@ -1,4 +1,5 @@
 <!-- navbar navigation component -->
+
 <nav class="navbar navbar-expand-lg navbar-white bg-white">
     <button type="button" id="sidebarCollapse" class="btn btn-light">
         <i class="fas fa-bars"></i><span></span>
@@ -7,7 +8,8 @@
         <ul class="nav navbar-nav ms-auto">
           <?php
             if($session->getSessionVariable('Role')=='0'){
-                echo '<li class="nav-item dropdown">
+                echo '
+                <li class="nav-item dropdown">
                     <div class="nav-dropdown">
                         <a href="#" id="nav1" class="nav-item nav-link dropdown-toggle text-secondary" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-link"></i> <span>Quick Links</span> <i style="font-size: .8em;" class="fas fa-caret-down"></i>
@@ -16,7 +18,7 @@
                             <ul class="nav-list">
                                 <li><a href="logs.php" class="dropdown-item"><i class="fas fa-list"></i> Logs</a></li>
                                 <div class="dropdown-divider"></div>
-                                <li><a href="" class="dropdown-item"><i class="fas fa-database"></i> Back ups</a></li>
+                                <li><a href="../controllers/backup.php" class="dropdown-item"><i class="fas fa-database"></i> Back ups</a></li>
                                 <div class="dropdown-divider"></div>
                                 <li><a href="updates.php" class="dropdown-item"><i class="fas fa-cloud-download-alt"></i> Updates</a></li>
                             </ul>

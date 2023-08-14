@@ -144,6 +144,11 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
 
     <!-- MODALS -->
     <?php echo $scripts; ?>
+    <script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
+      <script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/vfs_fonts.js"></script>
     <script src="../assets/js/script.js"></script>
     <script media="screen">
     $(document).ready(function() {
@@ -255,7 +260,48 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
     dataType: 'json',
     dataSrc: '',
     cache: false
-  },
+  },  <?php
+    if ($roleValue=='0') {
+      echo <<<HTML
+
+  dom: 'Bfrtip',
+  buttons: [
+      {
+          extend: 'excel',
+          text: '<i class="fas fa-file-excel"></i> Export to Excel',
+          className: 'btn btn-primary',
+          filename: 'Circulationlist_' + new Date().toISOString().slice(0, 19).replace(/-/g, "_").replace(/:/g, "_"), // Set the filename with the current datetime
+          exportOptions: {
+              columns: [0,2,3,4,5,6], // Hide the 2nd column when exporting to Excel
+          },
+      },
+      {
+          extend: 'pdf',
+          text: '<i class="fas fa-file-pdf"></i> Export to PDF',
+          className: 'btn btn-danger',
+          filename: 'Circulationlist_' + new Date().toISOString().slice(0, 19).replace(/-/g, "_").replace(/:/g, "_"), // Set the filename with the current datetime
+          exportOptions: {
+              columns: [0,2,3,4,5,6], // Hide the 2nd column when exporting to PDF
+          },
+          customize: function(doc) {
+              // Set landscape mode for the PDF
+              doc.content[1].layout = 'landscape';
+
+              // Add a custom title in the header
+              doc.content.unshift({
+                  text: 'Circulations List as of ' + new Date().toLocaleDateString(),
+                  fontSize: 18,
+                  margin: [0, 0, 0, 10],
+                  alignment: 'center'
+              });
+          }
+      },
+  ],
+HTML;
+    }
+
+     ?>
+     autoWidth: false,
   columns: [
     { title: 'Loan ID', data: "LoanID", visible: true },
     { title: 'MemberID', data: "MemberID", visible: false },
