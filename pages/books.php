@@ -31,6 +31,8 @@ $users=$result->num_rows;
 $result=$db->select('member','*','is_verified=0');
 $unverified=$result->num_rows;
 $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified);
+$config = parse_ini_file('../config.ini', true);
+$analytics=$config['analytics']['token'];
 
  ?>
 
@@ -39,17 +41,19 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
 
 <head>
   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-K5W94QCNM0"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $analytics; ?>"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
 
-  gtag('config', 'G-K5W94QCNM0');
+gtag('config', '<?php echo $analytics; ?>');
 </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+
     <title>Books | <?php echo $websiteTitle; ?></title>
     <?php echo $styles; ?>
     <!-- <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.7.1/css/buttons.dataTables.min.css"> -->
@@ -400,7 +404,7 @@ HTML;
                               disabled='disabled';
                               btn='btn-danger';
                             }
-                            
+
                             ";
                 echo 'var buttons = \'<button class="btn \' + btn + \' \' + disabled + \' btn-action-add" data-id="\' + row.BookID + \'"><i class="fa fa-cart-plus"></i></button> \';';
               }

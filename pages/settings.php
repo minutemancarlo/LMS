@@ -33,6 +33,8 @@ $cards = $roleHandler->getCards($roleValue,$borrowed,$overdue,$users,$unverified
 
 $config = parse_ini_file('../config.ini', true);
 $websiteTitle=$config['website']['name'];
+$analytics=$config['analytics']['token'];
+
 $email_host = $config['email']['host'];
 $email_port = $config['email']['port'];
 $email_username = $config['email']['username'];
@@ -43,17 +45,18 @@ $email_password = $config['email']['password'];
 
 <head>
      <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-K5W94QCNM0"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $analytics; ?>"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', 'G-K5W94QCNM0');
+  gtag('config', '<?php echo $analytics; ?>');
 </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
     <title>Settings | <?php echo $websiteTitle; ?></title>
       <?php echo $styles; ?>
     <link href="../assets/css/master.css" rel="stylesheet">
@@ -84,66 +87,52 @@ $email_password = $config['email']['password'];
                             </ul>
                             <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade active show" id="general" role="tabpanel" aria-labelledby="general-tab">
-                                  <form>
+                                  <form id="websiteSettings" enctype="multipart/form-data">
                                     <div class="col-md-6">
                                         <p class="text-muted">General settings such as, site title, and so on.</p>
                                         <div class="mb-3">
                                             <label for="site-title" class="form-label">Site Title</label>
-                                            <input type="text" name="site_title" class="form-control" value="<?php echo $websiteTitle; ?>">
+                                            <input type="text" name="site_title" class="form-control" value="<?php echo $websiteTitle; ?>" required>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Favicon</label>
-                                              <input class="form-control" name="site_favicon" type="file" id="formFile2">
+                                            <input class="form-control" name="site_favicon" type="file" id="formFile2" accept=".png">
                                             <small class="text-muted">The image must have a maximum size of 1MB</small>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Google Analytics Code</label>
-                                            <textarea class="form-control" name="google_analytics_code" rows="4"></textarea>
+                                            <textarea class="form-control" name="google_analytics_code"  rows="4"><?php echo $analytics; ?></textarea>
                                         </div>
                                         <div class="mb-3 text-end">
                                             <button class="btn btn-success" type="submit"><i class="fas fa-check"></i> Save</button>
                                         </div>
                                     </div>
+                                  </form>
+
                                 </div>
                                 <div class="tab-pane fade" id="email" role="tabpanel" aria-labelledby="email-tab">
+                                  <form id="emailSettings" method="post">
                                     <div class="col-md-6">
                                         <p class="text-muted">Email SMTP settings, notifications and others related to email.</p>
-                                        <!-- <div class="mb-3">
-                                            <label for="" class="form-label">Protocol</label>
-                                            <select name="" class="form-select">
-                                                <option value="">Select Protocol</option>
-                                                <option value="">SMTP</option>
-                                                <option value="">Sendmail</option>
-                                                <option value="">PHP Mailer</option>
-                                            </select>
-                                        </div> -->
                                         <div class="mb-3">
                                             <label for="" class="form-label">SMTP Host</label>
-                                            <input type="text" name="" class="form-control" value="<?php echo $email_host; ?>">
+                                            <input type="text" name="host" class="form-control" value="<?php echo $email_host; ?>">
                                         </div>
                                         <div class="mb-3">
                                             <label for="" class="form-label">SMTP Username</label>
-                                            <input type="text" name="" class="form-control" value="<?php echo $email_username; ?>">
+                                            <input type="text" name="username" class="form-control" value="<?php echo $email_username; ?>">
                                         </div>
-                                        <!-- <div class="mb-3">
-                                            <label for="" class="form-label">SMTP Security</label>
-                                            <select name="" class="form-select">
-                                                <option value="">Select SMTP Security</option>
-                                                <option value="">TLS</option>
-                                                <option value="">SSL</option>
-                                                <option value="">None</option>
-                                            </select>
-                                        </div> -->
+
                                         <div class="mb-3">
                                             <label for="" class="form-label">SMTP Port</label>
-                                            <input type="text" name="" class="form-control" value="<?php echo $email_port; ?>">
+                                            <input type="text" name="port" class="form-control" value="<?php echo $email_port; ?>">
                                         </div>
                                         <div class="mb-3">
                                             <label for="" class="form-label">SMTP Password</label>
-                                            <input type="password" name="" class="form-control" value="<?php echo $email_password; ?>">
+                                            <input type="password" name="password" class="form-control" value="<?php echo $email_password; ?>">
                                         </div>
                                         <div class="mb-3 text-end">
-                                            <button class="btn btn-primary" type="button"><i class="fas fa-paper-plane"></i> Test</button>
+                                            <!-- <button class="btn btn-primary" type="button"><i class="fas fa-paper-plane"></i> Test</button> -->
                                             <button type="submit" class="btn btn-success" type="submit"><i class="fas fa-check"></i> Save</button>
                                           </form>
                                         </div>
@@ -340,7 +329,8 @@ $email_password = $config['email']['password'];
     <script src="../assets/js/script.js"></script>
     <script type="text/javascript">
     $(document).ready(function() {
-
+      <?php echo $sweetAlert; ?>
+      <?php echo $ajax; ?>
     // Continuously send AJAX request every 10 seconds
       var timer = setInterval(function() {
           $.ajax({
@@ -368,7 +358,101 @@ $email_password = $config['email']['password'];
                   }
               }
           });
-      }, 10000); // 10 seconds interval
+      }, 10000);
+
+
+
+$('#websiteSettings').submit(function(event) {
+    event.preventDefault();
+
+
+    var formData = new FormData(this);
+    // Define success and error callbacks
+var successCallback = function(response) {
+  console.log(response);
+  // Perform actions on successful response
+  if (response.success) {
+      Toast.fire({
+          icon: 'success',
+          title: response.message,
+          timer: 2000,
+      }).then(() => {
+          location.reload();
+          // You can also perform other actions after successful response
+      });
+  } else {
+      Toast.fire({
+          icon: 'error',
+          title: response.message
+      });
+  }
+};
+
+var errorCallback = function(xhr, status, error) {
+  console.error(error);
+  // Handle error
+  Toast.fire({
+      icon: 'error',
+      title: "Unexpected Error Occured. Please check browser logs for more info."
+  });
+};
+$.ajax({
+  url: '../controllers/settingsController.php',
+  type: 'POST',
+  data: formData,
+  dataType: 'json',
+  processData: false,
+  contentType: false,
+  success: successCallback,
+  error: errorCallback
+});
+
+
+});
+
+$('#emailSettings').submit(function(event) {
+    event.preventDefault();
+
+
+
+    // Define success and error callbacks
+var successCallback = function(response) {
+  console.log(response);
+  // Perform actions on successful response
+  if (response.success) {
+      Toast.fire({
+          icon: 'success',
+          title: response.message,
+          timer: 2000,
+      }).then(() => {
+          location.reload();
+          // You can also perform other actions after successful response
+      });
+  } else {
+      Toast.fire({
+          icon: 'error',
+          title: response.message
+      });
+  }
+};
+
+var errorCallback = function(xhr, status, error) {
+  console.error(error);
+  // Handle error
+  Toast.fire({
+      icon: 'error',
+      title: "Unexpected Error Occured. Please check browser logs for more info."
+  });
+};
+var formData = $(this).serialize();
+
+// Use the loadContent function to send the form data
+loadContent('../controllers/settingsController.php', formData, successCallback, errorCallback);
+
+
+});
+
+
     });
     </script>
 </body>

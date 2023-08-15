@@ -22,17 +22,14 @@ class RoleHandler {
             </li>
             <li>
               <a href="circulations.php"><i class="fas fa-book-reader"></i> Circulations</a>
-            </li>           
+            </li>
             <li>
               <a href="notif.php"><i class="fas fa-mail-bulk"></i> Notifications</a>
             </li>
             <li>
-            <a href="settings.php"><i class="fas fa-barcode"></i> Scan</a>
-          </li>
-            <li>
               <a href="settings.php"><i class="fas fa-cog"></i> System</a>
             </li>
-           
+
             ';
         } else {
             // Standard User menu tags
@@ -40,15 +37,11 @@ class RoleHandler {
             <li>
             <a href="books.php"><i class="fas fa-book"></i> Catalogs</a>
             </li>
-            <li>
-              <a href="#"><i class="fas fa-undo"></i> Returns</a>
-            </li>
+
             <li>
               <a href="history.php"><i class="fas fa-hourglass"></i> History</a>
             </li>
-            <li>
-              <a href=""><i class="fas fa-credit-card"></i> Payments</a>
-            </li>
+
             <li>
             <a href="checkout.php">
 <i class="fas fa-shopping-cart"></i> Cart
@@ -156,7 +149,7 @@ class RoleHandler {
                         <div class="footer">
                             <hr />
                             <div class="stats">
-                                Total Number of unverified members
+                                Total unverified members
                             </div>
                         </div>
                     </div>

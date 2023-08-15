@@ -22,14 +22,27 @@ $session->checkSessionExpiration();
 $roleValue = $session->getSessionVariable("Role");
 $roleName = $roleHandler->getRoleName($roleValue);
 $menuTags = $roleHandler->getMenuTags($roleValue);
+$config = parse_ini_file('../config.ini', true);
+$analytics=$config['analytics']['token'];
  ?>
 <!doctype html>
 <html lang="en">
 
 <head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $analytics; ?>"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', '<?php echo $analytics; ?>');
+</script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+
     <title>Circulations | <?php echo $websiteTitle; ?></title>
     <?php echo $styles; ?>
     <link href="../assets/css/master.css" rel="stylesheet">
@@ -140,7 +153,8 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
                    <div class="modal-footer">
                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                        <button type="button" id="release" class="btn btn-primary">Release</button>
-                       <button type="button" id="notify" class="btn btn-warning">Notify</button>
+                       <button type="button" id="return" class="btn btn-info">Return</button>
+                       <button type="button" id="notify" class="btn btn-warning">Extend</button>
                    </div>
                </div>
            </div>
@@ -335,7 +349,7 @@ HTML;
         badge = '<span class="badge bg-success">Returned</span> ';
       } else {
 
-        if (new Date(row.DueDate) <= today) {
+        if (new Date(row.DueDate) <= today) {          
           badge = '<span class="badge bg-danger">Overdue</span>';
         } else {
           badge = '<span class="badge bg-primary">Borrowed</span>';
@@ -429,17 +443,21 @@ $(document).on('click', '.btn-action-view', function() {
    if(selectedRow.data().status==='0'){
      $('#release').attr('hidden',false);
      $('#notify').attr('hidden',true);
+     $('#return').attr('hidden',true);
    }else if(selectedRow.data().status==='1'){
      if (new Date(selectedRow.data().DueDate) <= today) {
        $('#release').attr('hidden',true);
+       $('#return').attr('hidden',false);
        $('#notify').attr('hidden',false);
      } else {
        $('#release').attr('hidden',true);
        $('#notify').attr('hidden',true);
+       $('#return').attr('hidden',false);
      }
    }else{
      $('#release').prop('hidden',true);
      $('#notify').prop('hidden',true);
+     $('#return').attr('hidden',true);
    }
  });
 
@@ -475,6 +493,74 @@ $(document).on('click', '.btn-action-view', function() {
    };
     var formData = { action: 'changeStatus', loanID:  $('#loanID').html(), status: 1};
    loadContent('../controllers/circulationsController.php', formData, successCallback, errorCallback);
+});
+
+$('#return').click(function() {
+  var successCallback = function(response) {
+    console.log(response);
+      var data = JSON.parse(JSON.stringify(response));
+    if (data.success) {
+      Toast.fire({
+        icon: 'success',
+        title: data.message,
+        timer: 2000,
+      }).then(() => {
+        location.reload();
+        // window.location.href = window.origin+'/lms/admin';
+      });
+    } else {
+      Toast.fire({
+      icon: 'error',
+      title: data.message
+    });
+    }
+  };
+
+  var errorCallback = function(xhr, status, error) {
+
+    var errorMessage = xhr.responseText;
+    console.log('AJAX request error:', errorMessage);
+    Toast.fire({
+    icon: 'error',
+    title: "Unexpected Error Occured. Please check browser logs for more info."
+  });
+  };
+   var formData = { action: 'changeStatus', loanID:  $('#loanID').html(), status: 2};
+  loadContent('../controllers/circulationsController.php', formData, successCallback, errorCallback);
+});
+
+$('#notify').click(function() {
+  var successCallback = function(response) {
+    console.log(response);
+      var data = JSON.parse(JSON.stringify(response));
+    if (data.success) {
+      Toast.fire({
+        icon: 'success',
+        title: data.message,
+        timer: 2000,
+      }).then(() => {
+        location.reload();
+        // window.location.href = window.origin+'/lms/admin';
+      });
+    } else {
+      Toast.fire({
+      icon: 'error',
+      title: data.message
+    });
+    }
+  };
+
+  var errorCallback = function(xhr, status, error) {
+
+    var errorMessage = xhr.responseText;
+    console.log('AJAX request error:', errorMessage);
+    Toast.fire({
+    icon: 'error',
+    title: "Unexpected Error Occured. Please check browser logs for more info."
+  });
+  };
+   var formData = { action: 'changeStatus', loanID:  $('#loanID').html(), extend: true, status: 2 };
+  loadContent('../controllers/circulationsController.php', formData, successCallback, errorCallback);
 });
 
 

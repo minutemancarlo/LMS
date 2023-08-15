@@ -15,7 +15,8 @@ $websiteTitle=$settings->getWebsiteTitle();
         <meta name="author" content="" />
         <title>Home | <?php echo $websiteTitle; ?></title>
         <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+        <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+
         <!-- Custom Google font-->
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

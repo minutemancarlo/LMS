@@ -83,6 +83,7 @@ class DatabaseHandler {
 
             die("Query execution failed: " . $this->connection->error);
         }
+        
 
         return $result;
     }

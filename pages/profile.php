@@ -25,6 +25,8 @@ $roleId = $session->getSessionVariable("profId");
 $Name = $session->getSessionVariable("Name");
 $email = $session->getSessionVariable("email");
 $contact = $session->getSessionVariable("phone");
+$address = $session->getSessionVariable("address");
+
 $roleName = $roleHandler->getRoleName($roleValue);
 $menuTags = $roleHandler->getMenuTags($roleValue);
 $result = $db->select('loan', '*', 'is_returned=0');
@@ -35,14 +37,28 @@ $users = $result->num_rows;
 $result = $db->select('member', '*', 'is_verified=0');
 $unverified = $result->num_rows;
 $cards = $roleHandler->getCards($roleValue, $borrowed, $overdue, $users, $unverified);
+$config = parse_ini_file('../config.ini', true);
+$analytics=$config['analytics']['token'];
+
 ?>
 <!doctype html>
 <html lang="en">
 
 <head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $analytics; ?>"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', '<?php echo $analytics; ?>');
+</script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+
     <title>Profile | <?php echo $websiteTitle; ?> </title>
     <?php echo $styles; ?>
     <link href="../assets/css/master.css" rel="stylesheet">
@@ -104,48 +120,45 @@ $cards = $roleHandler->getCards($roleValue, $borrowed, $overdue, $users, $unveri
                         <div class="box box-primary">
                             <div class="box-body">
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <!-- <div class="col-md-3">
                                         <div class="card">
                                             <div class="card-body" style="font-size: small;">
                                                 <h3 style="color: white;">LMS E-Card</h3>
-                                                <!-- Profile Image -->
                                                 <img src="../assets/img/user.png" alt="Profile Image" width="150" height="150" style="border-radius: 50%;">
                                                 <div style="font-size: 16px;">
-                                                    <!-- Name -->
-                                                    <p><?php echo ucwords($Name); ?></p>
+                                                    <p><?php //echo ucwords($Name); ?></p>
 
-                                                    <!-- Email -->
-                                                    <p><?php echo $email; ?></p>
+                                                    <p><?php //echo $email; ?></p>
 
-                                                    <!-- Contact Number -->
-                                                    <p><?php echo $contact; ?></p>
+                                                    <p><?php// echo $contact; ?></p>
                                                 </div>
-                                                <!-- Sample Barcode -->
                                                 <canvas style="width: 100%" id="barcodeContainer">barcode</canvas>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div style="font-size: 16px;" class="col-md-9">
+                                    </div> -->
+                                    <div style="font-size: 16px;" class="col-md-6">
                                         <div class="box box-success">
                                             <div class="box-body">
                                                 <form action="" id="signupForm" method="POST" class="needs-validation" novalidate>
                                                     <div class="mb-3 text-start">
                                                         <label for="name" class="form-label">Name</label>
-                                                        <input type="text" class="form-control" name="Name" id="Name" placeholder="" required>
+                                                        <input type="text" name="action" value="update" hidden>
+                                                        <input type="text" class="form-control" name="Name" id="Name" placeholder="" value="<?php echo ucwords($Name); ?>" required>
                                                         <div class="invalid-feedback">
                                                             Please enter your name.
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 text-start">
                                                         <label for="email" class="form-label">Email address</label>
-                                                        <input type="email" class="form-control" name="Email" id="Email" placeholder="" required>
+                                                        <sub class="text-muted"></sub>
+                                                        <input type="email" class="form-control" name="Email" id="Email" placeholder="" value="<?php echo $email; ?>" required disabled>
                                                         <div class="invalid-feedback">
                                                             Please provide a valid email address.
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 text-start">
                                                         <label for="address" class="form-label">Address</label>
-                                                        <input type="text" class="form-control" name="Address" id="Address" placeholder="" required>
+                                                        <input type="text" class="form-control" name="Address" id="Address" value="<?php echo $address; ?>" placeholder="" required>
                                                         <div class="invalid-feedback">
                                                             Please provide a your Address.
                                                         </div>
@@ -153,13 +166,15 @@ $cards = $roleHandler->getCards($roleValue, $borrowed, $overdue, $users, $unveri
                                                     <div class="mb-3 text-start">
                                                         <label for="name" class="form-label">Phone Number</label>
                                                         <sub class="text-muted"> e.g. 09123456789 </sub>
-                                                        <input type="tel" class="form-control" name="Phone" id="Phone" placeholder="" pattern="[0-9]{11}" required>
+                                                        <input type="tel" class="form-control" name="Phone" id="Phone" placeholder="" value="<?php echo $contact; ?>" pattern="[0-9]{11}" required>
                                                         <div class="invalid-feedback">
                                                             Please enter valid phone number.
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 text-start">
                                                         <label for="password" class="form-label">Password</label>
+                                                        <sub class="text-muted"> Leave it blank if your don't want to change. </sub>
+
                                                         <input type="password" class="form-control" name="Password" id="Password" pattern=".{8,}" placeholder="">
                                                         <div class="invalid-feedback password-error">
                                                             Please enter a password that is at least 8 characters long.
@@ -204,7 +219,7 @@ $cards = $roleHandler->getCards($roleValue, $borrowed, $overdue, $users, $unveri
         var password = $('#Password').val();
         var confirmPassword = $('#ConfirmPassword').val();
 
-        // Check if password is at least 8 characters long
+        if(password.length!=0){
         if (password.length < 8) {
             $('#Password').addClass('is-invalid');
             $('.password-error').show();
@@ -230,7 +245,7 @@ $cards = $roleHandler->getCards($roleValue, $borrowed, $overdue, $users, $unveri
             $('#ConfirmPassword').removeClass('is-invalid');
             $('.confirm-password-error').hide();
         }
-
+}
 
 
 
@@ -243,6 +258,7 @@ $cards = $roleHandler->getCards($roleValue, $borrowed, $overdue, $users, $unveri
               title: data.message,
               timer: 2000,
             }).then(() => {
+              location.reload();
               // window.location.href = window.origin+'/lms/admin';
             });
           } else {
@@ -300,10 +316,10 @@ $cards = $roleHandler->getCards($roleValue, $borrowed, $overdue, $users, $unveri
                 });
             }, 10000); // 10 seconds interval
             // Default barcode data
-            var defaultBarcodeData = "<?php echo $roleId;  ?>";
+            //var defaultBarcodeData = "<?php //echo $roleId;  ?>";
 
             // Generate the barcode on document load
-            generateBarcode(defaultBarcodeData);
+            //generateBarcode(defaultBarcodeData);
 
         });
 

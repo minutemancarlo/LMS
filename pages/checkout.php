@@ -25,14 +25,29 @@ $validate = $settings->validateForms();
 $roleValue = $session->getSessionVariable("Role");
 $roleName = $roleHandler->getRoleName($roleValue);
 $menuTags = $roleHandler->getMenuTags($roleValue);
+$email = $session->getSessionVariable("email");
+$name= $session->getSessionVariable("Name");
+$config = parse_ini_file('../config.ini', true);
+$analytics=$config['analytics']['token'];
  ?>
 <!doctype html>
 <html lang="en">
 
 <head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $analytics; ?>"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', '<?php echo $analytics; ?>');
+</script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+
     <title>Checkout | <?php echo $websiteTitle; ?></title>
       <?php echo $styles; ?>
       <style media="screen">
@@ -302,6 +317,9 @@ $menuTags = $roleHandler->getMenuTags($roleValue);
         };
         var formData = new FormData();
         formData.append("action", "checkout");
+        formData.append("email", "<?php echo $email; ?>");
+        formData.append("name", "<?php echo $name; ?>");
+
         $.ajax({
           url: '../controllers/checkoutController.php',
           type: 'POST',

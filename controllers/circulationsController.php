@@ -77,15 +77,33 @@ if (isset($_POST['action']) && $_POST['action'] === "changeStatus") {
 
    // Get today's date
     $today = date('Y-m-d');
-
-    // Calculate the due date (3 days from today)
     $dueDate = date('Y-m-d', strtotime($today . ' +3 days'));
 
+    // Calculate the due date (3 days from today)
+    if($newStatus!=2){
     $updateData = array(
         'status' => $newStatus,
         'DateBorrowed' => $today,
-        'DueDate' => $dueDate
+        'DueDate' => $dueDate,
+        'is_returned' => $newStatus==2?1:0
     );
+  }else{
+    if (isset($_POST['extend'])) {
+      $updateData = array(
+        'DueDate' => $dueDate
+      );
+    }else{
+    $updateData = array(
+        'status' => $newStatus,
+        'is_returned' => $newStatus==2?1:0,
+        'ReturnDate' => $today,
+          'is_returned' => $newStatus==2?1:0
+    );
+  }
+  }
+
+
+
 
    // Update the loan table using the DatabaseHandler class
    $updateResult = $db->update('loan', $updateData, "LoanID = '$loanID'");

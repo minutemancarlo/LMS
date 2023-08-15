@@ -21,6 +21,8 @@ $link = $settings->getBaseURL()."auth/login.php";
   <meta name="x-apple-disable-message-reformatting">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta content="telephone=no" name="format-detection">
+  <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+  
   <title>Verified | <?php echo $settings->getWebsiteTitle(); ?></title><!--[if (mso 16)]>
     <style type="text/css">
     a {text-decoration: none;}

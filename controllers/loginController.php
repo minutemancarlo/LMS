@@ -9,12 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Retrieve the email and password from the form data
     $email = $_POST['email'];
     $password = $_POST['password'];
-
-
-    // Create an instance of the DatabaseHandler class
     $db = new DatabaseHandler();
-
-    // Select the record from the database based on the email
     $result = $db->select("member", "*", "email = '$email'");
 
     if ($result->num_rows > 0) {
@@ -26,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $phone = $row['Phone'];
         $ID = $row['MemberID'];
         $profid = $row['id'];
+        $address= $row['Address'];
         // Verify the provided password against the stored password using password_verify()
         if (password_verify($password, $storedPassword)) {
             $isVerified = $row['is_verified'];
@@ -43,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $session->setSessionVariable("profId",$profid);
                 $session->setSessionVariable("email",$email);
                 $session->setSessionVariable("phone",$phone);
+                $session->setSessionVariable("address",$address);
 
             } else {
                 $response = array(

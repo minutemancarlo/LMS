@@ -4,7 +4,13 @@ use PHPMailer\PHPMailer\SMTP;
 require 'phpmailer/vendor/autoload.php';
 require_once '../classess/SystemSettings.php';
 $settings = new SystemSettings();
+$config = parse_ini_file('../config.ini', true);
 
+// Access email settings
+$emailHost = $config['email']['host'];
+$emailUsername = $config['email']['username'];
+$emailPort = $config['email']['port'];
+$emailPassword = $config['email']['password'];
 
 
 
@@ -25,20 +31,20 @@ $action=$_POST['action'];
     // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
     $mail->SMTPDebug = 0;
     $mail->IsSMTP();
-    $mail->Host = "smtp.dev.x10.bz";
-    $mail->Port = 465;
+    $mail->Host = $emailHost;
+    $mail->Port = $emailPort;//465
 
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
 
     $mail->SMTPAuth = true;
-    $mail->Username = 'noreply@dev.x10.bz';
-    $mail->Password = '2JJzkKnfLW';
+    $mail->Username = $emailUsername;//'noreply@dev.x10.bz';
+    $mail->Password = $emailPassword;//'2JJzkKnfLW';
 
 
     //Set who the message is to be sent from
-    $mail->setFrom('noreply@dev.x10.bz', "LMS Pozorrubio");
+    $mail->setFrom($emailUsername, "LMS Pozorrubio");
     //Set an alternative reply-to address
-    $mail->addReplyTo('noreply@dev.x10.bz', "LMS Pozorrubio");
+    $mail->addReplyTo($emailUsername, "LMS Pozorrubio");
     //Set who the message is to be sent to
     $mail->addAddress($email);
 

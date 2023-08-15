@@ -1,66 +1,58 @@
-var trafficchart = document.getElementById("trafficflow");
-var saleschart = document.getElementById("sales");
-
-// new
-var myChart1 = new Chart(trafficchart, {
-type: 'line',
-data: {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    datasets: [{
-        data: ['1135', '1135', '1140', '1168', '1150', '1145', '1155', '1155', '1150', '1160', '1185', '1190'],
-        backgroundColor: "rgba(48, 164, 255, 0.2)",
-        borderColor: "rgba(48, 164, 255, 0.8)",
-        fill: true,
-        borderWidth: 1
-    }]
-},
-options: {
-    animation: {
-        duration: 2000,
-        easing: 'easeOutQuart',
-    },
-    plugins: {
-        legend: {
-            display: false,
-            position: 'right',
-        },
-        title: {
-            display: true,
-            text: 'Number of Visitors',
-            position: 'left',
-        },
-    },
-}
-});
-
-// new
-var myChart2 = new Chart(saleschart, {
-type: 'bar',
-data: {
-    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    datasets: [{
-            label: 'Income',
-            data: ["280", "300", "400", "600", "450", "400", "500", "550", "450", "650", "950", "1000"],
-            backgroundColor: "rgba(76, 175, 80, 0.5)",
-            borderColor: "#6da252",
-            borderWidth: 1,
-    }]
-},
-options: {
-    animation: {
-        duration: 2000,
-        easing: 'easeOutQuart',
-    },
-    plugins: {
-        legend: {
-            display: false,
-            position: 'top',
-        },
-        title: {
-            display: true,
-            text: 'Number of Sales',
-            position: 'left',
-        },
-    },
-}
-});
+// var trafficchart = document.getElementById("trafficflow");
+// var saleschart = document.getElementById("sales");
+//
+// // new
+//
+//
+// // new
+// var myChart2 = new Chart(saleschart, {
+//     type: 'line',
+//     data: {
+//         labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+//         datasets: [{
+//             label: 'Borrowed',
+//             data: ['0', '0', '0', '0', '1', '1', '1', '2', '2', '2', '3', '3'], // Your data for dataset 1
+//             backgroundColor: "rgba(48, 164, 255, 0.2)",
+//             borderColor: "rgba(48, 164, 255, 0.8)",
+//             fill: true,
+//             borderWidth: 1
+//         },
+//         {
+//             label: 'Returned',
+//             data: ['1', '1', '1', '1', '2', '2', '2', '3', '3', '3', '4', '4'],
+//             backgroundColor: "rgba(255, 99, 132, 0.2)",
+//             borderColor: "rgba(255, 99, 132, 0.8)",
+//             fill: true,
+//             borderWidth: 1
+//         }]
+//     },
+//     options: {
+//         animation: {
+//             duration: 2000,
+//             easing: 'easeOutQuart',
+//         },
+//         scales: {
+//             y: {
+//                 beginAtZero: true,
+//                 ticks: {
+//                     stepSize: 1, // Set the step size to 1
+//                     callback: function(value, index, values) {
+//                         return value.toFixed(0); // Format to remove decimals
+//                     }
+//                 }
+//             }
+//         },
+//         plugins: {
+//             legend: {
+//                 display: true,
+//                 position: 'bottom'
+//
+//             },
+//             title: {
+//                 display: true,
+//                 text: 'Circulations Count',
+//                 position: 'left',
+//             },
+//         },
+//     }
+// });

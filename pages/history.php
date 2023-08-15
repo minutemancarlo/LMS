@@ -25,23 +25,27 @@ $validate = $settings->validateForms();
 $roleValue = $session->getSessionVariable("Role");
 $roleName = $roleHandler->getRoleName($roleValue);
 $menuTags = $roleHandler->getMenuTags($roleValue);
+$config = parse_ini_file('../config.ini', true);
+$analytics=$config['analytics']['token'];
  ?>
 <!doctype html>
 <html lang="en">
 
 <head>
-   <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-K5W94QCNM0"></script>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=<?php echo $analytics; ?>"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
 
-  gtag('config', 'G-K5W94QCNM0');
+gtag('config', '<?php echo $analytics; ?>');
 </script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" type="image/png" href="../assets/img/favicon.png">
+
     <title>History | <?php echo $websiteTitle; ?></title>
     <?php echo $styles; ?>
     <link href="../assets/css/master.css" rel="stylesheet">
