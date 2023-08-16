@@ -24,7 +24,16 @@ $roleName = $roleHandler->getRoleName($roleValue);
 $menuTags = $roleHandler->getMenuTags($roleValue);
 $result=$db->select('loan','*','is_returned=0');
 $borrowed=$result->num_rows;
-$overdue=0;
+$result=$db->executeQuery("
+  Select
+    count(*) as count
+FROM loan where Year(DueDate)=Year(curdate()) and CURDATE() >= DueDate AND Status = 1 and is_returned=0 group by loanid");
+ $row = $result->fetch_assoc();
+$overdue=$row['count'];
+
+
+
+
 $result=$db->select('member','*','');
 $users=$result->num_rows;
 $result=$db->select('member','*','is_verified=0');
