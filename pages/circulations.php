@@ -349,7 +349,7 @@ HTML;
         badge = '<span class="badge bg-success">Returned</span> ';
       } else {
 
-        if (new Date(row.DueDate) <= today) {          
+        if (new Date(row.DueDate) <= today) {
           badge = '<span class="badge bg-danger">Overdue</span>';
         } else {
           badge = '<span class="badge bg-primary">Borrowed</span>';
@@ -371,7 +371,7 @@ HTML;
       }
     }
   ],
-  order: [[1, 'desc']]
+  order: [[3, 'desc']]
 });
 
 
@@ -418,9 +418,9 @@ $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
     }
 
     return (
-        isDateInRange(borrowedDate, borrowedDateRange) ||
-        isDateInRange(returnDate, returnDateRange) ||
-        isDateInRange(dateReturned, dateReturnedRange) ||
+        isDateInRange(borrowedDate, borrowedDateRange) &&
+        isDateInRange(returnDate, returnDateRange) &&
+        isDateInRange(dateReturned, dateReturnedRange) &&
         (searchID === '' || data[0] == searchID)
     );
 });
