@@ -436,7 +436,7 @@ $(document).on('click', '.btn-action-view', function() {
    $('#viewLoan').modal('show');
    var id = $(this).data('id');
    $('#loanID').html(id);
-   cartTable.search(id).draw();
+   cartTable.columns(0).search(id).draw();
 
    var selectedRow = table.row($(this).closest('tr'));
   var today = new Date();

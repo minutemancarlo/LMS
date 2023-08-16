@@ -22,7 +22,7 @@ $session->checkSessionExpiration();
 $roleValue = $session->getSessionVariable("Role");
 $roleName = $roleHandler->getRoleName($roleValue);
 $menuTags = $roleHandler->getMenuTags($roleValue);
-$result=$db->select('loan','*','is_returned=0');
+$result=$db->select('loan','*','is_returned=0 and status=1');
 $borrowed=$result->num_rows;
 $result=$db->executeQuery("
   Select
