@@ -111,12 +111,12 @@ if (isset($_POST['action']) && $_POST['action'] === "changeStatus") {
    if ($updateResult) {
        $response = array(
            'success' => true,
-           'message' => 'Loan status updated successfully.'
+           'message' => 'Borrow status updated successfully.'
        );
    } else {
        $response = array(
            'success' => false,
-           'message' => 'Failed to update loan status.'
+           'message' => 'Failed to update borrow status.'
        );
    }
    header('Content-Type: application/json');

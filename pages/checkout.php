@@ -66,13 +66,13 @@ gtag('config', '<?php echo $analytics; ?>');
             <div class="content">
                 <div class="container-fluid">
                     <div class="page-title">
-                        <h3>Checkout</h3>
+                        <h3>Borrow Books</h3>
                         <div class="container mt-5">
                           <div class="row">
                             <div class="col-md-8">
                               <div class="card mb-3">
                                 <div class="card-header">
-                                  Checkout Cart
+                                  My Selection
                                 </div>
                                 <div class="card-body">
                                   <div class="row g-3">
@@ -99,7 +99,7 @@ gtag('config', '<?php echo $analytics; ?>');
 
 
                                   <hr>
-                                  <button class="btn btn-primary" id="checkout">Checkout</button>
+                                  <button class="btn btn-primary" id="checkout">Borrow</button>
                                 </div>
                               </div>
                             </div>
@@ -168,7 +168,7 @@ gtag('config', '<?php echo $analytics; ?>');
         processing: true,
          dom: 'rtip',
          language: {
-           emptyTable: "No items in your cart"
+           emptyTable: "No items selected"
         },
         ajax: {
           url: "../controllers/checkoutController.php",
@@ -285,7 +285,7 @@ gtag('config', '<?php echo $analytics; ?>');
         if(table.rows().count()==0){
           Toast.fire({
             icon: 'error',
-            title: "Please add books to your cart."
+            title: "Please add books to your selection."
           });
           return;
         }

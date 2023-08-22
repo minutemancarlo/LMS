@@ -100,12 +100,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
           if ($bookExists) {
               // Book exists in cart, delete it
-              
+
               $db->delete("cart", "memberID=$memberID and bookID=$bookID");
 
               $response = array(
                   'success' => true,
-                  'message' => 'Book removed from cart'
+                  'message' => 'Book removed from selection'
               );
           } else {
               // Book does not exist in cart, insert it
@@ -117,13 +117,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
               if ($insertResult) {
                   $response = array(
                       'success' => true,
-                      'message' => 'Book added to cart'
+                      'message' => 'Book added to selection'
                   );
               } else {
                   // Failed to insert
                   $response = array(
                       'success' => false,
-                      'message' => 'Failed to add book to cart'
+                      'message' => 'Failed to add book to selection'
                   );
               }
           }
@@ -131,7 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           echo json_encode($response);
           exit;
       } catch (Exception $e) {
-          echo json_encode(['error' => 'Failed to process cart data']);
+          echo json_encode(['error' => 'Failed to process selection data']);
           exit;
       }
   }

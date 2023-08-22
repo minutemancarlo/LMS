@@ -25,6 +25,17 @@ $websiteTitle=$settings->getWebsiteTitle();
 
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <link href="../assets/vendor/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+        <link href="../assets/vendor/fontawesome/css/solid.min.css" rel="stylesheet">
+
+        <style>
+            #btn-back-to-top {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                display: none;
+            }
+        </style>
     </head>
     <body class="d-flex flex-column h-100">
         <main class="flex-shrink-0">
@@ -44,14 +55,14 @@ $websiteTitle=$settings->getWebsiteTitle();
             </nav>
             <!-- Header-->
             <header class="py-5">
-                <div class="container px-5 pb-5">
+                <div class="container-fluid px-5 pb-5">
                     <div class="row gx-5 align-items-center">
                         <div class="col-xxl-5">
                             <!-- Header text content-->
                             <div class="text-center text-xxl-start">
                                 <div class="badge bg-gradient-primary-to-secondary text-white mb-4"><div class="text-uppercase">Welcome Guest!</div></div>
                                 <div class="fs-3 fw-light text-muted">Municipality of Pozorrubio</div>
-                                <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">Library Management System</span></h1>
+                                <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">Pozzorubio Library</span></h1>
                             </div>
                         </div>
                         <div class="col-xxl-7">
@@ -179,7 +190,7 @@ $websiteTitle=$settings->getWebsiteTitle();
                             </div>
                         </div>
                         <!-- Banner Here -->
-                        <div class="container mt-5">
+                        <div class="container mt-5" style="width: 75%">
                           <div id="myCarousel" class="carousel slide" data-ride="carousel">
                             <!-- Indicators -->
                             <ul class="carousel-indicators">
@@ -234,8 +245,8 @@ $websiteTitle=$settings->getWebsiteTitle();
                 <div class="container px-5">
                     <div class="row gx-5 justify-content-center">
                         <div class="col-xxl-8">
-                            <div class="text-center my-5">
-                                <h2 class="display-5 fw-bolder" id="about"><span class="text-gradient d-inline">About Us</span></h2>
+                            <div class=" my-5">
+                                <h2 class="display-5 fw-bolder text-center" id="about"><span class="text-gradient d-inline">About Us</span></h2>
 
                                 <p class="text-muted">
 Welcome to the Pozorrubio Municipality Library Management System! We are delighted to introduce our state-of-the-art digital platform designed to enhance the overall library experience and streamline the management of valuable literary resources for our community.
@@ -291,12 +302,39 @@ We value your feedback and suggestions. If you have any queries or require assis
                 </div>
             </div>
         </footer>
+        <button
+                type="button"
+                class="btn btn-danger btn-floating btn-lg"
+                id="btn-back-to-top"
+                >
+          <i class="fa fa-chevron-circle-up"></i>
+        </button>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <!-- Core theme JS-->
+          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="js/scripts.js"></script>
+        <script>
+            $(document).ready(function() {
+                var mybutton = $("#btn-back-to-top");
+
+                $(window).scroll(function() {
+                    if ($(this).scrollTop() > 20) {
+                        mybutton.removeClass('d-none').fadeIn();
+                    } else {
+                        mybutton.fadeOut();
+                    }
+                });
+
+                mybutton.click(function() {
+                    $("html, body").animate({ scrollTop: 0 }, "slow");
+                    return false;
+                });
+            });
+        </script>
+
     </body>
 </html>

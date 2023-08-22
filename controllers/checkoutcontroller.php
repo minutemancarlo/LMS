@@ -38,7 +38,7 @@ CROSS JOIN
             // No cart items found
             $response = array(
                 'success' => false,
-                'message' => 'No cart items found'
+                'message' => 'No books found'
             );
         }
 
@@ -57,7 +57,6 @@ if (isset($_POST['action'])) {
         $insertLoanData = array(
             'LoanID'=>(string)$loanID,
             'MemberID' => $memberID,
-            'dueDate' => $dueDate,
             'is_returned' => 0,
             'status' => 0
         );
@@ -91,19 +90,19 @@ if (isset($_POST['action'])) {
                    } else {
                        $response = array(
                            'success' => false,
-                           'message' => 'Failed to insert loan information.'
+                           'message' => 'Failed to insert borrow request.'
                        );
                    }
                } else {
                 $response = array(
                     'success' => false,
-                    'message' => 'No books found in the cart.'
+                    'message' => 'No books found in the selection.'
                 );
             }
         } else {
             $response = array(
                 'success' => false,
-                'message' => 'Failed to insert loan data.'
+                'message' => 'Failed to insert borrow request.'
             );
         }
     }

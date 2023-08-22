@@ -44,7 +44,7 @@ class RoleHandler {
 
             <li>
             <a href="checkout.php">
-<i class="fas fa-shopping-cart"></i> Cart
+<i class="fas fa-book-reader"></i> Borrow Books
 <span class="badge bg-primary " id="cardCount" style="font-size: 10px;">0</span>
 </a>
             </li>';

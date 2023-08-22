@@ -36,7 +36,7 @@ if($session->isSessionVariableSet("isLoggedin")){
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="icon" type="image/png" href="../assets/img/favicon.png">
-    
+
     <title>Sign up | <?php echo $websiteTitle; ?></title>
     <?php echo $styles; ?>
     <link href="../assets/css/auth.css" rel="stylesheet">
@@ -173,6 +173,7 @@ By using our Library Management System, you acknowledge that you have read, unde
       <?php echo $sweetAlert; ?>
       <?php echo $ajax; ?>
       <?php echo $validate; ?>
+
       $('#signupForm').on('submit', function() {
         event.preventDefault();
         var password = $('#Password').val();
@@ -220,13 +221,15 @@ By using our Library Management System, you acknowledge that you have read, unde
           console.log(response);
             var data = JSON.parse(JSON.stringify(response));
           if (data.success) {
-            Toast.fire({
-              icon: 'success',
-              title: data.message,
-              timer: 2000,
-            }).then(() => {
-              // window.location.href = window.origin+'/lms/admin';
-            });
+            Swal.fire({
+            title: 'Verification email sent',
+            text: data.message,
+            icon: 'info',
+            showCancelButton: false,
+            confirmButtonText: 'Okay'
+        }).then(function() {
+            window.location.href = 'login.php';
+        });
           } else {
             Toast.fire({
             icon: 'error',
