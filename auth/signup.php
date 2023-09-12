@@ -228,7 +228,9 @@ By using our Library Management System, you acknowledge that you have read, unde
             showCancelButton: false,
             confirmButtonText: 'Okay'
         }).then(function() {
-            window.location.href = 'login.php';
+          var email = $('#Email').val();
+          var domain = email.substring(email.indexOf("@") + 1);
+           window.open("https://"+domain, "_blank");
         });
           } else {
             Toast.fire({

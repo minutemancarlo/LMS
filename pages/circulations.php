@@ -220,7 +220,7 @@ gtag('config', '<?php echo $analytics; ?>');
       cache: false
     },
     columns: [
-      { title: 'Loan ID', data: "LoanID", visible: false },
+      { title: 'ID', data: "LoanID", visible: false },
 
       {
         title: 'Image',
@@ -322,7 +322,7 @@ HTML;
      ?>
      autoWidth: false,
   columns: [
-    { title: 'Loan ID', data: "LoanID", visible: true },
+    { title: 'ID', data: "LoanID", visible: true },
     { title: 'MemberID', data: "MemberID", visible: false },
     { title: 'Name', data: "Name", visible: true,
     render: function(data, type, row) {

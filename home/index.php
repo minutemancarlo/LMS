@@ -62,7 +62,7 @@ $websiteTitle=$settings->getWebsiteTitle();
                             <div class="text-center text-xxl-start">
                                 <div class="badge bg-gradient-primary-to-secondary text-white mb-4"><div class="text-uppercase">Welcome Guest!</div></div>
                                 <div class="fs-3 fw-light text-muted">Municipality of Pozorrubio</div>
-                                <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">Pozzorubio Library</span></h1>
+                                <h1 class="display-3 fw-bolder mb-5"><span class="text-gradient d-inline">Pozorrubio Library</span></h1>
                             </div>
                         </div>
                         <div class="col-xxl-7">

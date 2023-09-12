@@ -85,7 +85,7 @@ gtag('config', '<?php echo $analytics; ?>');
                <div class="modal-content">
                    <!-- Modal Header -->
                    <div class="modal-header">
-                       <h5 class="modal-title" id="exampleModalLabel">Loan ID: <strong id="loanID"></strong> </h5>
+                       <h5 class="modal-title" id="exampleModalLabel">ID: <strong id="loanID"></strong> </h5>
                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                    </div>
                    <!-- Modal Body -->
@@ -157,7 +157,7 @@ gtag('config', '<?php echo $analytics; ?>');
           cache: false
         },
         columns: [
-          { title: 'Loan ID', data: "LoanID", visible: false },
+          { title: 'ID', data: "LoanID", visible: false },
 
           {
             title: 'Image',
@@ -227,7 +227,7 @@ gtag('config', '<?php echo $analytics; ?>');
         },
         columns: [
           { title: '#', data: "rowNumber", visible: true },
-          { title: 'Loan ID', data: "LoanID", visible: true },
+          { title: 'ID', data: "LoanID", visible: true },
           { title: 'Date Borrowed', data: "DateBorrowed", visible: true },
           { title: 'Due Date', data: "DueDate", visible: true},
           { title: 'Date Returned', data: "ReturnDate", visible: true },
@@ -266,7 +266,8 @@ gtag('config', '<?php echo $analytics; ?>');
               return buttons;
             }
           }
-        ]
+        ],
+        order: [[2, 'desc']]
     });
 
 
