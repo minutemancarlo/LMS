@@ -55,6 +55,11 @@ $analytics=$config['analytics']['token'];
     <title>Members | <?php echo $websiteTitle; ?></title>
     <?php echo $styles; ?>
     <link href="../assets/css/master.css" rel="stylesheet">
+    <style media="screen">
+    .inactive-row td {
+        color: red;
+      }
+    </style>
 
 </head>
 
@@ -99,6 +104,7 @@ $analytics=$config['analytics']['token'];
                        <div class="mb-3">
                            <label for="memberName" class="form-label">Member Name</label>
                            <input type="text" name="memberID" id="memberID" value="" hidden readonly>
+                           <input type="text" name="is_active" id="is_active" value="" hidden readonly>
                            <input type="text" class="form-control" id="memberName" name="memberName" readonly>
                        </div>
                        <div class="mb-3">
@@ -178,7 +184,7 @@ $analytics=$config['analytics']['token'];
                           title: data.message,
                           timer: 2000,
                       }).then(() => {
-                          location.reload();
+                         location.reload();
                       });
                   } else {
                       Toast.fire({
@@ -226,9 +232,50 @@ $analytics=$config['analytics']['token'];
           $('#memberPhone').val(row.Phone);
           $('#memberAddress').val(row.Address);
           $('#memberRole').val(row.Role);
+          $('#is_active').val(row.Is_active);
 
           $('#editMember').modal('show');
          });
+
+         $(document).on('click', '.btn-action-delete', function() {
+
+           var id = $(this).data('id');
+           var row = table.row($(this).closest('tr')).data();
+           var res = row.is_active==0?'Activation':'Deactivation';
+           var btn = row.is_active==0?'Activate':'Deactivate';
+           var st = row.is_active==0?1:0;
+    // Show a SweetAlert2 confirmation dialog
+    Swal.fire({
+        title: 'Confirm '+ res,
+        text: 'Are you sure you want to '+ btn +' this member?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: btn,
+        cancelButtonText: 'Cancel',
+    }).then((result) => {
+        if (result.isConfirmed) {
+
+
+          $('#member_id').html(id);
+          $('#memberID').val(id);
+          $('#memberName').val(row.Name);
+          $('#memberEmail').val(row.Email);
+          $('#memberPhone').val(row.Phone);
+          $('#memberAddress').val(row.Address);
+          $('#memberRole').val(row.Role);
+          $('#is_active').val(st);
+          $("#memberForm").submit();
+        }
+    });
+});
+
+
+           //  $('#editMember').modal('show');
+           //
+
+           //
+           // $('#editMember').modal('show');
+          // });
 
         var table=$('#memberTable').DataTable({
         processing: true,
@@ -284,14 +331,23 @@ $analytics=$config['analytics']['token'];
             searchable: false,
             className: "text-center",
             render: function (data, type, row) {
-               var buttons='<a  class="btn btn-success btn-action-edit" data-id="' + row.MemberID + '"><i class="fas fa-pen"></i></a>'
-              // var buttons = '<button class="btn btn-success btn-action-edit" data-id="' + row.MemberID + '"><i class="fa fa-edit"></i></button> ';
-              // buttons += '<button class="btn btn-danger btn-action-delete" data-id="' + row.MemberID + '"><i class="fa fa-trash"></i></button> ';
+              var buttons = '<a class="btn btn-success btn-action-edit" data-id="' + row.MemberID + '" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-pen"></i></a>';
+              buttons += ' <button class="btn btn-danger btn-action-delete" data-id="' + row.MemberID + '" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></button>';
+
               return buttons;
             }
-          }
+          },
+          { title: 'isactive', data: "is_active", visible: false },
         ],
-        order: [[1, 'desc']]
+        order: [[1, 'desc']],
+    createdRow: function (row, data, dataIndex) {
+
+        if (data.is_active == 0) {
+
+            // If is_active is 0, add a class to make the text red
+            $(row).addClass('inactive-row');
+        }
+    }
       });
     });
     </script>

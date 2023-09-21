@@ -25,8 +25,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Verify the provided password against the stored password using password_verify()
         if (password_verify($password, $storedPassword)) {
             $isVerified = $row['is_verified'];
+            $isActive = $row['is_active'];
 
-            if ($isVerified == 1) {
+            if ($isVerified == 1 && $isActive == 1) {
                 $response = array(
                     'success' => true,
                     'message' => 'Login Successful'
@@ -42,10 +43,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $session->setSessionVariable("address",$address);
 
             } else {
+              if ($isActive == 0) {
+                $response = array(
+                    'success' => false,
+                    'message' => 'Your account is temporarily deactivated'
+                );
+              }else{
                 $response = array(
                     'success' => false,
                     'message' => 'Email Address not verified'
                 );
+              }
             }
         } else {
             $response = array(

@@ -29,9 +29,6 @@ if (isset($_POST['action'])) {
     }
 
     if ($action === "update") {
-
-
-
             // Get the data from the POST variables
             $memberID = $_POST["memberID"];
             $memberName = $_POST["memberName"];
@@ -39,7 +36,7 @@ if (isset($_POST['action'])) {
             $memberPhone = $_POST["memberPhone"];
             $memberAddress = $_POST["memberAddress"];
             $role = $_POST["memberRole"];
-
+            $isActive = $_POST["is_active"];
             $session=new CustomSessionHandler();
 
             if ($memberID==$session->getSessionVariable('Id')) {
@@ -57,7 +54,8 @@ if (isset($_POST['action'])) {
                 "Email" => $memberEmail,
                 "Phone" => $memberPhone,
                 "Address" => $memberAddress,
-                "Role" => $role
+                "Role" => $role,
+                "is_active" => $isActive
             );
 
             // Create the WHERE clause for the update query
