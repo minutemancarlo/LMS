@@ -289,6 +289,14 @@ gtag('config', '<?php echo $analytics; ?>');
           });
           return;
         }
+        let loadingAlert = Swal.fire({
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        text: 'Loading. Please wait...',
+        didOpen: () => {
+          Swal.showLoading();
+        }
+        });
         var successCallback = function(response) {
             var data = JSON.parse(JSON.stringify(response));
               if (data.success) {
@@ -310,6 +318,7 @@ gtag('config', '<?php echo $analytics; ?>');
         var errorCallback = function(xhr, status, error) {
           var errorMessage = xhr.responseText;
           console.log('AJAX request error:', errorMessage);
+            loadingAlert.close();
           Toast.fire({
           icon: 'error',
           title: "Unexpected Error Occured. Please check browser logs for more info."

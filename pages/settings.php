@@ -39,6 +39,10 @@ $email_host = $config['email']['host'];
 $email_port = $config['email']['port'];
 $email_username = $config['email']['username'];
 $email_password = $config['email']['password'];
+
+$sms_api = $config['sms']['key'];
+$sms_borrow = $config['sms']['borrow'];
+$sms_duedate = $config['sms']['duedate'];
  ?>
 <!doctype html>
 <html lang="en">
@@ -80,6 +84,9 @@ $email_password = $config['email']['password'];
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="email-tab" data-bs-toggle="tab" href="#email" role="tab" aria-controls="email" aria-selected="false">Email</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="sms-tab" data-bs-toggle="tab" href="#sms" role="tab" aria-controls="sms" aria-selected="false">SMS</a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" id="attributions-tab" data-bs-toggle="tab" href="#attributions" role="tab" aria-controls="attributions" aria-selected="false">Attributions</a>
@@ -137,6 +144,35 @@ $email_password = $config['email']['password'];
                                           </form>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="tab-pane fade show" id="sms" role="tabpanel" aria-labelledby="sms-tab">
+                                  <form id="smsSettings" >
+                                    <div class="col-md-6">
+                                        <p class="text-muted">SMS Message settings</p>
+                                        <div class="mb-3">
+                                            <label for="" class="form-label">API Key:</label>
+                                            <input type="text" name="SMSapiKey" class="form-control" value="<?php echo $sms_api; ?>" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Borrow Message:</label><br>
+                                            <sub>Please use keywords {Name} to use name of the receiver.</sub>
+                                            <textarea class="form-control" name="borrowMessage" maxlength="150"  rows="4" required><?php echo $sms_borrow; ?></textarea>
+                                            <p><span id="charCountborrow">150</span> characters remaining</p>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Due Date Notification Message:</label><br>
+                                            <sub>Please use {Name} for the receiver's name and {borrowID} for the Borrow ID</sub>
+                                            <textarea class="form-control" name="dueDateMessage"  maxlength="150" rows="4" required><?php echo $sms_duedate; ?></textarea>
+                                            <p><span id="charCountdue">150</span> characters remaining</p>
+
+                                        </div>
+                                        <div class="mb-3 text-end">
+                                            <button class="btn btn-success" type="submit"><i class="fas fa-check"></i> Save</button>
+                                        </div>
+                                    </div>
+                                  </form>
+
                                 </div>
                                 <div class="tab-pane fade" id="attributions" role="tabpanel" aria-labelledby="attributions-tab">
                                     <h4 class="mb-0">Legal Notice</h4>
@@ -360,12 +396,27 @@ $email_password = $config['email']['password'];
           });
       }, 10000);
 
+      $('textarea[name="borrowMessage"]').on('input', function() {
+         const remainingChars = 150 - $(this).val().length;
+         $('#charCountborrow').text(remainingChars);
+     });
+
+     $('textarea[name="dueDateMessage"]').on('input', function() {
+         const remainingChars = 150 - $(this).val().length;
+         $('#charCountdue').text(remainingChars);
+     });
+
+     // Initialize character counts
+     const initialCharsBorrow = 150 - $('textarea[name="borrowMessage"]').val().length;
+     $('#charCountborrow').text(initialCharsBorrow);
+
+     const initialCharsDue = 150 - $('textarea[name="dueDateMessage"]').val().length;
+     $('#charCountdue').text(initialCharsDue);
+
 
 
 $('#websiteSettings').submit(function(event) {
     event.preventDefault();
-
-
     var formData = new FormData(this);
     // Define success and error callbacks
 var successCallback = function(response) {
@@ -412,9 +463,45 @@ $.ajax({
 
 $('#emailSettings').submit(function(event) {
     event.preventDefault();
+    // Define success and error callbacks
+var successCallback = function(response) {
+  console.log(response);
+  // Perform actions on successful response
+  if (response.success) {
+      Toast.fire({
+          icon: 'success',
+          title: response.message,
+          timer: 2000,
+      }).then(() => {
+          location.reload();
+          // You can also perform other actions after successful response
+      });
+  } else {
+      Toast.fire({
+          icon: 'error',
+          title: response.message
+      });
+  }
+};
+
+var errorCallback = function(xhr, status, error) {
+  console.error(error);
+  // Handle error
+  Toast.fire({
+      icon: 'error',
+      title: "Unexpected Error Occured. Please check browser logs for more info."
+  });
+};
+var formData = $(this).serialize();
+
+// Use the loadContent function to send the form data
+loadContent('../controllers/settingsController.php', formData, successCallback, errorCallback);
 
 
+});
 
+$('#smsSettings').submit(function(event) {
+    event.preventDefault();
     // Define success and error callbacks
 var successCallback = function(response) {
   console.log(response);

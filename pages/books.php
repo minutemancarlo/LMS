@@ -136,11 +136,14 @@ gtag('config', '<?php echo $analytics; ?>');
             <form id="bookForm" novalidate method="POST" class="needs-validation" enctype="multipart/form-data">
               <input type="text" name="bookID" id="bookID" value="0" readonly hidden>
               <img src="../assets/img/book.png" id="thumbnailPreview"  alt="Thumbnail Preview" class="img-fluid rounded" style="width: 100px; height: 100px;">
-              <div class="mb-3">
+
+              <div class="mb-3" >
                 <label for="thumbnail" class="form-label">Thumbnail Image</label>
-                <input type="file" class="form-control" id="thumbnail" name="thumbnail" accept="image/*">
-                <div class="invalid-feedback">
-                  Please select a thumbnail image.
+                <div class=""id="imageHa">
+                  <input type="file" class="form-control" id="thumbnail" name="thumbnail" accept="image/*">
+                  <div class="invalid-feedback">
+                    Please select a thumbnail image.                  
+                </div>
                 </div>
               </div>
               <div class="mb-3">
@@ -313,10 +316,14 @@ HTML;
           data: "Thumbnail",
           render: function(data, type, row) {
             if (type === 'display' || type === 'filter') {
-          // Add the default image URL here
-            var defaultImage = '../assets/img/book.png';
-            return '<img src="' + (data!='' ? data : defaultImage) + '" class="img-thumbnail" alt="Thumbnail" style="width: 100px;height:100px">';
-          }
+
+              var defaultImage = '../assets/img/book.png';
+
+              return '<a href="#"  class="imageModal">' +
+             '<img src="' + (data != '' ? data : defaultImage) + '" ' +
+             'class="img-thumbnail" alt="Thumbnail" style="width: 100px; height: 100px">' +
+             '</a>';
+  }
           return data;
         }
       },
@@ -658,6 +665,9 @@ HTML;
         var table = $('#booksTable').DataTable();
         var rowData = table.row($(this).closest('tr')).data();
         $('#bookForm')[0].reset();
+        $('#btnBookSubmit').prop('hidden',false);
+        $('#genre').prop('hidden',false);
+        $('#imageHa').prop('hidden',false);
         $('#btnBookSubmit').html("Update");
         $('#bookModalLabel').html('Update Book Information');
         $('#thumbnailPreview').attr('src', rowData.Thumbnail);
@@ -668,10 +678,53 @@ HTML;
         $('#isbn').val(rowData.ISBN);
         $('#quantity').val(rowData.Quantity);
         $('#genre').val(JSON.parse(rowData.Genre));
+
+        $('#bookID').val(rowData.BookID).prop('readonly', false);
+        $('#bookTitle').val(rowData.Title).prop('readonly', false);
+        $('#author').val(rowData.Author).prop('readonly', false);
+        $('#publication').val(rowData.Publication).prop('readonly', false);
+        $('#isbn').val(rowData.ISBN).prop('readonly', false);
+        $('#quantity').val(rowData.Quantity).prop('readonly', false);
+
         displayTags(JSON.parse(rowData.Genre));
         remaining=rowData.Remaining;
         quantity=rowData.Quantity;
         $('#btnDelete').prop('hidden',false);
+        $('#bookModal').modal('show');
+        // console.log(rowData);
+      });
+
+      $(document).on('click', '.imageModal', function () {
+        // Get the row data using DataTables API
+        var table = $('#booksTable').DataTable();
+        var rowData = table.row($(this).closest('tr')).data();
+        $('#bookForm')[0].reset();
+        $('#btnBookSubmit').prop('hidden',true);
+        $('#genre').prop('hidden',true);
+        $('#bookModalLabel').html('Book Information');
+        $('#thumbnailPreview').attr('src', rowData.Thumbnail);
+        $('#imageHa').prop('hidden',true);
+
+        $('#bookID').val(rowData.BookID);
+        $('#bookTitle').val(rowData.Title);
+        $('#author').val(rowData.Author);
+        $('#publication').val(rowData.Publication);
+        $('#isbn').val(rowData.ISBN);
+        $('#quantity').val(rowData.Quantity);
+        $('#genre').val(JSON.parse(rowData.Genre));
+
+        $('#bookID').val(rowData.BookID).prop('readonly', true);
+        $('#bookTitle').val(rowData.Title).prop('readonly', true);
+        $('#author').val(rowData.Author).prop('readonly', true);
+        $('#publication').val(rowData.Publication).prop('readonly', true);
+        $('#isbn').val(rowData.ISBN).prop('readonly', true);
+        $('#quantity').val(rowData.Quantity).prop('readonly', true);
+
+
+        displayTags(JSON.parse(rowData.Genre));
+        remaining=rowData.Remaining;
+        quantity=rowData.Quantity;
+        $('#btnDelete').prop('hidden',true);
         $('#bookModal').modal('show');
         // console.log(rowData);
       });

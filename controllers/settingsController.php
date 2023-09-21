@@ -91,7 +91,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $response['success'] = false;
             $response['message'] = 'Failed to save settings.';
         }
-    } 
+    }
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Check if required POST values are set
+    if (isset($_POST['SMSapiKey']) && isset($_POST['borrowMessage']) && isset($_POST['dueDateMessage'])) {
+        // Get form data
+        $key = $_POST['SMSapiKey'];
+        $borrow = $_POST['borrowMessage'];
+        $due = $_POST['dueDateMessage'];
+        $configFile = '../config.ini';
+
+        // Load the existing config file
+        $config = parse_ini_file($configFile, true);
+
+        $config['sms']['key']=$key;
+        $config['sms']['borrow']=$borrow;
+        $config['sms']['duedate']=$due;
+
+        // Write the updated config array back to the config file
+        $newConfig = "";
+        foreach ($config as $section => $values) {
+            $newConfig .= "[$section]\n";
+            foreach ($values as $key => $value) {
+                $newConfig .= "$key = \"$value\"\n";
+            }
+            $newConfig .= "\n";
+        }
+
+        if (file_put_contents($configFile, $newConfig)) {
+            $response['success'] = true;
+            $response['message'] = 'Settings saved successfully!';
+        } else {
+            $response['success'] = false;
+            $response['message'] = 'Failed to save settings.';
+        }
+    }
 }
 
 // Send JSON response

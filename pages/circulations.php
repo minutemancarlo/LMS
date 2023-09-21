@@ -66,6 +66,7 @@ gtag('config', '<?php echo $analytics; ?>');
                                 <span class="badge bg-success">Returned</span>
                                 <span class="badge bg-primary">Borrowed</span>
                                 <span class="badge bg-danger">Overdue</span>
+                                <span class="badge bg-secondary">Cancelled</span>
                               </sub>
                               </div>
                             </div>
@@ -84,6 +85,7 @@ gtag('config', '<?php echo $analytics; ?>');
                                           <option value="Pending">Pending</option>
                                           <option value="Overdue">Overdue</option>
                                           <option value="Returned">Returned</option>
+                                          <option value="Cancelled">Cancelled</option>
                                         </select>
                                       </div>
                                       <div class="col">
@@ -153,6 +155,7 @@ gtag('config', '<?php echo $analytics; ?>');
                    <div class="modal-footer">
                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                        <button type="button" id="release" class="btn btn-primary">Release</button>
+                       <button type="button" id="cancel" class="btn btn-danger">Cancel</button>
                        <button type="button" id="return" class="btn btn-info">Return</button>
                        <button type="button" id="notify" class="btn btn-warning">Extend</button>
                    </div>
@@ -347,13 +350,13 @@ HTML;
         badge = '<span class="badge bg-warning" style="color: black;">Pending</span> ';
       } else if (data === '2') {
         badge = '<span class="badge bg-success">Returned</span> ';
+      }else if (data === '4') {
+        badge = '<span class="badge bg-secondary">Cancelled</span> ';
       } else {
-
         if (new Date(row.DueDate) <= today) {
           badge = '<span class="badge bg-danger">Overdue</span>';
         } else {
           badge = '<span class="badge bg-primary">Borrowed</span>';
-
         }
       }
       return badge;
@@ -442,15 +445,18 @@ $(document).on('click', '.btn-action-view', function() {
   var today = new Date();
    if(selectedRow.data().status==='0'){
      $('#release').attr('hidden',false);
+     $('#cancel').attr('hidden',false);
      $('#notify').attr('hidden',true);
      $('#return').attr('hidden',true);
    }else if(selectedRow.data().status==='1'){
      if (new Date(selectedRow.data().DueDate) <= today) {
        $('#release').attr('hidden',true);
+       $('#cancel').attr('hidden',true);
        $('#return').attr('hidden',false);
        $('#notify').attr('hidden',false);
      } else {
        $('#release').attr('hidden',true);
+       $('#cancel').attr('hidden',true);
        $('#notify').attr('hidden',true);
        $('#return').attr('hidden',false);
      }
@@ -458,6 +464,7 @@ $(document).on('click', '.btn-action-view', function() {
      $('#release').prop('hidden',true);
      $('#notify').prop('hidden',true);
      $('#return').attr('hidden',true);
+     $('#cancel').attr('hidden',true);
    }
  });
 
@@ -494,6 +501,41 @@ $(document).on('click', '.btn-action-view', function() {
     var formData = { action: 'changeStatus', loanID:  $('#loanID').html(), status: 1};
    loadContent('../controllers/circulationsController.php', formData, successCallback, errorCallback);
 });
+
+$('#cancel').click(function() {
+  var successCallback = function(response) {
+    console.log(response);
+      var data = JSON.parse(JSON.stringify(response));
+    if (data.success) {
+      Toast.fire({
+        icon: 'success',
+        title: data.message,
+        timer: 2000,
+      }).then(() => {
+        location.reload();
+        // window.location.href = window.origin+'/lms/admin';
+      });
+    } else {
+      Toast.fire({
+      icon: 'error',
+      title: data.message
+    });
+    }
+  };
+
+  var errorCallback = function(xhr, status, error) {
+
+    var errorMessage = xhr.responseText;
+    console.log('AJAX request error:', errorMessage);
+    Toast.fire({
+    icon: 'error',
+    title: "Unexpected Error Occured. Please check browser logs for more info."
+  });
+  };
+   var formData = { action: 'changeStatus', loanID:  $('#loanID').html(), status: 4 };
+  loadContent('../controllers/circulationsController.php', formData, successCallback, errorCallback);
+});
+
 
 $('#return').click(function() {
   var successCallback = function(response) {

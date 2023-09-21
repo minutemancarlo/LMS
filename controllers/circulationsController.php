@@ -80,7 +80,7 @@ if (isset($_POST['action']) && $_POST['action'] === "changeStatus") {
     $dueDate = date('Y-m-d', strtotime($today . ' +3 days'));
 
     // Calculate the due date (3 days from today)
-    if($newStatus!=2){
+    if($newStatus!=2 && $newStatus!=4 ){
     $updateData = array(
         'status' => $newStatus,
         'DateBorrowed' => $today,
@@ -93,12 +93,19 @@ if (isset($_POST['action']) && $_POST['action'] === "changeStatus") {
         'DueDate' => $dueDate
       );
     }else{
-    $updateData = array(
-        'status' => $newStatus,
-        'is_returned' => $newStatus==2?1:0,
-        'ReturnDate' => $today,
-          'is_returned' => $newStatus==2?1:0
-    );
+      if ($newStatus==4) {
+        $updateData = array(
+            'status' => $newStatus,
+            'is_returned' => 0,
+        );
+      }else{
+        $updateData = array(
+            'status' => $newStatus,
+            'is_returned' => $newStatus==2?1:0,
+            'ReturnDate' => $today
+        );
+      }
+
   }
   }
 
@@ -109,6 +116,7 @@ if (isset($_POST['action']) && $_POST['action'] === "changeStatus") {
    $updateResult = $db->update('loan', $updateData, "LoanID = '$loanID'");
 
    if ($updateResult) {
+     $db->delete('loaninfo', "LoanID = '$loanID'");
        $response = array(
            'success' => true,
            'message' => 'Borrow status updated successfully.'

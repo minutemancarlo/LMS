@@ -11,6 +11,11 @@ if (isset($_POST['action'])) {
     $session = new CustomSessionHandler();
     $settings->setDefaultTimezone();
     $db = new DatabaseHandler();
+    $config = parse_ini_file('../config.ini', true);
+    $sms_api = $config['sms']['key'];
+    $sms_borrow = $config['sms']['borrow'];
+    $sms_duedate = $config['sms']['duedate'];
+
     if ($action === 'select') {
       $query = "SELECT *
     FROM loan AS a
@@ -56,14 +61,20 @@ $query = "SELECT a.MemberID, Name, LoanID, Phone, Email
                 $result->close();
 
                 foreach ($data as $row) {
+                  $msgString=$sms_duedate;
+                  $msgString = str_replace('{Name}', strtoupper($row['Name']), $msgString);
+                  $msgString = str_replace('{borrowID}', $row["LoanID"], $msgString);
+
                     $ch = curl_init();
                     $parameters = array(
-                        'key' => '4jH7kL2mP9nS6qB3rT8yV5wX2zA1cD1e', // Your API KEY
+                        'key' => $sms_api, // Your API KEY
                         'phone' => $row['Phone'],
-                        'message' => 'Good day ' . strtoupper($row['Name']) . "! This is to remind you for overdue book loan with Loan ID " . $row["LoanID"] . ". Please notify the library if an extension is needed. Thank you.",
+                        'message' => $msgString,
                         'senderName' => 'SEMAPHORE',
                         'messageType' => 'single'
                     );
+
+
 
                     curl_setopt($ch, CURLOPT_URL, 'https://dev.x10.bz/emailApi/sms/send.php');
                     curl_setopt($ch, CURLOPT_POST, 1);
@@ -74,7 +85,7 @@ $query = "SELECT a.MemberID, Name, LoanID, Phone, Email
                     $output = curl_exec($ch);
                     curl_close($ch);
                     $data = json_decode($output, true);
-
+                    
                     foreach ($data as $entry) {
                         $messageId = $entry['message_id'];
                         $recipient = $entry['recipient'];
