@@ -11554,16 +11554,31 @@ html {
   height: 100%;
 }
 
-.bg-gradient-primary-to-secondary {
+/* .bg-gradient-primary-to-secondary {
   background: #1e30f3;
   background: linear-gradient(135deg, #1e30f3 0%, #e21e80 100%);
+} */
+
+.bg-gradient-primary-to-secondary {
+  background: #00f; /* Start with blue */
+  background: linear-gradient(135deg, #00f 0%, #ff0 100%); /* Gradient from blue (#00f) to yellow (#ff0) */
 }
 
+
+
 .text-gradient {
-  background: -webkit-linear-gradient(315deg, #1e30f3 0%, #e21e80 100%);
+  background: -webkit-linear-gradient(315deg, #00f 0%, #ff0 100%); /* Gradient from blue (#00f) to yellow (#ff0) */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+
+
+/* .text-gradient {
+  background: -webkit-linear-gradient(315deg, #1e30f3 0%, #e21e80 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+} */
 
 .rounded-4 {
   border-radius: 1rem !important;

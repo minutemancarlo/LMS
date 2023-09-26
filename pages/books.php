@@ -142,9 +142,13 @@ gtag('config', '<?php echo $analytics; ?>');
                 <div class=""id="imageHa">
                   <input type="file" class="form-control" id="thumbnail" name="thumbnail" accept="image/*">
                   <div class="invalid-feedback">
-                    Please select a thumbnail image.                  
+                    Please select a thumbnail image.
                 </div>
                 </div>
+              </div>
+              <div class="mb-3">
+                <label for="genre" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" placeholder="Book Description"></textarea>
               </div>
               <div class="mb-3">
                 <label for="bookTitle" class="form-label">Book Title</label>
@@ -280,7 +284,7 @@ gtag('config', '<?php echo $analytics; ?>');
             className: 'btn btn-primary',
             filename: 'Cataloglist_' + new Date().toISOString().slice(0, 19).replace(/-/g, "_").replace(/:/g, "_"), // Set the filename with the current datetime
             exportOptions: {
-                columns: [0, 2, 3, 4, 5, 6, 7], // Hide the 2nd column when exporting to Excel
+                columns: [0, 2, 3, 4, 5, 6, 7,8], // Hide the 2nd column when exporting to Excel
             },
         },
         {
@@ -289,7 +293,7 @@ gtag('config', '<?php echo $analytics; ?>');
             className: 'btn btn-danger',
             filename: 'Cataloglist_' + new Date().toISOString().slice(0, 19).replace(/-/g, "_").replace(/:/g, "_"), // Set the filename with the current datetime
             exportOptions: {
-                columns: [0, 2, 3, 4, 5, 6, 7], // Hide the 2nd column when exporting to PDF
+                columns: [0,  3, 4, 5, 6, 7,8], // Hide the 2nd column when exporting to PDF
             },
             customize: function(doc) {
                 // Set landscape mode for the PDF
@@ -311,6 +315,7 @@ HTML;
        ?>
       columns: [
         { title: 'BookID', data: "BookID", visible: false },
+        { title: 'desc', data: "Description", visible: false },
         {
           title: 'Image',
           data: "Thumbnail",
@@ -525,6 +530,13 @@ HTML;
         $('#tagContainer').html('');
         $('#thumbnail').val('');
         $('#btnDelete').prop('hidden',true);
+        $('#bookID').val('').prop('readonly', false);
+        $('#bookTitle').val('').prop('readonly', false);
+        $('#author').val('').prop('readonly', false);
+        $('#publication').val('').prop('readonly', false);
+        $('#isbn').val('').prop('readonly', false);
+        $('#quantity').val('').prop('readonly', false);
+        $('#description').html('').prop('readonly', false);
       });
 
       $(document).on('click', '.btn-action-add', function () {
@@ -685,6 +697,7 @@ HTML;
         $('#publication').val(rowData.Publication).prop('readonly', false);
         $('#isbn').val(rowData.ISBN).prop('readonly', false);
         $('#quantity').val(rowData.Quantity).prop('readonly', false);
+        $('#description').html(rowData.Description).prop('readonly', false);
 
         displayTags(JSON.parse(rowData.Genre));
         remaining=rowData.Remaining;
@@ -719,6 +732,7 @@ HTML;
         $('#publication').val(rowData.Publication).prop('readonly', true);
         $('#isbn').val(rowData.ISBN).prop('readonly', true);
         $('#quantity').val(rowData.Quantity).prop('readonly', true);
+        $('#description').html(rowData.Description).prop('readonly', true);
 
 
         displayTags(JSON.parse(rowData.Genre));

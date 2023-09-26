@@ -182,20 +182,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $isbn = $_POST["isbn"];
             $quantity = $_POST["quantity"];
             $genre = $_POST["genre"];
+            $desc = isset($_POST["description"])?$_POST["description"]:'';
 
             // Escape the input values to prevent SQL injection
             $bookTitle = $db->escape($bookTitle);
             $author = $db->escape($author);
             $publication = $db->escape($publication);
             $isbn = $db->escape($isbn);
+            $desc= $db->escape($desc);
             $quantity = (int) $quantity;
             $genreArray = $db->escape(json_encode(explode(", ", $genre)));
+            $fileName=isset($fileName)?$fileName:null;
 
+            if ($bookID=='0'||$bookID=='') {
 
-            if ($bookID=='0') {
-
-              $query = "INSERT INTO catalog (Title, Author, Publication, ISBN, Quantity, Genre, Thumbnail) VALUES
-               ($bookTitle, $author, $publication, $isbn, $quantity, $genreArray, '$fileName')";
+              $query = "INSERT INTO catalog (Title, Description, Author, Publication, ISBN, Quantity, Genre, Thumbnail) VALUES
+               ($bookTitle, $desc , $author, $publication, $isbn, $quantity, $genreArray, '$fileName')";
 
                $insertResult = $db->executeQuery($query);
 
